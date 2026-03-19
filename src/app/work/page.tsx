@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Menu } from "@/components/menu/Menu";
 
 const FILTERS = ['All Projects', 'AI / ML', 'Frontend', 'Backend', 'Open Source'];
 
@@ -63,6 +64,7 @@ export default function Work() {
 
   return (
     <div className="flex flex-col flex-1 px-8 lg:px-24 mb-32 max-w-7xl mx-auto w-full">
+        <Menu />
       <motion.h1 
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
