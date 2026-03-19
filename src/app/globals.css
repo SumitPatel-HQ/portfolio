@@ -15,17 +15,106 @@
 }
 
 :root {
-  --background: var(--color-background-light);
-  --foreground: var(--color-background-dark);
+  --background: #0a0a0a;
+  --foreground: #ffffff;
+  --accent: #00d9d9;
+  --accent-faded: rgba(0, 217, 217, 0.1);
+  --border: rgba(255, 255, 255, 0.1);
+  --muted: #888888;
 }
 
-.dark {
-  --background: var(--color-background-dark);
-  --foreground: var(--color-background-light);
+/* Light mode support if requested */
+.light {
+  --background: #f5f8f8;
+  --foreground: #0a0a0a;
+  --border: rgba(0, 0, 0, 0.1);
 }
 
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
 body {
+  max-width: 100vw;
+  overflow-x: hidden;
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans);
+  font-family: var(--font-inter), sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+h1, h2, h3 {
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+}
+
+button {
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-family: inherit;
+}
+
+.indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.indicator::before {
+  content: "";
+  display: block;
+  width: 8px;
+  height: 8px;
+  background: var(--accent);
+  border-radius: 50%;
+}
+
+.cta-button {
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all 0.2s ease;
+  border: 1px solid var(--border);
+}
+
+.cta-button.primary {
+  background: var(--accent);
+  color: var(--background);
+  border-color: var(--accent);
+}
+
+.cta-button:hover {
+  opacity: 0.8;
+}
+
+.container {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
 }
