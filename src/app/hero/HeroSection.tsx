@@ -9,7 +9,7 @@ import StripesBackground from "@/components/ui/StripesBackground";
 export const HeroSection = () => {
   return (
     <main className="min-h-screen bg-background text-foreground relative overflow-hidden flex flex-col">
-      <StripesBackground position="full" opacity="opacity-25" />
+      <StripesBackground position="full" opacity="opacity-15" />
 
       <div className="relative z-10 flex-1 flex flex-col px-layout">
         <div className="h-hero-top grid grid-cols-12 items-center border-b border-border-custom max-md:flex max-md:justify-between">
