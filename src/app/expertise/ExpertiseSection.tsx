@@ -6,7 +6,7 @@ export const ExpertiseSection = () => {
   return (
     <section className="px-8 md:px-24 py-10 grid grid-cols-1 lg:grid-cols-2 gap-12">
       <div className="flex flex-col">
-        <h3 className="text-2xl font-bold mb-6 text-white">Expertise</h3>
+        <h3 className="text-2xl font-extrabold mb-6 text-white">Expertise</h3>
         <p className="text-white/70 leading-relaxed mb-8 max-w-lg">
           Combining deep technical knowledge in AI and full-stack development with a refined eye for design. My approach is rooted in building scalable, user-centric solutions that solve complex problems.
         </p>
@@ -25,7 +25,7 @@ export const ExpertiseSection = () => {
         />
         <div className="relative z-10 text-center p-8 flex flex-col items-center">
           <span className="text-5xl text-primary mb-4 block animate-pulse">✦</span>
-          <h4 className="text-white text-2xl font-bold tracking-tight">Let&apos;s build the future</h4>
+          <h4 className="text-white text-2xl font-extrabold tracking-tight">Let&apos;s build the future</h4>
         </div>
       </div>
     </section>

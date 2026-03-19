@@ -67,7 +67,7 @@ export default function Work() {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="text-[12vw] md:text-[8vw] leading-[0.85] font-black tracking-tighter text-white mb-16 md:mb-24 uppercase select-none mt-10"
+        className="text-[12vw] md:text-[8vw] leading-[0.85] font-extrabold tracking-tighter text-white mb-16 md:mb-24 uppercase select-none mt-10"
       >
         Work
       </motion.h1>
@@ -78,7 +78,7 @@ export default function Work() {
           <button 
             key={filter}
             onClick={() => setActiveFilter(filter)}
-            className={`group relative pb-2 text-sm md:text-base font-bold uppercase tracking-wider transition-colors ${activeFilter === filter ? 'text-primary' : 'text-white/50 hover:text-white'}`}
+            className={`group relative pb-2 text-sm md:text-base font-extrabold uppercase tracking-wider transition-colors ${activeFilter === filter ? 'text-primary' : 'text-white/50 hover:text-white'}`}
           >
             {filter}
             {activeFilter === filter && (
@@ -120,14 +120,14 @@ export default function Work() {
                   <div className="hidden md:block col-span-1 text-white/50 font-mono text-sm">{project.id}</div>
                   
                   <div className="col-span-1 md:col-span-5">
-                    <h3 className="text-2xl md:text-4xl font-bold text-white group-hover:text-primary transition-colors duration-300">
+                    <h3 className="text-2xl md:text-4xl font-extrabold text-white group-hover:text-primary transition-colors duration-300">
                       {project.title}
                     </h3>
                   </div>
                   
                   <div className="col-span-1 md:col-span-4 flex flex-wrap gap-2 mt-2 md:mt-0">
                     {project.stack.map((tech) => (
-                      <span key={tech} className="px-3 py-1 text-xs font-bold uppercase tracking-wide border border-white/20 rounded-full text-white/70 group-hover:border-primary/50 group-hover:text-primary transition-colors">
+                      <span key={tech} className="px-3 py-1 text-xs font-extrabold uppercase tracking-wide border border-white/20 rounded-full text-white/70 group-hover:border-primary/50 group-hover:text-primary transition-colors">
                         {tech}
                       </span>
                     ))}
@@ -160,7 +160,7 @@ export default function Work() {
       </div>
 
       <div className="mt-20 flex justify-center">
-        <button className="flex items-center gap-2 text-white/50 hover:text-primary transition-colors uppercase tracking-widest text-sm font-bold">
+        <button className="flex items-center gap-2 text-white/50 hover:text-primary transition-colors uppercase tracking-widest text-sm font-extrabold">
           <span>+</span>
           Load More Projects
         </button>

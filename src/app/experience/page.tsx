@@ -61,7 +61,7 @@ export default function Experience() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white to-white/40 mb-6"
+          className="text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white to-white/40 mb-6"
         >
           Professional<br />Experience
         </motion.h1>
@@ -87,11 +87,11 @@ export default function Experience() {
             className="group relative flex flex-col md:flex-row items-start md:items-center py-16 border-t border-white/10 transition-all hover:bg-white/5 px-4 -mx-4 rounded-xl overflow-hidden"
           >
             <div className="w-full md:w-1/3 mb-4 md:mb-0 relative select-none">
-              <span className="text-[6rem] md:text-[8rem] lg:text-[10rem] font-black leading-none text-white/5 absolute -top-12 md:-top-16 left-0 -z-10 group-hover:text-primary/10 transition-colors">
+              <span className="text-[6rem] md:text-[8rem] lg:text-[10rem] font-extrabold leading-none text-white/5 absolute -top-12 md:-top-16 left-0 -z-10 group-hover:text-primary/10 transition-colors">
                 {exp.year}
               </span>
               <div className="relative z-10 pl-2">
-                <span className={`font-bold tracking-widest uppercase text-sm mb-1 block ${exp.duration === 'Present' ? 'text-primary' : 'text-white/50'}`}>
+                <span className={`font-extrabold tracking-widest uppercase text-sm mb-1 block ${exp.duration === 'Present' ? 'text-primary' : 'text-white/50'}`}>
                   {exp.duration}
                 </span>
                 <span className="text-white/40 text-sm">{exp.type}</span>
@@ -99,7 +99,7 @@ export default function Experience() {
             </div>
             <div className="w-full md:w-2/3 flex flex-col gap-2 relative z-10">
               <div className="flex flex-col md:flex-row md:items-baseline md:justify-between w-full">
-                <h3 className="text-2xl md:text-3xl font-bold text-white group-hover:text-primary transition-colors">{exp.title}</h3>
+                <h3 className="text-2xl md:text-3xl font-extrabold text-white group-hover:text-primary transition-colors">{exp.title}</h3>
                 <span className="text-lg md:text-xl font-medium text-white/50">{exp.company}</span>
               </div>
               <p className="text-white/50 text-base md:text-lg font-light leading-relaxed max-w-3xl">
@@ -114,7 +114,7 @@ export default function Experience() {
       <section className="mt-24 w-full">
         <div className="flex items-center gap-4 mb-12">
           <span className="h-px w-12 bg-primary"></span>
-          <h2 className="text-3xl md:text-4xl font-bold text-white">Skills & Tools</h2>
+          <h2 className="text-3xl md:text-4xl font-extrabold text-white">Skills & Tools</h2>
         </div>
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">

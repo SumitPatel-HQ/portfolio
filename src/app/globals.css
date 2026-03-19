@@ -51,7 +51,29 @@
 }
 
 @utility text-hero-mobile {
-  font-size: 20vw;
+  font-size: 18vw;
+}
+
+@utility hero-headline-stack {
+  width: fit-content;
+  max-width: 100%;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  line-height: 0.88;
+  --hero-line-offset: clamp(0.2rem, 1.4vw, 1.4rem);
+}
+
+@utility hero-headline-line {
+  font-size: 15vw;
+  letter-spacing: -0.045em;
+  white-space: nowrap;
+}
+
+@utility hero-headline-secondary {
+  align-self: flex-end;
+  margin-top: -0.04em;
+  transform: translateX(var(--hero-line-offset));
 }
 
 @utility text-status {
@@ -98,7 +120,6 @@
   --muted: #888888;
   --font-inter: 'Inter', sans-serif;
 }
-
 
 /* Light mode support if requested */
 .light {

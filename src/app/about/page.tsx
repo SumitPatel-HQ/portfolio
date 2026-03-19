@@ -19,7 +19,7 @@ export default function About() {
     <div className="flex flex-col flex-1 px-8 lg:px-24">
       {/* Identity Section */}
       <section className="relative pt-16 md:pt-24 mb-32">
-        <div className="absolute -top-16 -left-4 md:-left-10 text-[15vw] md:text-[6vw] font-black pointer-events-none leading-none z-0 text-transparent mix-blend-overlay" style={{ WebkitTextStroke: '1px rgba(255, 255, 255, 0.05)' }}>
+        <div className="absolute -top-16 -left-4 md:-left-10 text-[15vw] md:text-[6vw] font-extrabold pointer-events-none leading-none z-0 text-transparent mix-blend-overlay" style={{ WebkitTextStroke: '1px rgba(255, 255, 255, 0.05)' }}>
           01
         </div>
         
@@ -29,7 +29,7 @@ export default function About() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
-              className="text-6xl md:text-8xl font-black tracking-tighter leading-[0.9] mb-4 text-white"
+              className="text-6xl md:text-8xl font-extrabold tracking-tighter leading-[0.9] mb-4 text-white"
             >
               IDE<br /><span className="text-primary">NTITY</span>
             </motion.h1>
@@ -64,7 +64,7 @@ export default function About() {
               transition={{ duration: 0.8, delay: 0.5 }}
               className="pt-6"
             >
-              <h3 className="text-xs font-bold uppercase tracking-widest text-white/50 mb-4">Core Competencies</h3>
+              <h3 className="text-xs font-extrabold uppercase tracking-widest text-white/50 mb-4">Core Competencies</h3>
               <div className="flex flex-wrap gap-3">
                 {EXPERTISE.map(skill => (
                   <SkillPill key={skill} skill={skill} />
@@ -78,7 +78,7 @@ export default function About() {
       {/* Services Section */}
       <section className="mb-32">
         <div className="flex flex-col md:flex-row justify-between items-end border-b border-white/10 pb-8 mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-white">Services</h2>
+          <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-white">Services</h2>
           <p className="text-white/50 mt-4 md:mt-0">How I can help you build the future.</p>
         </div>
         
@@ -111,12 +111,12 @@ export default function About() {
               transition={{ duration: 0.6, delay: index * 0.2 }}
               className="group relative p-8 rounded-xl bg-white/5 hover:bg-white/10 transition-colors duration-300 flex flex-col h-full min-h-[400px] border border-white/5"
             >
-              <div className="text-[15vw] md:text-[5vw] font-bold text-primary opacity-80 leading-none mb-auto">{service.id}</div>
+              <div className="text-[15vw] md:text-[5vw] font-extrabold text-primary opacity-80 leading-none mb-auto">{service.id}</div>
               <div className="mt-8">
                 <div className="w-12 h-12 rounded-full bg-primary/20 text-primary flex items-center justify-center mb-6 text-2xl">
                   {service.icon}
                 </div>
-                <h3 className="text-2xl font-bold mb-3 text-white">{service.title}</h3>
+                 <h3 className="text-2xl font-extrabold mb-3 text-white">{service.title}</h3>
                 <p className="text-white/60 leading-relaxed">
                   {service.desc}
                 </p>
@@ -133,13 +133,13 @@ export default function About() {
 
       {/* CTA section */}
       <section className="flex flex-col items-center justify-center text-center gap-6 pb-20">
-        <h2 className="text-3xl md:text-5xl font-black tracking-tight text-white">Ready to collaborate?</h2>
+        <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-white">Ready to collaborate?</h2>
         <p className="text-white/50 max-w-xl">
           Let&apos;s build something extraordinary together. I&apos;m currently available for freelance projects and consulting.
         </p>
         <Link 
           href="/contact"
-          className="mt-4 inline-flex items-center gap-2 bg-primary text-black font-bold text-lg px-8 py-4 rounded-full hover:scale-105 transition-transform"
+          className="mt-4 inline-flex items-center gap-2 bg-primary text-black font-extrabold text-lg px-8 py-4 rounded-full hover:scale-105 transition-transform"
         >
           Start a Project
           <span>→</span>
