@@ -15,7 +15,7 @@ export const HeroSection = () => {
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="text-primary font-bold tracking-widest uppercase text-sm mb-4"
         >
-          Portfolio 2024
+          Portfolio 2026
         </motion.div>
         <motion.h1 
           initial={{ opacity: 0, y: 30 }}
