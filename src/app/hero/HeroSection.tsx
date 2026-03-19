@@ -22,8 +22,8 @@ export const HeroSection = () => {
         </div>
 
         <div className="flex-1 flex flex-col justify-center py-8">
-          <h1 className="text-hero leading-[0.7] m-0 tracking-[-0.05em] border-b border-white/10 max-md:text-hero-mobile">SUMIT</h1>
-          <h1 className="text-hero leading-[0.9] m-0 tracking-[-0.05em] text-right pr-2vw max-md:text-hero-mobile">PATEL</h1>
+          <h1 className="text-hero leading-[0.9]  tracking-[-0.05em] border-b border-white/10 max-md:text-hero-mobile">SUMIT</h1>
+          <h1 className="text-hero leading-[0.9]  tracking-[-0.05em] text-right max-md:text-hero-mobile">PATEL</h1>
         </div>
 
         <div className="h-hero-bottom grid grid-cols-12 items-center border-t border-white/10 max-md:flex max-md:flex-col max-md:h-auto max-md:gap-10 max-md:pb-10">
