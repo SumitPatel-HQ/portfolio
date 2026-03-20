@@ -26,9 +26,9 @@ export const HeroSection = () => {
           </div>
         </div>
 
-        <div className="flex-1 flex flex-col justify-center py-8">
-          <h1 className="text-hero font-extrabold leading-[0.9] tracking-hero border-b border-white/10 max-md:text-hero-mobile">SUMIT</h1>
-          <h1 className="text-hero font-extrabold leading-[0.9] tracking-hero text-right max-md:text-hero-mobile">PATEL</h1>
+        <div className="flex-1 flex flex-col justify-center ">
+          <h1 className="text-hero font-extrabold leading-[0.9] tracking-hero border-b border-white/10 max-md:text-hero-mobile scale-y-[1.2] ">SUMIT</h1>
+          <h1 className="text-hero font-extrabold leading-[0.9] tracking-hero text-right max-md:text-hero-mobile scale-y-[1.2] mt-10 pr-[0.05em]">PATEL</h1>
         </div>
 
         <div className="h-hero-bottom flex items-center justify-between border-t border-white/10 max-md:flex-col max-md:h-auto max-md:gap-10 max-md:pb-10">
@@ -45,7 +45,7 @@ export const HeroSection = () => {
               Get in touch
             </button>
             <button className="py-3.5 px-18px text-status font-semibold uppercase border border-white/30 min-w-btn text-center bg-white/8 text-btn-secondary-text cursor-pointer transition-all duration-300 hover:bg-white hover:text-black hover:border-white hover:-translate-y-0.5 max-md:min-w-btn-mobile">
-              Explore Archive
+              View Projects
             </button>
           </div>
         </div>
