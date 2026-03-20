@@ -23,8 +23,8 @@ const socials = [
 
 export const MenuContent: React.FC<MenuContentProps> = ({ onNavigate }) => {
   return (
-    <div className="flex h-full w-full flex-col px-6 pb-8 pt-24 font-sans sm:px-10 sm:pt-28 lg:px-16 lg:pb-10 lg:pt-20 xl:px-24">
-      <div className="grid h-full w-full grid-cols-1 gap-10 lg:grid-cols-[1fr_minmax(300px,420px)] lg:items-start lg:gap-16">
+    <div className="flex h-full w-full flex-col px-6 pb-8 pt-24 font-sans sm:px-10 sm:pt-28 lg:px-16 lg:pb-10 lg:pt-32 xl:px-24">
+      <div className="grid h-full w-full grid-cols-1 gap-10 lg:mx-auto lg:mt-15 lg:w-fit lg:grid-cols-[max-content_max-content] lg:items-start lg:gap-x-150">
         <div className="flex min-h-0 flex-col justify-center pl-2 sm:pl-4 lg:pl-8">
           <nav aria-label="Main menu" className="flex flex-col gap-2 sm:gap-3">
             {menuItems.map((item) => (
@@ -42,7 +42,7 @@ export const MenuContent: React.FC<MenuContentProps> = ({ onNavigate }) => {
           </nav>
         </div>
 
-        <div className="menu-content-info grid grid-cols-1 gap-8 text-left text-[13px] font-medium uppercase tracking-[0.085em] leading-[1.33] text-foreground/85 lg:grid-cols-2 lg:items-start lg:gap-x-12 lg:justify-self-end lg:text-right">
+        <div className="menu-content-info grid grid-cols-1 gap-2 text-left text-[13px] font-medium uppercase tracking-[0.085em] leading-[1.33] text-foreground/85 lg:grid-cols-2 lg:items-start lg:gap-x-0 lg:text-right">
           <div className="space-y-1 lg:self-start">
             <p>Akaru</p>
             <p>9 quai Andre Lassagne</p>
