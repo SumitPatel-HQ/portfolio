@@ -9,7 +9,7 @@ export const ContactMiniSection = () => {
   return (
     <section
       aria-labelledby="contact-mini-heading"
-      className="relative w-full overflow-hidden px-8 py-12 md:px-24 md:py-16"
+      className="relative w-full overflow-hidden px-8 py-12  md:px-24 md:py-0"
     >
       <div className="relative mx-auto grid w-full grid-cols-1 gap-10 rounded-3xl p-8 md:grid-cols-12 md:gap-8">
         <div className="md:col-span-8">
