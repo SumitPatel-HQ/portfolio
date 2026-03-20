@@ -21,6 +21,8 @@ const socials = [
   { label: 'Facebook', href: '#' },
 ];
 
+const titleLetters = ['S', 'U', 'M', 'I', 'T'];
+
 export const MenuContent: React.FC<MenuContentProps> = ({ onNavigate }) => {
   return (
     <div className="flex h-full w-full flex-col px-6 pb-8 pt-24 font-sans sm:px-10 sm:pt-28 lg:px-16 lg:pb-10 lg:pt-32 xl:px-24">
@@ -74,8 +76,23 @@ export const MenuContent: React.FC<MenuContentProps> = ({ onNavigate }) => {
       {/* Desktop title layout (visible from lg and up) */}
       <div className="pointer-events-none relative mt-6 hidden w-full items-end justify-center overflow-visible pb-0 pt-4 lg:flex" aria-hidden="true">
         <div className="overflow-visible">
-          <h1 className="menu-content-title translate-y-0 leading-[0.2] text-[clamp(14rem,36vw,33rem)] font-extrabold uppercase tracking-[-0.07em] text-foreground/10">
-            <span className="block origin-bottom scale-y-[1.25]">SUMIT</span>
+          <h1
+            aria-label="SUMIT"
+            className="menu-content-title translate-y-0 leading-[0.72] text-[clamp(14rem,36vw,33rem)] font-extrabold uppercase tracking-[-0.07em] text-foreground/10 [perspective:1000px]"
+          >
+            <span className="menu-content-title-letters flex gap-0 [transform-style:preserve-3d]">
+              {titleLetters.map((letter, index) => (
+                <span
+                  key={`${letter}-${index}`}
+                  aria-hidden="true"
+                  className="menu-content-title-letter-clip block overflow-hidden leading-[1.05] pt-[0.3em] -mt-[0.3em] pb-[0.15em] -mb-[0.15em]"
+                >
+                  <span className="menu-content-title-letter block origin-bottom scale-y-[1.2] leading-tight [transform-style:preserve-3d]">
+                    {letter}
+                  </span>
+                </span>
+              ))}
+            </span>
           </h1>
         </div>
       </div>
@@ -84,7 +101,7 @@ export const MenuContent: React.FC<MenuContentProps> = ({ onNavigate }) => {
       <div className="pointer-events-none relative mt-auto flex items-end justify-center overflow-visible pb-6 pt-6 -mb-6 lg:hidden" aria-hidden="true">
         <div className="overflow-visible">
           <div className="py-3 -my-3">
-            <h1 className="menu-content-title block origin-bottom pb-2 leading-[0.9] text-[88px] font-extrabold uppercase text-foreground/15 sm:text-[132px]">
+            <h1 className="menu-content-title-mobile block origin-bottom pb-2 leading-[0.9] text-[88px] font-extrabold uppercase text-foreground/15 sm:text-[132px]">
               <span className="block origin-bottom scale-y-[1.2]">SUMIT</span>
             </h1>
           </div>
