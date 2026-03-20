@@ -29,8 +29,8 @@ const StripesBackground: React.FC<StripesBackgroundProps> = ({
     <div
       className={clsx(
         "pointer-events-none z-10",
-        "bg-[repeating-linear-gradient(45deg,_#00000066_0px,_#00000066_1px,_transparent_1px,_transparent_6px)]",
-        "dark:bg-[repeating-linear-gradient(45deg,_#ffffff66_0px,_#ffffff66_1px,_transparent_1px,_transparent_6px)]",
+        "bg-[repeating-linear-gradient(45deg,#00000066_0px,#00000066_1px,transparent_1px,transparent_6px)]",
+        "dark:bg-[repeating-linear-gradient(45deg,#ffffff66_0px,#ffffff66_1px,transparent_1px,transparent_6px)]",
         positionStyles[position],
         width,
         height,
