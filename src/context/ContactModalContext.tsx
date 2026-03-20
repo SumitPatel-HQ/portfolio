@@ -78,7 +78,7 @@ export function ContactModalProvider({ children }: { children: React.ReactNode }
               </div>
               <div className="flex flex-col gap-2">
                 <Label>Message</Label>
-                <Textarea className="min-h-[120px]" />
+                <Textarea className="h-32 resize-none" />
               </div>
               <Button className="w-full" type="button" onClick={closeModal}>
                 Submit

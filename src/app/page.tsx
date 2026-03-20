@@ -3,7 +3,7 @@
 import React from 'react';
 import { HeroSection } from './hero/HeroSection';
 import { FeaturedWork } from './featured-work/FeaturedWork';
-import { ContactMiniSection } from './contact/contactminisection/contactpage';
+import { ContactMiniSection } from './contactminipage/contactMiniSection';
 
 export default function Home() {
   return (

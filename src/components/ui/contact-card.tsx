@@ -39,7 +39,7 @@ export function ContactCard({
 		>
 
 			<div className="flex flex-col justify-between lg:col-span-2">
-				<div className="relative h-full space-y-4 px-4 py-12 md:px-12 md:pt-15 md:pb-8">
+				<div className="relative h-full space-y-4 px-4 py-12 md:px-12 md:pt-16 md:pb-8">
 					<h1 className="text-3xl font-bold md:text-4xl lg:text-5xl text-foreground">
 						{title}
 					</h1>
