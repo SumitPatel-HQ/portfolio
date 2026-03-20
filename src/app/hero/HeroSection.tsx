@@ -6,8 +6,11 @@ import React from 'react';
 // import styles from "./style.module.css";
 import StripesBackground from "@/components/ui/StripesBackground";
 import { Menu } from "@/components/menu/Menu";
+import { useContactModal } from "@/context/ContactModalContext";
 
 export const HeroSection = () => {
+  const { openModal } = useContactModal();
+
   return (
     <main className="min-h-screen bg-background text-foreground relative overflow-hidden flex flex-col">
       <Menu />
@@ -36,7 +39,9 @@ export const HeroSection = () => {
             </p>
           </div>
           <div className="flex justify-end items-center gap-3 max-md:w-full max-md:justify-start max-md:flex-wrap">
-            <button className="py-3.5 px-18px text-status font-semibold uppercase border border-accent min-w-btn text-center bg-accent text-black cursor-pointer transition-all duration-300 hover:bg-white hover:text-black hover:border-white hover:-translate-y-0.5 max-md:min-w-btn-mobile">
+            <button 
+            onClick={openModal} 
+            className="py-3.5 px-18px text-status font-semibold uppercase border border-accent min-w-btn text-center bg-accent text-black cursor-pointer transition-all duration-300 hover:bg-white hover:text-black hover:border-white hover:-translate-y-0.5 max-md:min-w-btn-mobile">
               Get in touch
             </button>
             <button className="py-3.5 px-18px text-status font-semibold uppercase border border-white/30 min-w-btn text-center bg-white/8 text-btn-secondary-text cursor-pointer transition-all duration-300 hover:bg-white hover:text-black hover:border-white hover:-translate-y-0.5 max-md:min-w-btn-mobile">

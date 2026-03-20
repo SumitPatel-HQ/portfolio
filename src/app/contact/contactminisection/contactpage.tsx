@@ -2,8 +2,11 @@
 
 import React from "react";
 import Link from "next/link";
+import { useContactModal } from "@/context/ContactModalContext";
 
 export const ContactMiniSection = () => {
+  const { openModal } = useContactModal();
+
   return (
     <section
       aria-labelledby="contact-mini-heading"
@@ -37,13 +40,13 @@ export const ContactMiniSection = () => {
         </div>
 
         <div className="md:col-span-4 md:flex md:items-center md:justify-end">
-          <Link
-            href="/contact"
-            aria-label="Open contact page"
+          <button
+            onClick={openModal}
+            aria-label="Open contact modal"
             className="inline-flex h-40 w-40 items-center justify-center rounded-full border border-primary/30 bg-accent text-sm font-extrabold uppercase tracking-btn text-background transition-all hover:scale-[1.03] hover:bg-accent/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background md:h-48 md:w-48"
           >
             Get In Touch
-          </Link>
+          </button>
         </div>
       </div>
     </section>
