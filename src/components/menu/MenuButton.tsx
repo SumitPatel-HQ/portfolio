@@ -48,7 +48,7 @@ export const MenuButton: React.FC<MenuButtonProps> = ({ isOpen, toggleMenu }) =>
             variants={{
               idle: { x: 0 },
               hover: { x: -14 },
-              open: { x: -6 },
+              open: { x: -20, opacity: 0 },
             }}
             transition={textTransition}
             className="text-lg font-semibold leading-none tracking-wider uppercase"
