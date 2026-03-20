@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import React from 'react';
+import { useContactModal } from '@/context/ContactModalContext';
 
 interface MenuContentProps {
   onNavigate?: () => void;
@@ -11,7 +12,7 @@ const menuItems = [
   { label: 'Projects', href: '/work' },
   { label: 'Expertise', href: '/experience' },
   { label: 'Agency', href: '/about' },
-  { label: 'Contact', href: '/contact' },
+  { label: 'Contact', href: '#' },
 ];
 
 const socials = [
@@ -24,6 +25,8 @@ const socials = [
 const titleLetters = ['S', 'U', 'M', 'I', 'T'];
 
 export const MenuContent: React.FC<MenuContentProps> = ({ onNavigate }) => {
+  const { openModal } = useContactModal();
+
   return (
     <div className="flex h-full w-full flex-col px-6 pb-8 pt-24 font-sans sm:px-10 sm:pt-28 lg:px-16 lg:pb-10 lg:pt-32 xl:px-24">
       <div className="grid h-full w-full grid-cols-1 gap-10 lg:mx-auto lg:mt-15 lg:w-fit lg:grid-cols-[max-content_max-content] lg:items-start lg:gap-x-150">
@@ -31,14 +34,27 @@ export const MenuContent: React.FC<MenuContentProps> = ({ onNavigate }) => {
           <nav aria-label="Main menu" className="flex flex-col gap-2 sm:gap-3">
             {menuItems.map((item) => (
               <div key={item.label} className="overflow-hidden">
-                <Link
-                  href={item.href}
-                  onClick={onNavigate}
-                  className="group menu-content-pages inline-flex items-center gap-3 text-[44px] font-[350] leading-[0.98] tracking-[-0.015em] text-foreground transition-transform duration-300 ease-out hover:translate-x-1 hover:opacity-85 sm:text-[56px] lg:text-[64px]"
-                >
-                  <span className="translate-y-[-0.02em] text-[0.43em] opacity-45">↗</span>
-                  <span>{item.label}</span>
-                </Link>
+                {item.label === 'Contact' ? (
+                  <button
+                    onClick={() => {
+                      onNavigate?.();
+                      openModal();
+                    }}
+                    className="group menu-content-pages inline-flex items-center gap-3 text-[44px] font-[350] leading-[0.98] tracking-[-0.015em] text-foreground transition-transform duration-300 ease-out hover:translate-x-1 hover:opacity-85 sm:text-[56px] lg:text-[64px] bg-transparent border-none p-0 cursor-pointer"
+                  >
+                    <span className="translate-y-[-0.02em] text-[0.43em] opacity-45">↗</span>
+                    <span>{item.label}</span>
+                  </button>
+                ) : (
+                  <Link
+                    href={item.href}
+                    onClick={onNavigate}
+                    className="group menu-content-pages inline-flex items-center gap-3 text-[44px] font-[350] leading-[0.98] tracking-[-0.015em] text-foreground transition-transform duration-300 ease-out hover:translate-x-1 hover:opacity-85 sm:text-[56px] lg:text-[64px]"
+                  >
+                    <span className="translate-y-[-0.02em] text-[0.43em] opacity-45">↗</span>
+                    <span>{item.label}</span>
+                  </Link>
+                )}
               </div>
             ))}
           </nav>

@@ -4,10 +4,12 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { MenuButton } from './MenuButton';
 import { MenuContent } from './MenuContent';
 import { useMenuAnimation } from './useMenuAnimation';
+import { useContactModal } from '@/context/ContactModalContext';
 
 export const Menu = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { containerRef } = useMenuAnimation(isOpen);
+  const { isOpen: isContactModalOpen } = useContactModal();
 
   const toggleMenu = useCallback(() => {
     setIsOpen(prev => !prev);
@@ -56,7 +58,11 @@ export const Menu = () => {
 
   return (
     <>
-      <MenuButton isOpen={isOpen} toggleMenu={toggleMenu} />
+      <MenuButton 
+        isOpen={isOpen} 
+        toggleMenu={toggleMenu} 
+        isContactModalOpen={isContactModalOpen} 
+      />
 
       {/* Menu Overlay */}
       <div

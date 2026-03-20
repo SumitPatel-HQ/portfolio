@@ -6,9 +6,14 @@ import { motion } from 'framer-motion';
 interface MenuButtonProps {
   isOpen: boolean;
   toggleMenu: () => void;
+  isContactModalOpen?: boolean;
 }
 
-export const MenuButton: React.FC<MenuButtonProps> = ({ isOpen, toggleMenu }) => {
+export const MenuButton: React.FC<MenuButtonProps> = ({ 
+  isOpen, 
+  toggleMenu, 
+  isContactModalOpen 
+}) => {
   const [isHovered, setIsHovered] = useState(false);
   const smoothEase = [0.4, 0, 0.2, 1] as const;
 
@@ -38,6 +43,11 @@ export const MenuButton: React.FC<MenuButtonProps> = ({ isOpen, toggleMenu }) =>
       aria-label="Toggle menu"
       aria-expanded={isOpen}
       whileTap={{ scale: 0.97 }}
+      animate={{ 
+        opacity: isContactModalOpen ? 0 : 1, 
+        pointerEvents: isContactModalOpen ? 'none' : 'auto',
+        y: isContactModalOpen ? -20 : 0
+      }}
       transition={{ duration: 0.35, ease: smoothEase }}
       className="fixed top-8 right-8 z-100 flex items-center justify-center overflow-hidden px-8 py-5 rounded-full bg-background-secondary text-foreground cursor-pointer shadow-lg max-md:top-6 max-md:right-6 max-md:px-6 max-md:py-4"
     >
