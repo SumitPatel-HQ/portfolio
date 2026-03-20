@@ -134,9 +134,9 @@ export const MenuContent: React.FC<MenuContentProps> = ({ onNavigate }) => {
         </div>
 
         <div className="overflow-visible">
-          <div className="py-8 -my-8">
-            <h1 className="menu-content-title block origin-bottom pb-3 leading-[0.9] text-[220px] font-extrabold uppercase tracking-[-0.05em] text-foreground xl:text-[320px]">
-              <span className="block origin-bottom scale-y-[1.25]">SUMIT</span>
+          <div className="">
+            <h1 className="menu-content-title leading-[0.9] text-[220px] font-extrabold uppercase tracking-[-0.07em] text-foreground xl:text-[23rem]">
+              <span className="block origin-bottom scale-y-[1.5]">SUMIT</span>
             </h1>
           </div>
         </div>
