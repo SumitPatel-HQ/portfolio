@@ -41,7 +41,7 @@ export const MenuButton: React.FC<MenuButtonProps> = ({ isOpen, toggleMenu }) =>
       transition={{ duration: 0.35, ease: smoothEase }}
       className="fixed top-8 right-8 z-100 flex items-center justify-center gap-3 overflow-hidden px-8 py-5 rounded-full bg-[#1A1A1A] text-foreground cursor-pointer shadow-lg max-md:top-6 max-md:right-6 max-md:px-6 max-md:py-4"
     >
-      <span className="relative flex w-10 justify-center">
+      <span className="relative flex w-22 justify-center">
         <motion.span
           animate={visualState}
           variants={{
