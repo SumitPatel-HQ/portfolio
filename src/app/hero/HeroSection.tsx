@@ -4,7 +4,7 @@ import React from 'react';
 // import Link from 'next/link';
 // import { motion } from 'framer-motion';
 // import styles from "./style.module.css";
-import StripesBackground from "@/components/ui/StripesBackground";
+import StripesBackground from "@/components/ui/visuals/StripesBackground";
 import { Menu } from "@/components/menu/Menu";
 import { useContactModal } from "@/context/ContactModalContext";
 

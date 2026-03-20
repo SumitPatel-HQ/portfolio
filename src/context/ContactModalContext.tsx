@@ -2,12 +2,12 @@
 
 import React, { createContext, useContext, useState } from "react";
 import { ContactCard } from "@/components/ui/contact-card";
-import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogHeader, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogHeader } from "@/components/ui/dialog";
 import { MailIcon, PhoneIcon, MapPinIcon } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/components/ui/forms/input";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/forms/label";
+import { Textarea } from "@/components/ui/forms/textarea";
 
 interface ContactModalContextType {
   isOpen: boolean;

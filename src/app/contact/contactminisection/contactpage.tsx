@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
 import { useContactModal } from "@/context/ContactModalContext";
 
 export const ContactMiniSection = () => {
