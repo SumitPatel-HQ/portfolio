@@ -32,23 +32,31 @@ export const MenuButton: React.FC<MenuButtonProps> = ({ isOpen, toggleMenu }) =>
       type="button"
       aria-label="Toggle menu"
       aria-expanded={isOpen}
+      whileHover={{ scale: 1.03 }}
       whileTap={{ scale: 0.97 }}
       transition={{ duration: 0.35, ease: smoothEase }}
-      className={`fixed top-8 right-8 z-100 flex items-center justify-center gap-3 px-8 py-5 rounded-[200px] border cursor-pointer shadow-lg max-md:top-6 max-md:right-6 max-md:px-6 max-md:py-4 transition-all duration-400 ease-in-out ${
-        isOpen || isHovered
-          ? 'bg-foreground/10 text-foreground border-foreground/40 scale-105'
-          : 'bg-background text-foreground border-border-custom'
-      }`}
+      className="fixed top-8 right-8 z-100 flex items-center justify-center gap-3 px-8 py-5 rounded-[200px] border border-border-custom bg-background text-foreground cursor-pointer shadow-lg max-md:top-6 max-md:right-6 max-md:px-6 max-md:py-4"
     >
       <span className="text-lg leading-none tracking-wider uppercase">MENU</span>
 
-      <span className="relative block h-5 w-5 shrink-0" aria-hidden="true">
+      <span className="relative block h-10 w-10 shrink-0" aria-hidden="true">
+        <motion.span
+          animate={visualState}
+          variants={{
+            idle: { opacity: 0, scale: 0.35 },
+            hover: { opacity: 1, scale: 1 },
+            open: { opacity: 1, scale: 1 },
+          }}
+          transition={dotTransition}
+          className="absolute left-1/2 top-1/2 h-10 w-10 -translate-x-1/2 -translate-y-1/2 rounded-full bg-status-dot"
+        />
+
         <motion.span
           animate={visualState}
           variants={{
             idle: { opacity: 1, scale: 1 },
-            hover: { opacity: 0, scale: 0.45 },
-            open: { opacity: 0, scale: 0.45 },
+            hover: { opacity: 0, scale: 0.35 },
+            open: { opacity: 0, scale: 0.35 },
           }}
           transition={dotTransition}
           className="absolute left-1/2 top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-status-dot"
@@ -58,33 +66,22 @@ export const MenuButton: React.FC<MenuButtonProps> = ({ isOpen, toggleMenu }) =>
           animate={visualState}
           variants={{
             idle: { y: 0, rotate: 0, opacity: 0, scaleX: 0 },
-            hover: { y: -4, rotate: 0, opacity: 1, scaleX: 1 },
+            hover: { y: -3, rotate: 0, opacity: 1, scaleX: 1 },
             open: { y: 0, rotate: 45, opacity: 1, scaleX: 1 },
           }}
           transition={lineTransition}
-          className="absolute left-1/2 top-1/2 h-0.5 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full bg-foreground origin-center"
-        />
-
-        <motion.span
-          animate={visualState}
-          variants={{
-            idle: { opacity: 0, scaleX: 0 },
-            hover: { opacity: 1, scaleX: 1 },
-            open: { opacity: 0, scaleX: 0.45 },
-          }}
-          transition={lineTransition}
-          className="absolute left-1/2 top-1/2 h-0.5 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full bg-foreground origin-center"
+          className="absolute left-1/2 top-1/2 h-0.5 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full bg-background origin-center"
         />
 
         <motion.span
           animate={visualState}
           variants={{
             idle: { y: 0, rotate: 0, opacity: 0, scaleX: 0 },
-            hover: { y: 4, rotate: 0, opacity: 1, scaleX: 1 },
+            hover: { y: 3, rotate: 0, opacity: 1, scaleX: 1 },
             open: { y: 0, rotate: -45, opacity: 1, scaleX: 1 },
           }}
           transition={lineTransition}
-          className="absolute left-1/2 top-1/2 h-0.5 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full bg-foreground origin-center"
+          className="absolute left-1/2 top-1/2 h-0.5 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full bg-background origin-center"
         />
       </span>
     </motion.button>
