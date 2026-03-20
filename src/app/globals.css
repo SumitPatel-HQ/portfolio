@@ -6,6 +6,7 @@
 @theme {
   --color-primary: #64FFDA;
   --color-background-dark: #0A0A0A;
+  --color-background-secondary: #1A1A1A;
   --color-background-light: #f5f8f8;
   --color-surface-dark: #121212;
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
@@ -113,6 +114,7 @@
 
 :root {
   --background: #0a0a0a;
+  --background-secondary: #1A1A1A;
   --foreground: #ffffff;
   --accent: #00d9d9;
   --accent-faded: rgba(0, 217, 217, 0.1);
