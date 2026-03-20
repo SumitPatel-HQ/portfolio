@@ -40,7 +40,7 @@ export const ContactMiniSection = () => {
           <Link
             href="/contact"
             aria-label="Open contact page"
-            className="inline-flex h-40 w-40 items-center justify-center rounded-full bg-accent text-sm font-extrabold uppercase tracking-btn text-background transition-all hover:scale-[1.03] hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background md:h-48 md:w-48"
+            className="inline-flex h-40 w-40 items-center justify-center rounded-full border border-primary/30 bg-accent text-sm font-extrabold uppercase tracking-btn text-background transition-all hover:scale-[1.03] hover:bg-accent/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background md:h-48 md:w-48"
           >
             Get In Touch
           </Link>
