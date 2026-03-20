@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from 'react';
-import gsap from 'gsap';
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 
 interface MenuButtonProps {
   isOpen: boolean;
@@ -9,45 +9,99 @@ interface MenuButtonProps {
 }
 
 export const MenuButton: React.FC<MenuButtonProps> = ({ isOpen, toggleMenu }) => {
-  const buttonRef = useRef<HTMLButtonElement>(null);
-  const textRef = useRef<HTMLSpanElement>(null);
-  const [buttonText, setButtonText] = useState("Menu");
-  const isFirstRun = useRef(true);
+  const [isHovered, setIsHovered] = useState(false);
+  const smoothEase = [0.4, 0, 0.2, 1] as const;
 
-  useEffect(() => {
-    if (isFirstRun.current) {
-      isFirstRun.current = false;
-      return;
-    }
+  const visualState: 'idle' | 'hover' | 'open' = isOpen ? 'open' : isHovered ? 'hover' : 'idle';
 
-    const nextText = isOpen ? "Close" : "Menu";
-    
-    if (buttonRef.current && textRef.current) {
-      const tl = gsap.timeline();
-      tl.to(buttonRef.current, {
-        duration: 0.4,
-        autoAlpha: 0,
-        pointerEvents: 'none',
-        onComplete: () => {
-          setButtonText(nextText);
-        }
-      })
-      .to(buttonRef.current, {
-        duration: 0.4,
-        autoAlpha: 1,
-        pointerEvents: 'auto'
-      });
-    }
-  }, [isOpen]);
+  const lineTransition = {
+    duration: 0.4,
+    ease: smoothEase,
+  };
+
+  const dotTransition = {
+    duration: 0.35,
+    ease: smoothEase,
+  };
+
+  const textTransition = {
+    duration: 0.4,
+    ease: smoothEase,
+  };
 
   return (
-    <button
-      ref={buttonRef}
+    <motion.button
       onClick={toggleMenu}
-      className="fixed top-8 right-8 z-100 flex items-center justify-center gap-3 bg-background text-foreground px-8 py-5 rounded-[200px] border border-border-custom cursor-pointer shadow-lg max-md:top-6 max-md:right-6 max-md:px-6 max-md:py-4 transition-transform hover:scale-105"
+      onHoverStart={() => setIsHovered(true)}
+      onHoverEnd={() => setIsHovered(false)}
+      type="button"
+      aria-label="Toggle menu"
+      aria-expanded={isOpen}
+      whileTap={{ scale: 0.97 }}
+      transition={{ duration: 0.35, ease: smoothEase }}
+      className="fixed top-8 right-8 z-100 flex items-center justify-center overflow-hidden px-8 py-5 rounded-full bg-background-secondary text-foreground cursor-pointer shadow-lg max-md:top-6 max-md:right-6 max-md:px-6 max-md:py-4"
     >
-      <span ref={textRef} className="text-lg leading-none tracking-wider uppercase">{buttonText}</span>
-      <span className="w-4 h-4 rounded-full bg-status-dot block shrink-0" />
-    </button>
+      <span className="flex items-center gap-3 translate-x-3 max-md:translate-x-2">
+        <span className="relative flex w-12 justify-center">
+          <motion.span
+            animate={visualState}
+            variants={{
+              idle: { x: 0 },
+              hover: { x: -14 },
+              open: { x: -20, opacity: 0 },
+            }}
+            transition={textTransition}
+            className="text-lg font-semibold leading-none tracking-wider uppercase"
+          >
+            MENU
+          </motion.span>
+        </span>
+
+        <motion.span
+          animate={visualState}
+          variants={{
+            idle: { x: 0 },
+            hover: { x: 0 },
+            open: { x: 0 },
+          }}
+          transition={textTransition}
+          className="relative block h-10 w-10 shrink-0"
+          aria-hidden="true"
+        >
+          <motion.span
+            animate={visualState}
+            variants={{
+              idle: { opacity: 1, scale: 0.3 },
+              hover: { opacity: 1, scale: 1.45 },
+              open: { opacity: 1, scale: 1.45 },
+            }}
+            transition={dotTransition}
+            className="absolute inset-0 m-auto h-10 w-10 rounded-full bg-status-dot"
+          />
+
+          <motion.span
+            animate={visualState}
+            variants={{
+              idle: { y: 0, rotate: 0, opacity: 0, scaleX: 0 },
+              hover: { y: -2.5, rotate: 0, opacity: 1, scaleX: 1 },
+              open: { y: 0, rotate: 45, opacity: 1, scaleX: 1 },
+            }}
+            transition={lineTransition}
+            className="absolute inset-0 m-auto h-0.5 w-4 rounded-full bg-background origin-center"
+          />
+
+          <motion.span
+            animate={visualState}
+            variants={{
+              idle: { y: 0, rotate: 0, opacity: 0, scaleX: 0 },
+              hover: { y: 2.5, rotate: 0, opacity: 1, scaleX: 1 },
+              open: { y: 0, rotate: -45, opacity: 1, scaleX: 1 },
+            }}
+            transition={lineTransition}
+            className="absolute inset-0 m-auto h-0.5 w-4 rounded-full bg-background origin-center"
+          />
+        </motion.span>
+      </span>
+    </motion.button>
   );
 };

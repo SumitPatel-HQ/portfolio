@@ -3,8 +3,8 @@
 import React from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { SkillPill } from '@/components/ui/SkillPill';
-import { MarqueeStrip } from '@/components/ui/MarqueeStrip';
+import { SkillPill } from '@/components/ui/skills/SkillPill';
+import { MarqueeStrip } from '@/components/ui/visuals/MarqueeStrip';
 
 const EXPERTISE = [
   'React', 'Node.js', 'Python', 'TensorFlow', 'UI/UX', 'TypeScript', 'Next.js', 'Three.js'

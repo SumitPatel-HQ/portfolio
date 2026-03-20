@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Footer } from "@/components/layout/Footer";
+import { ContactModalProvider } from "@/context/ContactModalContext";
 
 // Load Inter font with CSS variables
 const inter = Inter({
@@ -23,10 +24,12 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark scroll-smooth" suppressHydrationWarning>
       <body className={`${inter.variable} font-sans antialiased min-h-screen flex flex-col bg-background text-foreground`}>
-        <main className="flex-1 flex flex-col">
-          {children}
-        </main>
-        <Footer />
+        <ContactModalProvider>
+          <main className="flex-1 flex flex-col">
+            {children}
+          </main>
+          <Footer />
+        </ContactModalProvider>
       </body>
     </html>
   );

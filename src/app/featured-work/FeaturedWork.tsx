@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion, useMotionValue, useSpring } from "framer-motion";
 import { MoveUpRight as ArrowIcon } from "lucide-react";
+import { createPortal } from "react-dom";
 import { cn } from "@/lib/utils";
 
 interface VisualItem {
@@ -44,6 +45,11 @@ export const FeaturedWork = () => {
   const smoothX = useSpring(cursorX, { stiffness: 300, damping: 40 });
   const smoothY = useSpring(cursorY, { stiffness: 300, damping: 40 });
 
+  const PREVIEW_WIDTH = 300;
+  const PREVIEW_HEIGHT = 400;
+  const PREVIEW_GAP = 24;
+  const VIEWPORT_PADDING = 16;
+
   useEffect(() => {
     const updateScreen = () => {
       setIsLargeScreen(window.innerWidth >= 768);
@@ -55,8 +61,20 @@ export const FeaturedWork = () => {
   }, []);
 
   const handlePointerMove = (event: React.MouseEvent<HTMLElement>) => {
-    cursorX.set(event.clientX);
-    cursorY.set(event.clientY);
+    if (!isLargeScreen) {
+      return;
+    }
+
+    const maxX = window.innerWidth - PREVIEW_WIDTH - VIEWPORT_PADDING;
+    const maxY = window.innerHeight - PREVIEW_HEIGHT - VIEWPORT_PADDING;
+    const desiredX = event.clientX + PREVIEW_GAP;
+    const desiredY = event.clientY + PREVIEW_GAP;
+
+    const clampedX = Math.max(VIEWPORT_PADDING, Math.min(desiredX, maxX));
+    const clampedY = Math.max(VIEWPORT_PADDING, Math.min(desiredY, maxY));
+
+    cursorX.set(clampedX);
+    cursorY.set(clampedY);
   };
 
   const handleActivate = (item: VisualItem) => {
@@ -147,35 +165,37 @@ export const FeaturedWork = () => {
           ))}
         </ul>
 
-        <AnimatePresence>
-          {isLargeScreen && focusedItem && (
-            <motion.div
-              key={focusedItem.key}
-              className="fixed z-30 pointer-events-none"
-              style={{
-                left: smoothX,
-                top: smoothY,
-                x: "-50%",
-                y: "-50%",
-              }}
-              initial={{ opacity: 0, scale: 0.5 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.5 }}
-              transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              aria-hidden="true"
-            >
-              <Image
-                src={focusedItem.url}
-                width={600}
-                height={800}
-                alt=""
-                className="object-cover w-[280px] lg:w-[300px] h-[360px] lg:h-[400px] rounded-lg shadow-2xl bg-white dark:bg-zinc-950"
-                sizes="300px"
-                priority
-              />
-            </motion.div>
+        {typeof document !== "undefined" &&
+          createPortal(
+            <AnimatePresence>
+              {isLargeScreen && focusedItem && (
+                <motion.div
+                  key={focusedItem.key}
+                  className="fixed z-[999] pointer-events-none"
+                  style={{
+                    left: smoothX,
+                    top: smoothY,
+                  }}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  aria-hidden="true"
+                >
+                  <Image
+                    src={focusedItem.url}
+                    width={600}
+                    height={800}
+                    alt=""
+                    className="object-cover w-[280px] lg:w-[300px] h-[360px] lg:h-[400px] rounded-lg shadow-2xl bg-white dark:bg-zinc-950"
+                    sizes="300px"
+                    priority
+                  />
+                </motion.div>
+              )}
+            </AnimatePresence>,
+            document.body
           )}
-        </AnimatePresence>
       </div>
     </section>
   );
