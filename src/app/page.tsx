@@ -1,9 +1,9 @@
 "use client";
 
 import React from 'react';
-import { HeroSection } from './hero/HeroSection';
-import { FeaturedWork } from './featured-work/FeaturedWork';
-import { ContactMiniSection } from './contactminipage/contactMiniSection';
+import { HeroSection } from './home/hero/HeroSection';
+import { FeaturedWork } from './home/featured-work/FeaturedWork';
+import { ContactMiniSection } from './home/contactminipage/contactMiniSection';
 
 export default function Home() {
   return (
