@@ -1,9 +1,8 @@
 "use client";
 
 import React from 'react';
-// import Link from 'next/link';
+import Link from 'next/link';
 // import { motion } from 'framer-motion';
-// import styles from "./style.module.css";
 import StripesBackground from "@/components/ui/visuals/StripesBackground";
 import { Menu } from "@/components/menu/Menu";
 import { useContactModal } from "@/context/ContactModalContext";
@@ -44,9 +43,9 @@ export const HeroSection = () => {
             className="py-3.5 px-18px text-status font-semibold uppercase border border-accent min-w-btn text-center bg-accent text-black cursor-pointer transition-all duration-300 hover:bg-white hover:text-black hover:border-white hover:-translate-y-0.5 max-md:min-w-btn-mobile">
               Get in touch
             </button>
-            <button className="py-3.5 px-18px text-status font-semibold uppercase border border-white/30 min-w-btn text-center bg-white/8 text-btn-secondary-text cursor-pointer transition-all duration-300 hover:bg-white hover:text-black hover:border-white hover:-translate-y-0.5 max-md:min-w-btn-mobile">
+            <Link href="/projects" className="py-3.5 px-18px text-status font-semibold uppercase border border-white/30 min-w-btn text-center bg-white/8 cta-secondary-text cursor-pointer transition-all duration-300 hover:bg-white hover:border-white hover:-translate-y-0.5 max-md:min-w-btn-mobile">
               View Projects
-            </button>
+            </Link>
           </div>
         </div>
       </div>

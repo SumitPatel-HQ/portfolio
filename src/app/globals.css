@@ -215,6 +215,15 @@ button {
   opacity: 0.8;
 }
 
+/* Force readable text on light hover surfaces for secondary CTA links/buttons. */
+.cta-secondary-text {
+  color: var(--color-btn-secondary-text);
+}
+
+.cta-secondary-text:hover {
+  color: #0a0a0a !important;
+}
+
 .container {
   min-height: 100vh;
   width: 100%;
