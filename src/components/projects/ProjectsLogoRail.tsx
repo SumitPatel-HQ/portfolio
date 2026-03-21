@@ -10,7 +10,7 @@ type ProjectsLogoRailProps = {
 
 export function ProjectsLogoRail({ projects, activeIndex, onSelect }: ProjectsLogoRailProps) {
   return (
-    <div className="projects-logo-rail relative z-20 mx-16 mt-auto flex w-fit items-center gap-3 rounded-xl p-3 xl:mx-24 xl:mb-14">
+    <div className="projects-logo-rail relative z-20 flex w-fit items-center gap-5 rounded-[12px] p-5">
       {projects.map((project, index) => {
         const isActive = index === activeIndex;
 
@@ -20,7 +20,7 @@ export function ProjectsLogoRail({ projects, activeIndex, onSelect }: ProjectsLo
             type="button"
             onClick={() => onSelect(index)}
             className={clsx(
-              "projects-logo-button min-h-[62px] min-w-[88px] rounded-[10px] px-4 py-3 text-sm font-semibold uppercase tracking-[0.04em]",
+              "projects-logo-button flex h-[120px] w-[120px] items-center justify-center rounded-[12px] px-2 text-[17px] font-semibold uppercase tracking-[0.02em]",
               isActive ? "is-active" : "is-inactive"
             )}
             aria-label={`Show ${project.logoAlt}`}

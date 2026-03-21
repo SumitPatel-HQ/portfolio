@@ -7,7 +7,7 @@ type ProjectsNavigationProps = {
 
 export function ProjectsNavigation({ onPrev, onNext }: ProjectsNavigationProps) {
   return (
-    <div className="relative z-20 ml-auto mr-14 mt-auto flex items-center gap-4 pb-10 xl:mr-[68px] xl:pb-12">
+    <div className="relative z-20 flex items-center gap-4">
       <button type="button" className="projects-nav-btn" onClick={onPrev} aria-label="Show previous project">
         <ArrowLeft size={20} />
       </button>
@@ -22,4 +22,3 @@ export function ProjectsNavigation({ onPrev, onNext }: ProjectsNavigationProps) 
     </div>
   );
 }
-

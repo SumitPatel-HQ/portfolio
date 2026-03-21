@@ -27,30 +27,32 @@ export default function ProjectsPage() {
     <main className="projects-screen relative flex min-h-screen w-full flex-col overflow-hidden bg-[#191919] text-[#FFFAEE]">
       <ProjectsStage imageUrl={activeProject.heroImage} imageAlt={activeProject.logoAlt} textureUrl={PROJECTS_TEXTURE_IMAGE} />
 
-      <header className="relative z-20 flex w-full items-center justify-between px-9 py-9 xl:px-[68px] xl:py-10">
+      <header className="absolute left-0 right-0 top-0 z-20 flex h-[120px] items-center justify-between px-8 py-8 md:px-[68px] md:py-[48px]">
         <p className="projects-subheader">Projects</p>
         <button type="button" className="inline-flex h-11 w-11 items-center justify-center text-[#FFFAEE]/90 hover:text-[#FFFAEE]">
           <Menu size={26} />
         </button>
       </header>
 
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={activeProject.id}
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -10 }}
-          transition={{ duration: 0.45, ease: "easeOut" }}
-          className="relative z-20"
-        >
-          <ProjectsOverlay project={activeProject} />
-        </motion.div>
-      </AnimatePresence>
-
-      <section className="relative z-20 mt-auto flex w-full flex-col">
-        <ProjectsLogoRail projects={PROJECTS} activeIndex={activeIndex} onSelect={setActiveIndex} />
-        <ProjectsNavigation onPrev={onPrev} onNext={onNext} />
+      <section className="absolute bottom-0 left-0 right-0 z-20 px-6 pb-[clamp(6.3rem,12.6vh,136px)] md:px-[clamp(2.4rem,5.2vw,100px)]">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeProject.id}
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.45, ease: "easeOut" }}
+            className="flex max-w-[1080px] flex-col gap-[clamp(2.2rem,4.4vw,72px)]"
+          >
+            <ProjectsOverlay project={activeProject} />
+            <ProjectsLogoRail projects={PROJECTS} activeIndex={activeIndex} onSelect={setActiveIndex} />
+          </motion.div>
+        </AnimatePresence>
       </section>
+
+      <footer className="absolute bottom-0 left-0 right-0 z-20 flex h-[120px] items-center justify-end px-8 py-8 md:px-[68px] md:py-[48px]">
+        <ProjectsNavigation onPrev={onPrev} onNext={onNext} />
+      </footer>
 
       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-56 bg-gradient-to-t from-[#0f0f0f] via-transparent to-transparent" />
       <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-40 bg-gradient-to-b from-black/35 via-transparent to-transparent" />
@@ -58,9 +60,6 @@ export default function ProjectsPage() {
       <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-52 bg-gradient-to-l from-black/35 via-transparent to-transparent" />
       <div className="pointer-events-none absolute bottom-0 left-0 right-0 z-10 h-[1px] bg-white/12" />
       <div className="pointer-events-none absolute left-0 right-0 top-0 z-10 h-[1px] bg-white/10" />
-      <div className="relative z-20 mt-6 px-8 pb-8 text-sm text-[#FFFAEE]/45 md:hidden">
-        Desktop-first preview enabled for this section.
-      </div>
     </main>
   );
 }

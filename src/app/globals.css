@@ -246,8 +246,10 @@ button {
 }
 
 .projects-title {
-  letter-spacing: -0.025em;
+  letter-spacing: -0.02em;
   font-family: var(--font-inter), "Helvetica Neue", "Arial", sans-serif;
+  text-transform: none;
+  font-weight: 500;
 }
 
 .projects-subheader {
@@ -262,11 +264,13 @@ button {
 .projects-logo-rail {
   background: rgba(255, 250, 238, 0.25);
   backdrop-filter: blur(11px);
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
 }
 
 .projects-logo-button {
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   transition: all 280ms ease;
+  font-family: var(--font-inter), "Helvetica Neue", "Arial", sans-serif;
 }
 
 .projects-logo-button.is-active {
@@ -276,7 +280,7 @@ button {
 }
 
 .projects-logo-button.is-inactive {
-  background: rgba(25, 25, 25, 0.9);
+  background: rgba(25, 25, 25, 0.98);
   color: rgba(255, 250, 238, 0.9);
 }
 
@@ -302,4 +306,18 @@ button {
   transform: translateY(-1px);
   border-color: rgba(255, 250, 238, 0.95);
   color: rgba(255, 250, 238, 1);
+}
+
+@media (max-width: 900px) {
+  .projects-logo-rail {
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .projects-logo-button {
+    height: 74px;
+    width: 74px;
+    font-size: 11px;
+    line-height: 1.1;
+  }
 }
