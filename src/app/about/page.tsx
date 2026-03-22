@@ -1,150 +1,163 @@
-"use client";
+import Link from "next/link";
+import Image from "next/image";
 
-import React from 'react';
-import Link from 'next/link';
-import { motion } from 'framer-motion';
-import { SkillPill } from '@/components/ui/skills/SkillPill';
-import { MarqueeStrip } from '@/components/ui/visuals/MarqueeStrip';
-
-const EXPERTISE = [
-  'React', 'Node.js', 'Python', 'TensorFlow', 'UI/UX', 'TypeScript', 'Next.js', 'Three.js'
+const COMPETENCIES = [
+  {
+    title: "Experience Design",
+    description:
+      "Building cinematic user journeys that transcend the document-based web.",
+  },
+  {
+    title: "Digital Strategy",
+    description:
+      "Defining the narrative arc for luxury brands and tech-forward startups.",
+  },
+  {
+    title: "Visual Engineering",
+    description:
+      "Translating brand identity into precision-engineered design systems.",
+  },
+  {
+    title: "Future Tech",
+    description:
+      "Exploring the intersection of AI-driven interfaces and spatial computing.",
+    highlight: true,
+  },
 ];
 
-const MARQUEE_ITEMS = [
-  'Awwwards Inspired', 'Next.js', 'GSAP', 'AI/ML', 'Open Source'
+const EXPERIENCE = [
+  {
+    period: "2022 - PRESENT",
+    company: "Obsidian Lens Studio",
+    roles: ["Founder", "Design Director"],
+    description:
+      "Leading creative direction for next-gen hardware startups and architectural visualization firms.",
+  },
+  {
+    period: "2019 - 2022",
+    company: "Aether Systems",
+    roles: ["Senior UI Lead"],
+    description:
+      "Spearheaded the redesign of core platform interfaces, achieving a 40% increase in user retention.",
+  },
 ];
 
-export default function About() {
+export default function AboutPage() {
   return (
-    <div className="flex flex-col flex-1 px-8 lg:px-24">
-      {/* Identity Section */}
-      <section className="relative pt-16 md:pt-24 mb-32">
-        <div className="absolute -top-16 -left-4 md:-left-10 text-[15vw] md:text-[6vw] font-extrabold pointer-events-none leading-none z-0 text-transparent mix-blend-overlay" style={{ WebkitTextStroke: '1px rgba(255, 255, 255, 0.05)' }}>
-          01
-        </div>
-        
-        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12">
-          <div className="lg:col-span-5 flex flex-col justify-end">
-            <motion.h1 
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              className="text-6xl md:text-8xl font-extrabold tracking-tighter leading-[0.9] mb-4 text-white"
-            >
-              IDE<br /><span className="text-primary">NTITY</span>
-            </motion.h1>
-            <motion.p 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-white/50 text-lg"
-            >
-              Who I am behind the code.
-            </motion.p>
+    <main className="min-h-screen pt-24 md:pt-0">
+      <div className="flex min-h-screen flex-col md:flex-row">
+        <section className="relative min-h-[530px] w-full overflow-hidden bg-[#0e0e0e] md:min-h-screen md:w-1/2">
+          <Image
+            alt="Cinematic black and white portrait of a creative professional in dramatic lighting"
+            className="absolute inset-0 h-full w-full object-cover opacity-80 grayscale brightness-75 transition-transform duration-1000 ease-[cubic-bezier(0.2,0,0,1)] hover:scale-105"
+            fill
+            sizes="(min-width: 768px) 50vw, 100vw"
+            src="/images/about/about-me-portfolio-profile.webp"
+          />
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_22%_32%,rgba(255,255,255,0.08),transparent_48%)]" />
+          <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-40 bg-gradient-to-r from-transparent via-[#131313]/70 to-[#131313] md:block lg:w-52" />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0e0e0e]/60 via-transparent to-transparent" />
+          <div className="absolute bottom-12 left-12 z-10">
+            <div className="inline-block rounded-full bg-[#353535]/40 px-4 py-2 backdrop-blur-md">
+              <span className="text-[10px] font-semibold uppercase tracking-[0.05em] text-[#c4c7c7]">
+                Available for Projects 2026
+              </span>
+            </div>
           </div>
-          
-          <div className="lg:col-span-7 flex flex-col justify-end gap-8">
-            <motion.div 
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              className="space-y-6 text-lg md:text-xl font-light leading-relaxed text-white/80"
-            >
-              <p>
-                I am a full-stack developer with a deep-seated passion for AI and machine learning. I build digital experiences that merge clean, efficient code with thoughtful, human-centric design. My philosophy is simple: technology should serve humanity, not complicate it.
-              </p>
-              <p>
-                With a unique background bridging computer science and fine arts, I navigate the space between engineering precision and creative intuition. This duality allows me to deliver solutions that are not only robust and scalable but also visually compelling and intuitive.
-              </p>
-            </motion.div>
-            
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.5 }}
-              className="pt-6"
-            >
-              <h3 className="text-xs font-extrabold uppercase tracking-widest text-white/50 mb-4">Core Competencies</h3>
-              <div className="flex flex-wrap gap-3">
-                {EXPERTISE.map(skill => (
-                  <SkillPill key={skill} skill={skill} />
-                ))}
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Services Section */}
-      <section className="mb-32">
-        <div className="flex flex-col md:flex-row justify-between items-end border-b border-white/10 pb-8 mb-12">
-          <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-white">Services</h2>
-          <p className="text-white/50 mt-4 md:mt-0">How I can help you build the future.</p>
-        </div>
-        
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {[
-            {
-              id: '01',
-              title: 'UI/UX Design',
-              desc: 'Crafting intuitive interfaces and design systems. I focus on accessibility, micro-interactions, and visual storytelling to create engaging user journeys.',
-              icon: '✧'
-            },
-            {
-              id: '02',
-              title: 'Development',
-              desc: 'Building robust frontend and backend architectures. From performant React applications to scalable Node.js APIs and AI model integration.',
-              icon: '⚡'
-            },
-            {
-              id: '03',
-              title: 'The Full Package',
-              desc: 'End-to-end product development. I take your idea from concept to deployment, handling everything including strategy, design, code, and CI/CD.',
-              icon: '🚀'
-            }
-          ].map((service, index) => (
-            <motion.div 
-              key={service.id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: index * 0.2 }}
-              className="group relative p-8 rounded-xl bg-white/5 hover:bg-white/10 transition-colors duration-300 flex flex-col h-full min-h-[400px] border border-white/5"
-            >
-              <div className="text-[15vw] md:text-[5vw] font-extrabold text-primary opacity-80 leading-none mb-auto">{service.id}</div>
-              <div className="mt-8">
-                <div className="w-12 h-12 rounded-full bg-primary/20 text-primary flex items-center justify-center mb-6 text-2xl">
-                  {service.icon}
+        <section className="flex w-full flex-col gap-24 overflow-y-auto bg-[#131313] px-8 py-20 text-[#e2e2e2] md:w-1/2 md:px-20 md:py-32">
+          <div className="max-w-xl">
+            <span className="mb-6 block text-[10px] font-bold uppercase tracking-[0.05em] text-[#c6c6c7]">
+              Introduction
+            </span>
+            <h1 className="mb-10 text-5xl font-extrabold tracking-[-0.04em] md:text-7xl">
+              Sumit <span className="font-light opacity-80">Patel.</span>
+            </h1>
+            <p className="text-lg font-light leading-relaxed text-[#c4c7c7] md:text-xl">
+              I am a multi-disciplinary creator focused on bridging the gap
+              between high-end industrial aesthetics and digital interfaces. My
+              work revolves around the concept of &quot;The Obsidian Lens&quot;,
+              bringing clarity, depth, and premium tactility to the screen.
+            </p>
+          </div>
+
+          <div>
+            <span className="mb-8 block text-[10px] font-bold uppercase tracking-[0.05em] text-[#c6c6c7]">
+              Core Competencies
+            </span>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              {COMPETENCIES.map((item) => (
+                <article
+                  key={item.title}
+                  className={`rounded-xl border p-8 transition-colors duration-500 ${
+                    item.highlight
+                      ? "border-[#c6c6c7]/20 bg-gradient-to-br from-[#c6c6c7] to-[#101213] text-[#2f3131]"
+                      : "border-white/5 bg-[#1b1b1b] hover:bg-[#2a2a2a]"
+                  }`}
+                >
+                  <h3 className="mb-3 text-xl font-bold">{item.title}</h3>
+                  <p
+                    className={`text-sm leading-relaxed ${
+                      item.highlight ? "text-[#111213]" : "text-[#c4c7c7]"
+                    }`}
+                  >
+                    {item.description}
+                  </p>
+                </article>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-12">
+            <span className="block text-[10px] font-bold uppercase tracking-[0.05em] text-[#c6c6c7]">
+              Past Engagements
+            </span>
+            <div className="space-y-12">
+              {EXPERIENCE.map((item) => (
+                <div
+                  key={`${item.company}-${item.period}`}
+                  className="group flex flex-col gap-4 md:flex-row md:items-start"
+                >
+                  <div className="w-28 shrink-0">
+                    <span className="text-sm font-bold text-[#c4c7c7]">
+                      {item.period}
+                    </span>
+                  </div>
+                  <div className="flex-grow">
+                    <h4 className="text-2xl font-bold text-[#e2e2e2] transition-colors group-hover:text-[#c6c6c7]">
+                      {item.company}
+                    </h4>
+                    <div className="mb-4 mt-2 flex flex-wrap gap-2">
+                      {item.roles.map((role) => (
+                        <span
+                          key={role}
+                          className="rounded-full bg-[#353535] px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#c4c7c7]"
+                        >
+                          {role}
+                        </span>
+                      ))}
+                    </div>
+                    <p className="max-w-md leading-relaxed text-[#c4c7c7]">
+                      {item.description}
+                    </p>
+                  </div>
                 </div>
-                 <h3 className="text-2xl font-extrabold mb-3 text-white">{service.title}</h3>
-                <p className="text-white/60 leading-relaxed">
-                  {service.desc}
-                </p>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </section>
+              ))}
+            </div>
+          </div>
 
-      {/* Credentials (Marquee) */}
-      <section className="w-full -mx-8 lg:-mx-24 px-8 lg:px-24 mb-32 overflow-hidden">
-        <MarqueeStrip items={MARQUEE_ITEMS} />
-      </section>
-
-      {/* CTA section */}
-      <section className="flex flex-col items-center justify-center text-center gap-6 pb-20">
-        <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-white">Ready to collaborate?</h2>
-        <p className="text-white/50 max-w-xl">
-          Let&apos;s build something extraordinary together. I&apos;m currently available for freelance projects and consulting.
-        </p>
-        <Link 
-          href="/contact"
-          className="mt-4 inline-flex items-center gap-2 bg-primary text-black font-extrabold text-lg px-8 py-4 rounded-full hover:scale-105 transition-transform"
-        >
-          Start a Project
-          <span>→</span>
-        </Link>
-      </section>
-    </div>
+          <div className="border-t border-[#444748]/20 pt-12">
+            <Link
+              className="inline-flex items-center gap-3 rounded-lg bg-[#c6c6c7] px-10 py-5 text-xs font-bold uppercase tracking-widest text-[#2f3131] transition-all hover:scale-[1.02] active:scale-95"
+              href="/contact"
+            >
+              Initiate Collaboration
+              <span aria-hidden="true">→</span>
+            </Link>
+          </div>
+        </section>
+      </div>
+    </main>
   );
 }
