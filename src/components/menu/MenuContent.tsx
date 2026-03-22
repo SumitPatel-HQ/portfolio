@@ -41,7 +41,7 @@ export const MenuContent: React.FC<MenuContentProps> = ({ onNavigate }) => {
                     }}
                     className="group menu-content-pages inline-flex items-center gap-3 text-[44px] font-[350] leading-[0.98] tracking-[-0.015em] text-foreground transition-transform duration-300 ease-out hover:translate-x-1 hover:opacity-85 sm:text-[56px] lg:text-[64px] bg-transparent border-none p-0 cursor-pointer"
                   >
-                    <span className="translate-y-[-0.02em] text-[0.43em] opacity-45">↗</span>
+                   <span className="text-[0.43em] translate-y-[-0.05em]  opacity-0 group-hover:opacity-100 transition-opacity duration-200 group-hover:scale-150">↗</span>
                     <span>{item.label}</span>
                   </button>
                 ) : (
@@ -50,7 +50,7 @@ export const MenuContent: React.FC<MenuContentProps> = ({ onNavigate }) => {
                     onClick={onNavigate}
                     className="group menu-content-pages inline-flex items-center gap-3 text-[44px] font-[350] leading-[0.98] tracking-[-0.015em] text-foreground transition-transform duration-300 ease-out hover:translate-x-1 hover:opacity-85 sm:text-[56px] lg:text-[64px]"
                   >
-                    <span className="translate-y-[-0.02em] text-[0.43em] opacity-45">↗</span>
+                    <span className="text-[0.43em] translate-y-[-0.05em]  opacity-0 group-hover:opacity-100 transition-opacity duration-200 group-hover:scale-150">↗</span>
                     <span>{item.label}</span>
                   </Link>
                 )}
@@ -59,7 +59,7 @@ export const MenuContent: React.FC<MenuContentProps> = ({ onNavigate }) => {
           </nav>
         </div>
 
-        <div className="menu-content-info grid grid-cols-1 gap-2 text-left text-[13px] font-medium uppercase tracking-[0.085em] leading-[1.33] text-foreground/85 lg:grid-cols-2 lg:items-start lg:gap-x-0 lg:text-right">
+        <div className="menu-content-info grid grid-cols-1 gap-2 text-left text-[13px] font-medium uppercase tracking-[0.085em] leading-[1.33] text-foreground-secondary lg:grid-cols-2 lg:items-start lg:gap-x-0 lg:text-right">
           <div className="space-y-1 lg:self-start">
             <p>Akaru</p>
             <p>9 quai Andre Lassagne</p>

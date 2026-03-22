@@ -21,13 +21,14 @@ export const ContactMiniSection = () => {
             <span className="block animate-none text-primary">Let&apos;s talk.</span>
           </h2>
 
-          <p className="mt-5 max-w-2xl text-base leading-relaxed text-white/70 md:text-lg">
+          <p className="mt-5 mb-8 max-w-2xl text-base leading-relaxed text-white/70 md:text-lg">
             I design and build clean, high-impact digital experiences for modern
             products. If you have an idea worth shipping, I&apos;d love to hear it.
           </p>
 
-          <div className="mt-8 pt-6">
-            <p className="text-sm uppercase tracking-[0.12em] text-white/55 border-t border-white/10 pt-5 rounded-t-lg">Email</p>
+          <div className="border-t w-full border-white/10" />
+          <div className="pt-6">
+            <p className="text-sm uppercase tracking-[0.12em] text-white/55 ">Email</p>
             <a
               href="mailto:hello@sumitpatel.dev"
               aria-label="Send an email to hello@sumitpatel.dev"

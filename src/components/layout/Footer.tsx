@@ -1,5 +1,8 @@
+"use client";
+
 import React from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 const pageLinks = [
   { label: 'Projects', href: '/projects' },
@@ -8,11 +11,17 @@ const pageLinks = [
 ];
 
 export function Footer() {
+  const pathname = usePathname();
+
+  // Disable footer on the about page
+  if (pathname === '/about') {
+    return null;
+  }
   return (
     <footer className="relative z-10 mt-10 w-full px-8 py-8 text-sm text-white/50 md:px-24">
       <div className="grid grid-cols-1 items-center gap-4 text-center md:grid-cols-3 md:gap-6">
         <div className="flex items-center justify-center gap-2 md:justify-start">
-          <span aria-hidden="true" className="h-2 w-2 rounded-full bg-primary" />
+          <span aria-hidden="true" className="h-2 w-2 rounded-full bg-accent" />
           <span>AVAILABLE FOR WORK</span>
         </div>
 
