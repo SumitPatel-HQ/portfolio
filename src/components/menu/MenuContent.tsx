@@ -8,8 +8,8 @@ interface MenuContentProps {
   onNavigate?: () => void;
 }
 
-const menuItems = [
-  { label: 'Projects', href: '/work' },
+const menuItems: { label: string; href?: string }[] = [
+  { label: 'Projects', href: '/projects' },
   { label: 'Experience', href: '/experience' },
   { label: 'About Me', href: '/about' },
   { label: 'Contact', href: '#' },
@@ -46,7 +46,7 @@ export const MenuContent: React.FC<MenuContentProps> = ({ onNavigate }) => {
                   </button>
                 ) : (
                   <Link
-                    href={item.href}
+                    href={item.href || '#'}
                     onClick={onNavigate}
                     className="group menu-content-pages inline-flex items-center gap-3 text-[44px] font-[350] leading-[0.98] tracking-[-0.015em] text-foreground transition-transform duration-300 ease-out hover:translate-x-1 hover:opacity-85 sm:text-[56px] lg:text-[64px]"
                   >

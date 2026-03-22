@@ -1,4 +1,11 @@
 import React from 'react';
+import Link from 'next/link';
+
+const pageLinks = [
+  { label: 'Projects', href: '/projects' },
+  { label: 'Experience', href: '/experience' },
+  { label: 'About Me', href: '/about' },
+];
 
 export function Footer() {
   return (
@@ -9,16 +16,18 @@ export function Footer() {
           <span>AVAILABLE FOR WORK</span>
         </div>
 
+
         <div className="flex items-center justify-center gap-6">
-          <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
-            GitHub
-          </a>
-          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
-            LinkedIn
-          </a>
-          <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
-            Twitter
-          </a>
+         {pageLinks.map((item) => (
+          <Link
+            key={item.label}
+            href={item.href}
+            rel="noopener noreferrer"
+            className="hover:text-primary transition-colors"
+          >
+            {item.label}
+          </Link>
+         ))}
         </div>
 
         <div className="text-center md:text-right">

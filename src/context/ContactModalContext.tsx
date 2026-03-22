@@ -63,14 +63,21 @@ export function ContactModalProvider({ children }: { children: React.ReactNode }
               },
             ]}
           >
-            <form action="" className="w-full space-y-4" onSubmit={(e) => e.preventDefault()}>
-              <div className="flex flex-col gap-2">
+            <form
+              action=""
+              className="w-full space-y-4"
+              onSubmit={(e) => {
+                e.preventDefault();
+                closeModal();
+              }}
+            >
+              <div className="flex flex-col gap-2 ">
                 <Label>Name</Label>
-                <Input type="text" />
+                <Input type="text" required />
               </div>
               <div className="flex flex-col gap-2">
                 <Label>Email</Label>
-                <Input type="email" />
+                <Input type="email" required />
               </div>
               <div className="flex flex-col gap-2">
                 <Label>Phone</Label>
@@ -80,7 +87,7 @@ export function ContactModalProvider({ children }: { children: React.ReactNode }
                 <Label>Message</Label>
                 <Textarea className="h-32 resize-none" />
               </div>
-              <Button className="w-full" type="button" onClick={closeModal}>
+              <Button className="w-full" type="submit">
                 Submit
               </Button>
             </form>

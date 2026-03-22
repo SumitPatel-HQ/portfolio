@@ -4,7 +4,6 @@ import React from 'react';
 import Link from 'next/link';
 // import { motion } from 'framer-motion';
 import StripesBackground from "@/components/ui/visuals/StripesBackground";
-import { Menu } from "@/components/menu/Menu";
 import { useContactModal } from "@/context/ContactModalContext";
 
 export const HeroSection = () => {
@@ -12,7 +11,7 @@ export const HeroSection = () => {
 
   return (
     <main className="min-h-screen bg-background text-foreground relative overflow-hidden flex flex-col">
-      <Menu />
+
       <StripesBackground position="full" opacity="opacity-10" />
 
       <div className="relative z-10 flex-1 flex flex-col px-layout">

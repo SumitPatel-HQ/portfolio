@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Menu } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 
 import { PROJECTS, PROJECTS_TEXTURE_IMAGE } from "@/app/projects/projects.data";
@@ -26,13 +25,6 @@ export default function ProjectsPage() {
   return (
     <main className="projects-screen relative flex min-h-screen w-full flex-col overflow-hidden bg-[#191919] text-[#FFFAEE]">
       <ProjectsStage imageUrl={activeProject.heroImage} imageAlt={activeProject.logoAlt} textureUrl={PROJECTS_TEXTURE_IMAGE} />
-
-      <header className="absolute left-0 right-0 top-0 z-20 flex h-[120px] items-center justify-between px-8 py-8 md:px-[68px] md:py-[48px]">
-        <p className="projects-subheader">Projects</p>
-        <button type="button" className="inline-flex h-11 w-11 items-center justify-center text-[#FFFAEE]/90 hover:text-[#FFFAEE]">
-          <Menu size={26} />
-        </button>
-      </header>
 
       <section className="absolute bottom-0 left-0 right-0 z-20 px-6 pb-[clamp(6.3rem,12.6vh,136px)] md:px-[clamp(2.4rem,5.2vw,100px)]">
         <AnimatePresence mode="wait">
