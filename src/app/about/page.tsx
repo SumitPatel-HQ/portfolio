@@ -52,7 +52,7 @@ export default function AboutPage() {
             className="absolute inset-0 h-full w-full object-cover opacity-80 grayscale brightness-75 transition-transform duration-1000 ease-[cubic-bezier(0.2,0,0,1)] hover:scale-105"
             fill
             sizes="(min-width: 768px) 50vw, 100vw"
-            src="/images/about/about-me-portfolio-profile.webp"
+            src="/images/about/img1.png"
           />
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_22%_32%,rgba(255,255,255,0.08),transparent_48%)]" />
           <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-40 bg-gradient-to-r from-transparent via-[#131313]/70 to-[#131313] md:block lg:w-52" />
