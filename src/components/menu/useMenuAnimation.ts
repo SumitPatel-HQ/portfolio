@@ -25,7 +25,6 @@ export const useMenuAnimation = ({ isOpen, isHome, onOpenStart, onCloseComplete 
   }, [onCloseComplete]);
 
   useEffect(() => {
-    let rafId: number | null = null;
     let ctx: gsap.Context | null = null;
 
     const init = () => {
@@ -166,7 +165,7 @@ export const useMenuAnimation = ({ isOpen, isHome, onOpenStart, onCloseComplete 
       activeTweenRef.current?.kill();
       activeTweenRef.current = null;
     };
-  }, [isOpen]);
+  }, [isOpen, isHome]);
 
   return { containerRef, homeLinkRef };
 };
