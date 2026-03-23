@@ -17,19 +17,19 @@ export function ProjectsStage({ imageUrl, imageAlt, textureUrl }: ProjectsStageP
           src={imageUrl}
           alt={imageAlt}
           className="absolute inset-0 h-full w-full object-cover"
-          initial={{ opacity: 0.12, scale: 1.02 }}
-          animate={{ opacity: 0.36, scale: 1 }}
-          exit={{ opacity: 0.12, scale: 0.99 }}
-          transition={{ duration: 0.6, ease: "easeInOut" }}
+          initial={{ opacity: 0.12, scale: 1.05, x: 10 }}
+          animate={{ opacity: 0.36, scale: 1, x: 0 }}
+          exit={{ opacity: 0.12, scale: 0.98, x: -10 }}
+          transition={{ duration: 0.7, ease: [0.32, 0.72, 0, 1] }}
         />
       </AnimatePresence>
       <div 
         className="absolute inset-0" 
         style={{
           background: `
-            radial-gradient(80% 55% at 38% 52%, rgba(0, 217, 217, 0.08), transparent 72%),
+            radial-gradient(80% 55% at 38% 52%, var(--accent-faded), transparent 72%),
             radial-gradient(95% 60% at 86% 62%, rgba(0, 0, 0, 0.52), transparent 74%),
-            linear-gradient(110deg, rgba(10, 10, 10, 0.8) 24%, rgba(10, 10, 10, 0.6) 48%, rgba(10, 10, 10, 0.8) 100%)
+            linear-gradient(110deg, color-mix(in srgb, var(--background) 80%, transparent) 24%, color-mix(in srgb, var(--background) 60%, transparent) 48%, color-mix(in srgb, var(--background) 80%, transparent) 100%)
           `
         }}
       />

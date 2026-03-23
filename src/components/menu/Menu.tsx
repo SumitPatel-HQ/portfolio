@@ -20,17 +20,20 @@ export const Menu = () => {
   const [animatedHomeLabel, setAnimatedHomeLabel] = useState<string | null>(null);
   const { isOpen: isContactModalOpen } = useContactModal();
 
-  const closedLabel = useMemo(() => {
+  const currentPageLabel = useMemo(() => {
+    if (pathname === '/') return 'Home';
     const currentItem = menuItemsLinks.find(item => item.href === pathname);
-    return currentItem ? currentItem.label : null;
+    return currentItem ? currentItem.label : 'Home';
   }, [pathname]);
 
-  const homeLabel = animatedHomeLabel ?? (!isOpen ? closedLabel : null);
+  const closedLabel = pathname === '/' ? null : currentPageLabel;
+  const homeLabel = isOpen ? (animatedHomeLabel ?? currentPageLabel) : closedLabel;
 
   const { containerRef, homeLinkRef } = useMenuAnimation({
     isOpen,
+    isHome: pathname === '/',
     onOpenStart: () => {
-      setAnimatedHomeLabel('Home');
+      setAnimatedHomeLabel(currentPageLabel);
     },
     onCloseComplete: () => {
       setAnimatedHomeLabel(null);

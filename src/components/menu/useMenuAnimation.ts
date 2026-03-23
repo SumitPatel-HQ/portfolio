@@ -3,11 +3,12 @@ import gsap from 'gsap';
 
 interface UseMenuAnimationProps {
   isOpen: boolean;
+  isHome: boolean;
   onOpenStart?: () => void;
   onCloseComplete?: () => void;
 }
 
-export const useMenuAnimation = ({ isOpen, onOpenStart, onCloseComplete }: UseMenuAnimationProps) => {
+export const useMenuAnimation = ({ isOpen, isHome, onOpenStart, onCloseComplete }: UseMenuAnimationProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const homeLinkRef = useRef<HTMLDivElement>(null);
   const masterTimelineRef = useRef<gsap.core.Timeline | null>(null);
@@ -68,11 +69,6 @@ export const useMenuAnimation = ({ isOpen, onOpenStart, onCloseComplete }: UseMe
             clipPath: 'inset(0% 0% 0% 0%)',
             ease: 'expo.inOut',
           }, openStartLabel)
-          .fromTo(getHomeLinkTarget(),
-            { yPercent: 200, autoAlpha: 0 },
-            { yPercent: 0, autoAlpha: 1, duration: 1.6, ease: 'expo.inOut' },
-            `${openStartLabel}+=0.24`
-          )
           .to('.menu-content-pages', { yPercent: 0, autoAlpha: 1, duration: 1.6, ease: 'expo.inOut', stagger: 0.032 }, `${openStartLabel}+=0.24`)
           .to('.menu-content-info', { yPercent: 0, autoAlpha: 1, duration: 1.6, ease: 'expo.inOut', stagger: 0.032 }, `${openStartLabel}+=0.24`)
           .to('.menu-content-title-letter', { yPercent: 0, rotateY: 0, scale: 1, autoAlpha: 1, duration: 1.6, ease: 'expo.inOut', stagger: 0.032 }, openStartLabel)
@@ -83,7 +79,6 @@ export const useMenuAnimation = ({ isOpen, onOpenStart, onCloseComplete }: UseMe
           .to('.menu-content-info', { yPercent: -110, autoAlpha: 0, duration: 0.45, ease: 'expo.in' }, closeStartLabel)
           .to('.menu-content-title-letter', { yPercent: -120, rotateY: -12, scale: 0.85, autoAlpha: 0, duration: 0.52, ease: 'expo.in', stagger: 0.016 }, closeStartLabel)
           .to('.menu-content-title-mobile', { yPercent: -110, rotateY: -10, scaleX: 0.85, scaleY: 0.85, autoAlpha: 0, duration: 0.45, ease: 'expo.in' }, closeStartLabel)
-          .to(getHomeLinkTarget(), { yPercent: -110, autoAlpha: 0, duration: 0.5, ease: 'expo.in' }, closeStartLabel)
           .to(containerRef.current, {
             duration: 0.8,
             clipPath: 'inset(0% 0% 100% 0%)',
@@ -129,6 +124,17 @@ export const useMenuAnimation = ({ isOpen, onOpenStart, onCloseComplete }: UseMe
           activeTweenRef.current = null;
         }
       });
+
+      // Handle HomeLink animation separately and only if on Home page
+      const homeLinkTarget = homeLinkRef.current ?? '.menu-home-link-target';
+      if (isHome) {
+        gsap.fromTo(homeLinkTarget,
+          { yPercent: 200, autoAlpha: 0 },
+          { yPercent: 0, autoAlpha: 1, duration: 1.6, ease: 'expo.inOut', delay: 0.24 }
+        );
+      } else {
+        gsap.to(homeLinkTarget, { yPercent: 0, autoAlpha: 1, duration: 0.4, ease: 'expo.out' });
+      }
     } else {
       // Menu is closed
       // On first load when already at closeEndLabel, skip animation
@@ -146,6 +152,14 @@ export const useMenuAnimation = ({ isOpen, onOpenStart, onCloseComplete }: UseMe
           onCloseCompleteRef.current?.();
         }
       });
+
+      // Handle HomeLink exit animation separately and only if on Home page
+      const homeLinkTarget = homeLinkRef.current ?? '.menu-home-link-target';
+      if (isHome) {
+        gsap.to(homeLinkTarget, { yPercent: -110, autoAlpha: 0, duration: 0.5, ease: 'expo.in' });
+      } else {
+        gsap.to(homeLinkTarget, { yPercent: 0, autoAlpha: 1, duration: 0.4, ease: 'expo.out' });
+      }
     }
 
     return () => {

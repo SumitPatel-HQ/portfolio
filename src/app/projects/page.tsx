@@ -1,11 +1,11 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
 import { PROJECTS, PROJECTS_TEXTURE_IMAGE } from "@/app/projects/projects.data";
 import { ProjectsLogoRail } from "@/components/projects/ProjectsLogoRail";
-import { ProjectsNavigation } from "@/components/projects/ProjectsNavigation";
+
 import { ProjectsOverlay } from "@/components/projects/ProjectsOverlay";
 import { ProjectsStage } from "@/components/projects/ProjectsStage";
 
@@ -15,36 +15,60 @@ export default function ProjectsPage() {
   const activeProject = useMemo(() => PROJECTS[activeIndex], [activeIndex]);
 
   const onPrev = () => {
-    setActiveIndex((current) => (current === 0 ? PROJECTS.length - 1 : current - 1));
+    setActiveIndex((current) =>
+      current === 0 ? PROJECTS.length - 1 : current - 1,
+    );
   };
 
   const onNext = () => {
-    setActiveIndex((current) => (current === PROJECTS.length - 1 ? 0 : current + 1));
+    setActiveIndex((current) =>
+      current === PROJECTS.length - 1 ? 0 : current + 1,
+    );
   };
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "ArrowLeft") {
+        onPrev();
+      } else if (e.key === "ArrowRight") {
+        onNext();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []); // onPrev/onNext are stable as they use functional updates.
 
   return (
     <main className="relative flex min-h-screen w-full flex-col overflow-hidden bg-background text-foreground">
-      <ProjectsStage imageUrl={activeProject.heroImage} imageAlt={activeProject.logoAlt} textureUrl={PROJECTS_TEXTURE_IMAGE} />
+      <ProjectsStage
+        imageUrl={activeProject.heroImage}
+        imageAlt={activeProject.logoAlt}
+        textureUrl={PROJECTS_TEXTURE_IMAGE}
+      />
 
-      <section className="absolute bottom-0 left-0 right-0 z-20 px-6 pb-[clamp(6.3rem,12.6vh,136px)] md:px-[clamp(2.4rem,5.2vw,100px)]">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeProject.id}
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.45, ease: "easeOut" }}
-            className="flex max-w-[1080px] flex-col gap-[clamp(2.2rem,4.4vw,72px)]"
-          >
-            <ProjectsOverlay project={activeProject} />
-            <ProjectsLogoRail projects={PROJECTS} activeIndex={activeIndex} onSelect={setActiveIndex} />
-          </motion.div>
-        </AnimatePresence>
+      <section className="absolute bottom-0 left-0 right-0 z-30 px-6 pb-6 md:px-[68px] md:pb-8">
+        <div className="flex max-w-[1080px] flex-col gap-8 md:gap-12">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeProject.id}
+              initial={{ opacity: 0, x: -14, filter: "blur(14px)" }}
+              animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+              exit={{ opacity: 0, x: 14, filter: "blur(14px)" }}
+              transition={{ duration: 0.52, ease: [0.32, 0.72, 0, 1] }}
+              className="flex flex-col gap-[clamp(2.2rem,4.4vw,72px)]"
+            >
+              <ProjectsOverlay project={activeProject} />
+            </motion.div>
+          </AnimatePresence>
+
+          <ProjectsLogoRail
+            projects={PROJECTS}
+            activeIndex={activeIndex}
+            onSelect={setActiveIndex}
+          />
+        </div>
       </section>
-
-      <footer className="absolute bottom-0 left-0 right-0 z-20 flex h-[120px] items-center justify-end px-8 py-8 md:px-[68px] md:py-[48px]">
-        <ProjectsNavigation onPrev={onPrev} onNext={onNext} />
-      </footer>
 
       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-56 bg-gradient-to-t from-[#0f0f0f] via-transparent to-transparent" />
       <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-40 bg-gradient-to-b from-black/35 via-transparent to-transparent" />
