@@ -28,27 +28,27 @@ export const MenuContent: React.FC<MenuContentProps> = ({ onNavigate }) => {
   const { openModal } = useContactModal();
 
   return (
-    <div className="flex h-full w-full flex-col px-6 pb-8 pt-24 font-sans sm:px-10 sm:pt-28 lg:px-16 lg:pb-10 lg:pt-32 xl:px-24">
+    <div className="flex h-full w-full flex-col px-6 pb-20 pt-24 font-sans sm:px-10 sm:pt-28 lg:px-16 lg:pb-24 lg:pt-32 xl:px-24">
       <div className="grid h-full w-full grid-cols-1 gap-10 lg:mx-auto lg:mt-15 lg:w-fit lg:grid-cols-[max-content_max-content] lg:items-start lg:gap-x-150">
         <div className="flex min-h-0 flex-col justify-center pl-2 sm:pl-4 lg:pl-8">
           <nav aria-label="Main menu" className="flex flex-col gap-2 sm:gap-3">
             {menuItems.map((item) => (
-              <div key={item.label} className="overflow-hidden">
+              <div key={item.label} className="overflow-hidden py-1 -my-1">
                 {item.label === 'Contact' ? (
                   <button
                     onClick={() => {
                       openModal();
                     }}
-                    className="group menu-content-pages inline-flex items-center gap-3 text-[44px] font-[350] leading-[0.98] tracking-[-0.015em] text-foreground transition-transform duration-300 ease-out hover:translate-x-1 hover:opacity-85 sm:text-[56px] lg:text-[64px] bg-transparent border-none p-0 cursor-pointer"
+                    className="group menu-content-pages inline-flex items-center gap-3 text-[44px] font-[350] leading-[1] tracking-[-0.015em] text-foreground transition-transform duration-300 ease-out hover:translate-x-1 hover:opacity-85 sm:text-[56px] lg:text-[64px] bg-transparent border-none p-0 cursor-pointer"
                   >
-                   <span className="text-[0.43em] translate-y-[-0.05em]  opacity-0 group-hover:opacity-100 transition-opacity duration-200 group-hover:scale-150">↗</span>
+                    <span className="text-[0.43em] translate-y-[-0.05em]  opacity-0 group-hover:opacity-100 transition-opacity duration-200 group-hover:scale-150">↗</span>
                     <span>{item.label}</span>
                   </button>
                 ) : (
                   <Link
                     href={item.href || '#'}
                     onClick={onNavigate}
-                    className="group menu-content-pages inline-flex items-center gap-3 text-[44px] font-[350] leading-[0.98] tracking-[-0.015em] text-foreground transition-transform duration-300 ease-out hover:translate-x-1 hover:opacity-85 sm:text-[56px] lg:text-[64px]"
+                    className="group menu-content-pages inline-flex items-center gap-3 text-[44px] font-[350] leading-[1] tracking-[-0.015em] text-foreground transition-transform duration-300 ease-out hover:translate-x-1 hover:opacity-85 sm:text-[56px] lg:text-[64px]"
                   >
                     <span className="text-[0.43em] translate-y-[-0.05em]  opacity-0 group-hover:opacity-100 transition-opacity duration-200 group-hover:scale-150">↗</span>
                     <span>{item.label}</span>
@@ -89,11 +89,11 @@ export const MenuContent: React.FC<MenuContentProps> = ({ onNavigate }) => {
       </div>
 
       {/* Desktop title layout (visible from lg and up) */}
-      <div className="pointer-events-none relative mt-6 hidden w-full items-end justify-center overflow-visible pb-0 pt-4 lg:flex" aria-hidden="true">
+      <div className="pointer-events-none relative mt-4 hidden w-full items-end justify-center overflow-visible pb-0 pt-2 lg:flex" aria-hidden="true">
         <div className="overflow-visible">
           <h1
             aria-label="SUMIT"
-            className="menu-content-title translate-y-0 leading-[0.72] text-[clamp(14rem,36vw,33rem)] font-extrabold uppercase tracking-[-0.07em] text-foreground/10 [perspective:1000px]"
+            className="menu-content-title -translate-y-8 leading-[0.72] text-[clamp(14rem,36vw,33rem)] font-extrabold uppercase tracking-[-0.07em] text-foreground/10 [perspective:1000px] lg:-translate-y-18 scale-y-[1.2]"
           >
             <span className="menu-content-title-letters flex gap-0 [transform-style:preserve-3d]">
               {titleLetters.map((letter, index) => (
@@ -113,7 +113,7 @@ export const MenuContent: React.FC<MenuContentProps> = ({ onNavigate }) => {
       </div>
 
       {/* Mobile title layout (hidden on lg and up) */}
-      <div className="pointer-events-none relative mt-auto flex items-end justify-center overflow-visible pb-6 pt-6 -mb-6 lg:hidden" aria-hidden="true">
+      <div className="pointer-events-none relative mt-auto flex items-end justify-center overflow-visible pb-20 pt-6 -mb-6 lg:hidden" aria-hidden="true">
         <div className="overflow-visible">
           <div className="py-3 -my-3">
             <h1 className="menu-content-title-mobile block origin-bottom pb-2 leading-[0.9] text-[88px] font-extrabold uppercase text-foreground/15 sm:text-[132px]">

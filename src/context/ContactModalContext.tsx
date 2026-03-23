@@ -87,7 +87,7 @@ export function ContactModalProvider({ children }: { children: React.ReactNode }
                 <Label>Message</Label>
                 <Textarea className="h-32 resize-none" />
               </div>
-              <Button className="w-full" type="submit">
+              <Button className="w-full bg-accent text-background" type="submit">
                 Submit
               </Button>
             </form>
