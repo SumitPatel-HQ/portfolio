@@ -1,15 +1,41 @@
 "use client";
 
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import { MenuButton } from './MenuButton';
 import { MenuContent } from './MenuContent';
+import { HomeLink } from './HomeLink';
 import { useMenuAnimation } from './useMenuAnimation';
 import { useContactModal } from '@/context/ContactModalContext';
 
+const menuItemsLinks = [
+  { label: 'Projects', href: '/projects' },
+  { label: 'Experience', href: '/experience' },
+  { label: 'About Me', href: '/about' },
+];
+
 export const Menu = () => {
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
-  const { containerRef } = useMenuAnimation(isOpen);
+  const [animatedHomeLabel, setAnimatedHomeLabel] = useState<string | null>(null);
   const { isOpen: isContactModalOpen } = useContactModal();
+
+  const closedLabel = useMemo(() => {
+    const currentItem = menuItemsLinks.find(item => item.href === pathname);
+    return currentItem ? currentItem.label : null;
+  }, [pathname]);
+
+  const homeLabel = animatedHomeLabel ?? (!isOpen ? closedLabel : null);
+
+  const { containerRef, homeLinkRef } = useMenuAnimation({
+    isOpen,
+    onOpenStart: () => {
+      setAnimatedHomeLabel('Home');
+    },
+    onCloseComplete: () => {
+      setAnimatedHomeLabel(null);
+    },
+  });
 
   const toggleMenu = useCallback(() => {
     setIsOpen(prev => !prev);
@@ -58,10 +84,11 @@ export const Menu = () => {
 
   return (
     <>
-      <MenuButton 
-        isOpen={isOpen} 
-        toggleMenu={toggleMenu} 
-        isContactModalOpen={isContactModalOpen} 
+      <HomeLink label={homeLabel} onNavigate={closeMenu} animatedRef={homeLinkRef} />
+      <MenuButton
+        isOpen={isOpen}
+        toggleMenu={toggleMenu}
+        isContactModalOpen={isContactModalOpen}
       />
 
       {/* Menu Overlay */}

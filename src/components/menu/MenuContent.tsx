@@ -61,10 +61,10 @@ export const MenuContent: React.FC<MenuContentProps> = ({ onNavigate }) => {
 
         <div className="menu-content-info grid grid-cols-1 gap-2 text-left text-[13px] font-medium uppercase tracking-[0.085em] leading-[1.33] text-foreground-secondary lg:grid-cols-2 lg:items-start lg:gap-x-0 lg:text-right">
           <div className="space-y-1 lg:self-start">
-            <p>Akaru</p>
-            <p>9 quai Andre Lassagne</p>
-            <p>69001 Lyon</p>
-            <p>France</p>
+            <p>Sumit</p>
+            {/* <p>9 quai Andre Lassagne</p> */}
+            <p>401303 Virar</p>
+            <p>Maharashtra</p>
           </div>
 
           {/* can be scaled for conact section */}

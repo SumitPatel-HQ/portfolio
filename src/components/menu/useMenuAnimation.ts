@@ -1,78 +1,158 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 
-export const useMenuAnimation = (isOpen: boolean) => {
+interface UseMenuAnimationProps {
+  isOpen: boolean;
+  onOpenStart?: () => void;
+  onCloseComplete?: () => void;
+}
+
+export const useMenuAnimation = ({ isOpen, onOpenStart, onCloseComplete }: UseMenuAnimationProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const timelineRef = useRef<gsap.core.Timeline | null>(null);
-  const isFirstRun = useRef(true);
+  const homeLinkRef = useRef<HTMLDivElement>(null);
+  const masterTimelineRef = useRef<gsap.core.Timeline | null>(null);
+  const activeTweenRef = useRef<gsap.core.Tween | null>(null);
+  const onOpenStartRef = useRef(onOpenStart);
+  const onCloseCompleteRef = useRef(onCloseComplete);
 
   useEffect(() => {
-    if (!containerRef.current) return;
+    onOpenStartRef.current = onOpenStart;
+  }, [onOpenStart]);
 
-    const ctx = gsap.context(() => {
-      // Set initial states for inner content
-      gsap.set('.menu-content-pages', { yPercent: 200, autoAlpha: 0 });
-      gsap.set('.menu-content-info', { yPercent: 100, autoAlpha: 0 });
-      gsap.set('.menu-content-title-letter', {
-        yPercent: 100,
-        rotateY: 20,
-        scale: 0.2,
-        autoAlpha: 0,
-        transformOrigin: '50% 100%'
+  useEffect(() => {
+    onCloseCompleteRef.current = onCloseComplete;
+  }, [onCloseComplete]);
+
+  useEffect(() => {
+    let rafId: number | null = null;
+    let ctx: gsap.Context | null = null;
+
+    const init = () => {
+      if (!containerRef.current) return;
+
+      ctx = gsap.context(() => {
+        const getHomeLinkTarget = () => homeLinkRef.current ?? '.menu-home-link-target';
+        const openStartLabel = 'open-start';
+        const openEndLabel = 'open-end';
+        const closeStartLabel = 'close-start';
+        const closeEndLabel = 'close-end';
+
+        // Set initial states for inner content
+        gsap.set('.menu-content-pages', { yPercent: 200, autoAlpha: 0 });
+        gsap.set('.menu-content-info', { yPercent: 100, autoAlpha: 0 });
+        gsap.set('.menu-content-title-letter', {
+          yPercent: 100,
+          rotateY: 20,
+          scale: 0.2,
+          autoAlpha: 0,
+          transformOrigin: '50% 100%'
+        });
+        gsap.set('.menu-content-title-mobile', {
+          yPercent: 100,
+          rotateY: 20,
+          scaleX: 0.2,
+          scaleY: 0.2,
+          autoAlpha: 0
+        });
+        gsap.set(getHomeLinkTarget(), { yPercent: 0, autoAlpha: 1 });
+
+        // Set initial state for overlay container
+        gsap.set(containerRef.current, { pointerEvents: 'none', clipPath: 'inset(100% 0% 0% 0%)' });
+
+        const tl = gsap.timeline({ paused: true });
+
+        tl.addLabel(openStartLabel)
+          .to(containerRef.current, {
+            duration: 1.2,
+            pointerEvents: 'auto',
+            clipPath: 'inset(0% 0% 0% 0%)',
+            ease: 'expo.inOut',
+          }, openStartLabel)
+          .fromTo(getHomeLinkTarget(),
+            { yPercent: 200, autoAlpha: 0 },
+            { yPercent: 0, autoAlpha: 1, duration: 1.6, ease: 'expo.inOut' },
+            `${openStartLabel}+=0.24`
+          )
+          .to('.menu-content-pages', { yPercent: 0, autoAlpha: 1, duration: 1.6, ease: 'expo.inOut', stagger: 0.032 }, `${openStartLabel}+=0.24`)
+          .to('.menu-content-info', { yPercent: 0, autoAlpha: 1, duration: 1.6, ease: 'expo.inOut', stagger: 0.032 }, `${openStartLabel}+=0.24`)
+          .to('.menu-content-title-letter', { yPercent: 0, rotateY: 0, scale: 1, autoAlpha: 1, duration: 1.6, ease: 'expo.inOut', stagger: 0.032 }, openStartLabel)
+          .to('.menu-content-title-mobile', { yPercent: 0, rotateY: 0, scaleX: 1, scaleY: 1, autoAlpha: 1, duration: 1.6, ease: 'expo.inOut' }, openStartLabel)
+          .addLabel(openEndLabel)
+          .addLabel(closeStartLabel)
+          .to('.menu-content-pages', { yPercent: -110, autoAlpha: 0, duration: 0.5, ease: 'expo.in', stagger: 0.02 }, closeStartLabel)
+          .to('.menu-content-info', { yPercent: -110, autoAlpha: 0, duration: 0.45, ease: 'expo.in' }, closeStartLabel)
+          .to('.menu-content-title-letter', { yPercent: -120, rotateY: -12, scale: 0.85, autoAlpha: 0, duration: 0.52, ease: 'expo.in', stagger: 0.016 }, closeStartLabel)
+          .to('.menu-content-title-mobile', { yPercent: -110, rotateY: -10, scaleX: 0.85, scaleY: 0.85, autoAlpha: 0, duration: 0.45, ease: 'expo.in' }, closeStartLabel)
+          .to(getHomeLinkTarget(), { yPercent: -110, autoAlpha: 0, duration: 0.5, ease: 'expo.in' }, closeStartLabel)
+          .to(containerRef.current, {
+            duration: 0.8,
+            clipPath: 'inset(0% 0% 100% 0%)',
+            ease: 'expo.inOut'
+          }, `${closeStartLabel}+=0.04`)
+          .addLabel(closeEndLabel);
+
+        masterTimelineRef.current = tl;
+        tl.seek(closeEndLabel, false);
       });
-      gsap.set('.menu-content-title-mobile', { yPercent: 100, rotateY: 20, scaleX: 0.2, scaleY: 0.2, autoAlpha: 0 });
+    };
 
-      // Set initial state for overlay container
-      gsap.set(containerRef.current, { pointerEvents: 'none', clipPath: 'inset(100% 0% 0% 0%)' });
+    init();
 
-      // Build out inside timeline
-      const tl = gsap.timeline({
-        paused: true,
-        defaults: { duration: 1.6, ease: 'expo.inOut' }
-      });
-
-      tl.to('.menu-content-pages', { yPercent: 0, autoAlpha: 1, stagger: 0.032 }, 0.24)
-        .to('.menu-content-info', { yPercent: 0, autoAlpha: 1, stagger: 0.032 }, 0.24)
-        .to('.menu-content-title-letter', { yPercent: 0, rotateY: 0, scale: 1, autoAlpha: 1, stagger: 0.032 }, 0)
-        .to('.menu-content-title-mobile', { yPercent: 0, rotateY: 0, scaleX: 1, scaleY: 1, autoAlpha: 1 }, 0);
-
-      timelineRef.current = tl;
-    }, containerRef);
-
-    return () => ctx.revert();
+    return () => {
+      activeTweenRef.current?.kill();
+      masterTimelineRef.current?.kill();
+      ctx?.revert();
+    };
   }, []);
 
   useEffect(() => {
-    if (!containerRef.current || !timelineRef.current) return;
+    if (!containerRef.current || !masterTimelineRef.current) return;
 
-    if (isFirstRun.current) {
-      isFirstRun.current = false;
-      return;
-    }
+    const openStartLabel = 'open-start';
+    const openEndLabel = 'open-end';
+    const closeStartLabel = 'close-start';
+    const closeEndLabel = 'close-end';
+
+    activeTweenRef.current?.kill();
+    activeTweenRef.current = null;
 
     if (isOpen) {
-      // Container opening
-      gsap.to(containerRef.current, {
-        duration: 1.2,
-        pointerEvents: 'auto',
-        clipPath: 'inset(0% 0% 0% 0%)',
-        ease: 'expo.inOut',
-      });
-      // Content opening
-      timelineRef.current.timeScale(1).play(0);
-    } else {
-      // Container-only close keeps the reveal flow from playing backward.
-      gsap.to(containerRef.current, {
-        duration: 0.8,
-        clipPath: 'inset(0% 0% 100% 0%)',
-        ease: 'expo.inOut',
+      onOpenStartRef.current?.();
+
+      gsap.set(containerRef.current, { pointerEvents: 'auto' });
+
+      masterTimelineRef.current.pause().seek(openStartLabel, false);
+
+      activeTweenRef.current = masterTimelineRef.current.tweenTo(openEndLabel, {
+        overwrite: true,
         onComplete: () => {
-          timelineRef.current?.pause(0);
-          gsap.set(containerRef.current, { pointerEvents: 'none', clipPath: 'inset(100% 0% 0% 0%)' });
-        },
+          activeTweenRef.current = null;
+        }
+      });
+    } else {
+      // Menu is closed
+      // On first load when already at closeEndLabel, skip animation
+      if (masterTimelineRef.current.time() === masterTimelineRef.current.duration()) {
+        return;
+      }
+
+      masterTimelineRef.current.pause().seek(closeStartLabel, false);
+
+      activeTweenRef.current = masterTimelineRef.current.tweenTo(closeEndLabel, {
+        overwrite: true,
+        onComplete: () => {
+          activeTweenRef.current = null;
+          gsap.set(containerRef.current, { pointerEvents: 'none' });
+          onCloseCompleteRef.current?.();
+        }
       });
     }
+
+    return () => {
+      activeTweenRef.current?.kill();
+      activeTweenRef.current = null;
+    };
   }, [isOpen]);
 
-  return { containerRef };
+  return { containerRef, homeLinkRef };
 };

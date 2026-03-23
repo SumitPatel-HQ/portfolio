@@ -23,7 +23,7 @@ export default function ProjectsPage() {
   };
 
   return (
-    <main className="projects-screen relative flex min-h-screen w-full flex-col overflow-hidden bg-[#191919] text-[#FFFAEE]">
+    <main className="relative flex min-h-screen w-full flex-col overflow-hidden bg-background text-foreground">
       <ProjectsStage imageUrl={activeProject.heroImage} imageAlt={activeProject.logoAlt} textureUrl={PROJECTS_TEXTURE_IMAGE} />
 
       <section className="absolute bottom-0 left-0 right-0 z-20 px-6 pb-[clamp(6.3rem,12.6vh,136px)] md:px-[clamp(2.4rem,5.2vw,100px)]">
