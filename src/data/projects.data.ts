@@ -7,6 +7,8 @@ export type ProjectItem = {
   heroImage: string;
   logo: string;
   logoAlt: string;
+  // liveUrl: string;
+  // repoUrl: string;
 };
 
 export const PROJECTS: ProjectItem[] = [

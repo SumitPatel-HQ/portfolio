@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 
-import { PROJECTS, PROJECTS_TEXTURE_IMAGE } from "@/app/projects/projects.data";
+import { PROJECTS, PROJECTS_TEXTURE_IMAGE } from "@/data/projects.data";
 import { ProjectsLogoRail } from "@/components/projects/ProjectsLogoRail";
 
 import { ProjectsOverlay } from "@/components/projects/ProjectsOverlay";

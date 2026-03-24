@@ -99,6 +99,7 @@ export const Menu = () => {
         ref={containerRef}
         onClick={closeMenu}
         className="fixed inset-0 z-50 overflow-hidden overscroll-contain bg-background text-foreground flex flex-col"
+        style={{ clipPath: 'inset(100% 0% 0% 0%)', pointerEvents: 'none' }}
       >
         {/* Stop propagation so clicking inside content doesn't blindly close unless clicked directly on background */}
         <div className="w-full h-full" onClick={(e) => e.stopPropagation()}>

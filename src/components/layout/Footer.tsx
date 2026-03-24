@@ -23,7 +23,7 @@ export function Footer() {
 
   // Filter links based on pathname
   const filteredLinks = pathname === '/' 
-    ? pageLinks.filter(link => link.label !== 'Contact')
+    ? pageLinks.filter(link => link.label !== 'Contact Now')
     : pageLinks;
 
   return (
@@ -37,7 +37,7 @@ export function Footer() {
 
         <div className="flex items-center justify-center gap-6">
          {filteredLinks.map((item) => 
-           item.label === 'Contact' ? (
+           item.label === 'Contact Now' ? (
              <button
                key={item.label}
                onClick={openModal}

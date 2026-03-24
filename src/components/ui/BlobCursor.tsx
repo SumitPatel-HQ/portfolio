@@ -72,7 +72,7 @@ export function BlobCursor({ targetRef, onClick, icon: Icon = ArrowUpRight }: Bl
 
     // Check if mouse is already inside the container when mounted
     if (target.matches && target.matches(":hover")) {
-      setIsVisible(true);
+      requestAnimationFrame(() => setIsVisible(true));
     }
 
     return () => {

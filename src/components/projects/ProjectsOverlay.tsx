@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 
-import type { ProjectItem } from "@/app/projects/projects.data";
+import type { ProjectItem } from "@/data/projects.data";
 
 type ProjectsOverlayProps = {
   project: ProjectItem;
@@ -10,7 +10,7 @@ export function ProjectsOverlay({ project }: ProjectsOverlayProps) {
   return (
     <div className="relative z-20 flex max-w-[980px] flex-col gap-8 px-6">
       <div className="flex flex-col gap-6">
-        <motion.h1 
+        <motion.h1
           className="text-[clamp(3rem,5.2vw,4.6rem)] leading-[1.04] text-foreground tracking-[-0.02em] font-medium"
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
@@ -18,7 +18,7 @@ export function ProjectsOverlay({ project }: ProjectsOverlayProps) {
         >
           {project.name}
         </motion.h1>
-        <motion.div 
+        <motion.div
           className="flex flex-wrap items-end gap-5"
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
@@ -36,7 +36,7 @@ export function ProjectsOverlay({ project }: ProjectsOverlayProps) {
           </div>
         </motion.div>
       </div>
-      <motion.p 
+      <motion.p
         className="max-w-4xl text-[clamp(1rem,1.2vw,1.25rem)] leading-[1.22] tracking-[-0.01em] text-foreground-secondary/50 font-normal"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
