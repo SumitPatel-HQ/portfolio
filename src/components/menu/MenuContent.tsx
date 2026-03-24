@@ -16,10 +16,10 @@ const menuItems: { label: string; href?: string }[] = [
 ];
 
 const socials = [
-  { label: 'Instagram', href: '#' },
   { label: 'LinkedIn', href: '#' },
+  { label: 'Github', href: '#' },
+  { label: 'Instagram', href: '#' },
   { label: 'Twitter', href: '#' },
-  { label: 'Facebook', href: '#' },
 ];
 
 const titleLetters = ['S', 'U', 'M', 'I', 'T'];

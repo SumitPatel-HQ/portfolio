@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 
 import { PROJECTS, PROJECTS_TEXTURE_IMAGE } from "@/app/projects/projects.data";
@@ -8,11 +9,23 @@ import { ProjectsLogoRail } from "@/components/projects/ProjectsLogoRail";
 
 import { ProjectsOverlay } from "@/components/projects/ProjectsOverlay";
 import { ProjectsStage } from "@/components/projects/ProjectsStage";
+import { BlobCursor } from "@/components/ui/BlobCursor";
 
 export default function ProjectsPage() {
   const [activeIndex, setActiveIndex] = useState(0);
 
   const activeProject = useMemo(() => PROJECTS[activeIndex], [activeIndex]);
+  
+  const mainRef = useRef<HTMLElement>(null);
+  const router = useRouter();
+
+  const handleContainerClick = (e: MouseEvent) => {
+    const target = e.target as HTMLElement;
+    if (target?.closest?.("button") || target?.closest?.("a")) {
+      return;
+    }
+    router.push(activeProject.href);
+  };
 
   const onPrev = () => {
     setActiveIndex((current) =>
@@ -40,7 +53,8 @@ export default function ProjectsPage() {
   }, []); // onPrev/onNext are stable as they use functional updates.
 
   return (
-    <main className="relative flex min-h-screen w-full flex-col overflow-hidden bg-background text-foreground">
+    <main ref={mainRef} className="relative flex min-h-screen w-full flex-col overflow-hidden bg-background text-foreground">
+      <BlobCursor targetRef={mainRef} onClick={handleContainerClick} />
       <ProjectsStage
         imageUrl={activeProject.heroImage}
         imageAlt={activeProject.logoAlt}

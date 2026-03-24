@@ -1,6 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
+import { TextureOverlay } from "@/components/ui/visuals/TextureOverlay";
 
 type ProjectsStageProps = {
   imageUrl: string;
@@ -33,10 +34,7 @@ export function ProjectsStage({ imageUrl, imageAlt, textureUrl }: ProjectsStageP
           `
         }}
       />
-      <div
-        className="absolute inset-0 mix-blend-hard-light opacity-[0.2]"
-        style={{ backgroundImage: `url("${textureUrl}")`, backgroundSize: "cover", backgroundPosition: "center" }}
-      />
+      <TextureOverlay url={textureUrl} opacity={0.2} />
     </div>
   );
 }
