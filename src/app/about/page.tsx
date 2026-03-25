@@ -60,7 +60,10 @@ export default function AboutPage() {
         </section>
 
         {/* RIGHT PANEL */}
-        <section className="flex w-full flex-col gap-12 px-8 pt-24 pb-32 md:h-screen md:overflow-y-auto md:w-[45vw] md:px-12">
+        <section 
+          data-lenis-prevent
+          className="flex w-full flex-col gap-12 px-8 pt-24 pb-32 md:h-screen md:overflow-y-auto md:w-[45vw] md:px-12"
+        >
           
           {/* BLOCK 1: IDENTITY */}
           <motion.div
@@ -90,37 +93,10 @@ export default function AboutPage() {
 
           <div className="border-t border-accent/20 w-full" />
 
-          {/* BLOCK 2: STATS */}
-          <motion.div
-            custom={1}
-            initial="hidden"
-            animate="visible"
-            variants={fadeUpVariants}
-          >
-            <span className="mb-12 block font-sans text-[10px] font-bold uppercase tracking-widest text-accent">
-              At A Glance
-            </span>
-            <div className="flex flex-wrap gap-12 md:gap-24">
-              <div className="flex flex-col gap-2">
-                <span className="font-sans text-4xl font-extrabold text-foreground">06+</span>
-                <span className="font-sans text-[10px] font-semibold uppercase tracking-wider text-muted-custom">Yrs Exp</span>
-              </div>
-              <div className="flex flex-col gap-2">
-                <span className="font-sans text-4xl font-extrabold text-foreground">12</span>
-                <span className="font-sans text-[10px] font-semibold uppercase tracking-wider text-muted-custom">Models</span>
-              </div>
-              <div className="flex flex-col gap-2">
-                <span className="font-sans text-4xl font-extrabold text-foreground uppercase">ASIA_W</span>
-                <span className="font-sans text-[10px] font-semibold uppercase tracking-wider text-muted-custom">Region</span>
-              </div>
-            </div>
-          </motion.div>
-
-          <div className="border-t border-accent/20 w-full" />
 
           {/* BLOCK 3: APPROACH */}
           <motion.div
-            custom={2}
+            custom={1}
             initial="hidden"
             animate="visible"
             variants={fadeUpVariants}
@@ -152,7 +128,7 @@ export default function AboutPage() {
 
           {/* BLOCK 4: CURRENTLY */}
           <motion.div
-            custom={3}
+            custom={1.5}
             initial="hidden"
             animate="visible"
             variants={fadeUpVariants}
@@ -180,7 +156,7 @@ export default function AboutPage() {
 
           {/* BLOCK 5: CONNECT */}
           <motion.div
-            custom={4}
+            custom={2}
             initial="hidden"
             animate="visible"
             variants={fadeUpVariants}

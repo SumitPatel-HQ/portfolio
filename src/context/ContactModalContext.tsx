@@ -1,7 +1,8 @@
 "use client";
 
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import { ContactCard } from "@/components/ui/contact-card";
+import { useLenis } from "@/providers/LenisProvider";
 import {
   Dialog,
   DialogContent,
@@ -9,6 +10,7 @@ import {
   DialogDescription,
   DialogHeader,
 } from "@/components/ui/dialog";
+
 import { Input } from "@/components/ui/forms/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/forms/label";
@@ -40,9 +42,20 @@ export function ContactModalProvider({
   children: React.ReactNode;
 }) {
   const [isOpen, setIsOpen] = useState(false);
+  const { lenis } = useLenis();
 
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
+
+  // Lock background scrolling while modal is open (Lenis support)
+  useEffect(() => {
+    if (!lenis) return;
+    if (isOpen) {
+      lenis.stop();
+    } else {
+      lenis.start();
+    }
+  }, [isOpen, lenis]);
 
   return (
     <ContactModalContext.Provider value={{ isOpen, openModal, closeModal }}>

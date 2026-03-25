@@ -7,6 +7,7 @@ import { MenuContent } from './MenuContent';
 import { HomeLink } from './HomeLink';
 import { useMenuAnimation } from './useMenuAnimation';
 import { useContactModal } from '@/context/ContactModalContext';
+import { useLenis } from '@/providers/LenisProvider';
 
 const menuItemsLinks = [
   { label: 'Projects', href: '/projects' },
@@ -19,6 +20,7 @@ export const Menu = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [animatedHomeLabel, setAnimatedHomeLabel] = useState<string | null>(null);
   const { isOpen: isContactModalOpen } = useContactModal();
+  const { lenis } = useLenis();
 
   const currentPageLabel = useMemo(() => {
     if (pathname === '/') return 'Home';
@@ -72,18 +74,21 @@ export const Menu = () => {
       html.style.overflow = 'hidden';
       body.style.overflow = 'hidden';
       body.style.touchAction = 'none';
+      if (lenis) lenis.stop();
     } else {
       html.style.overflow = prevHtmlOverflow;
       body.style.overflow = prevBodyOverflow;
       body.style.touchAction = prevBodyTouchAction;
+      if (lenis) lenis.start();
     }
 
     return () => {
       html.style.overflow = prevHtmlOverflow;
       body.style.overflow = prevBodyOverflow;
       body.style.touchAction = prevBodyTouchAction;
+      if (lenis) lenis.start();
     };
-  }, [isOpen]);
+  }, [isOpen, lenis]);
 
   return (
     <>

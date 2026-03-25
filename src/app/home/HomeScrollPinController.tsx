@@ -37,6 +37,7 @@ export function HomeScrollPinController({
     media.add("(min-width: 320px)", () => {
       let isSnapping = false;
       let snapCooldownUntil = 0;
+      let enteredFeaturedFromBottom = false;
       let lastScrollDirection = 0;
       let lastWheelUpAt = 0;
       let hasRecoveredUpInFeaturedZone = false;
@@ -111,10 +112,28 @@ export function HomeScrollPinController({
             lastScrollDirection = self.direction;
           }
 
+          // HEURISTIC: Self-correct the "entry direction" based on actual progress.
+          // If we're scrolling up near the bottom of the section, we likely came from the footer.
+          // If we're scrolling down near the top, we likely came from the hero.
+          if (self.direction === -1 && self.progress > 0.85) {
+            enteredFeaturedFromBottom = true;
+          } else if (self.direction === 1 && self.progress < 0.15) {
+            enteredFeaturedFromBottom = false;
+          }
+
           if (isSnapping || isSnapCooldownActive()) return;
 
-          // Upward snap window is intentionally wider so users do not need repeated wheel gestures.
-          if (self.direction === -1 && self.progress < 0.85 && self.progress > 0.08) {
+          // If we reach the top half, we allow the responsive snap back to Hero.
+          if (enteredFeaturedFromBottom && self.progress < 0.25) {
+            enteredFeaturedFromBottom = false;
+          }
+          
+          // Determine the upward snap threshold based on position/entry.
+          // Bottom-up: strict (0.1) to avoid skipping. Top-down: responsive (0.85).
+          const progressSnapLimit = enteredFeaturedFromBottom ? 0.1 : 0.85;
+
+          // Upward snap window
+          if (self.direction === -1 && self.progress < progressSnapLimit && self.progress > 0.08) {
             snapTo(heroRef.current!);
           }
         },
@@ -128,7 +147,11 @@ export function HomeScrollPinController({
 
         const isRecentWheelUp = performance.now() - lastWheelUpAt < RECENT_WHEEL_UP_INTENT_MS;
         const isUpwardIntent = lastScrollDirection === -1 || isRecentWheelUp;
-        const isInRecoveryZone = featuredTrigger.progress > 0.12 && featuredTrigger.progress < 0.88;
+        
+        // Stricter recovery zone if we entered from bottom
+        const recoveryStart = 0.12;
+        const recoveryEnd = enteredFeaturedFromBottom ? 0.15 : 0.88;
+        const isInRecoveryZone = featuredTrigger.progress > recoveryStart && featuredTrigger.progress < recoveryEnd;
 
         if (isUpwardIntent && isInRecoveryZone) {
           hasRecoveredUpInFeaturedZone = true;
@@ -153,13 +176,15 @@ export function HomeScrollPinController({
           lastScrollDirection = -1;
           lastWheelUpAt = performance.now();
 
+          const wheelThreshold = enteredFeaturedFromBottom ? 0.15 : 0.98;
+
           if (
             !isSnapping &&
             !isSnapCooldownActive() &&
             featuredTrigger.isActive &&
             !hasRecoveredUpInFeaturedZone &&
             featuredTrigger.progress > 0.02 &&
-            featuredTrigger.progress < 0.98
+            featuredTrigger.progress < wheelThreshold
           ) {
             hasRecoveredUpInFeaturedZone = true;
             snapTo(heroRef.current!);
