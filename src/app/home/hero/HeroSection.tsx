@@ -35,15 +35,16 @@ export const HeroSection = () => {
         </div>
 
         <div className="flex-1 flex flex-col justify-center ">
-          <div ref={nameRef} className="flex flex-col">
-            <BlobCursor 
-              targetRef={nameRef} 
-              onClick={handleNameClick} 
-              iconColor="text-black" 
+          <div ref={nameRef} className="flex flex-col relative">
+            <BlobCursor
+              targetRef={nameRef}
+              onClick={handleNameClick}
+              iconColor="text-black"
               restrictToTags={['h1']}
             />
-            <h1 ref={sumitRef} className="text-hero font-extrabold leading-[0.9] tracking-hero border-b border-white/10 max-md:text-hero-mobile scale-y-[1.2] relative z-20 w-fit">SUMIT</h1>
-            <h1 ref={patelRef} className="text-hero font-extrabold leading-[0.9] tracking-hero text-right max-md:text-hero-mobile scale-y-[1.2] mt-10 pr-[0.05em] relative z-20 ml-auto w-fit">PATEL</h1>
+            <h1 ref={sumitRef} className="text-hero font-extrabold leading-[0.9] tracking-hero max-md:text-hero-mobile scale-y-[1.2] relative z-20 w-fit uppercase">Sumit</h1>
+            <div className="w-full border-b border-white/10 relative z-10 mt-4" />
+            <h1 ref={patelRef} className="text-hero font-extrabold leading-[0.9] tracking-hero text-right max-md:text-hero-mobile scale-y-[1.2] mt-4 pr-[0.05em] relative z-20 ml-auto w-fit uppercase">Patel</h1>
           </div>
         </div>
 
@@ -55,9 +56,9 @@ export const HeroSection = () => {
             </p>
           </div>
           <div className="flex justify-end items-center gap-3 max-md:w-full max-md:justify-start max-md:flex-wrap">
-            <button 
-            onClick={openModal} 
-            className="py-3.5 px-18px text-status font-semibold uppercase border border-accent min-w-btn text-center bg-accent text-black cursor-pointer transition-all duration-300 hover:bg-white hover:text-black hover:border-white hover:-translate-y-0.5 max-md:min-w-btn-mobile">
+            <button
+              onClick={openModal}
+              className="py-3.5 px-18px text-status font-semibold uppercase border border-accent min-w-btn text-center bg-accent text-black cursor-pointer transition-all duration-300 hover:bg-white hover:text-black hover:border-white hover:-translate-y-0.5 max-md:min-w-btn-mobile">
               Get in touch
             </button>
             <Link href="/projects" className="py-3.5 px-18px text-status font-semibold uppercase border border-white/30 min-w-btn text-center bg-white/8 cta-secondary-text cursor-pointer transition-all duration-300 hover:bg-white hover:border-white hover:-translate-y-0.5 max-md:min-w-btn-mobile">
