@@ -1,8 +1,13 @@
+import { LucideIcon } from "lucide-react";
 import {
-  LucideIcon,
-  Mail,
-} from "lucide-react";
-import { GithubIcon, LinkedinIcon, InstagramIcon, XIcon } from "@/components/ui/SocialIcons";
+  GithubIcon,
+  LinkedinIcon,
+  InstagramIcon,
+  XIcon,
+  MailIcon,
+  PhoneIcon,
+  MapPinIcon,
+} from "@/components/ui/SocialIcons";
 
 export type SocialLink = {
   id: number;
@@ -20,7 +25,7 @@ export const socials: SocialLink[] = [
     href: "mailto:sumitvp2@gmail.com",
     username: "sumitvp2@gmail.com",
     ariaLabel: "Send an email to sumitvp2@gmail.com",
-    icon: Mail,
+    icon: MailIcon as LucideIcon,
   },
   {
     id: 2,
@@ -53,5 +58,21 @@ export const socials: SocialLink[] = [
     username: "@ZSumit_",
     ariaLabel: "Follow me on X (Twitter)",
     icon: XIcon as LucideIcon,
+  },
+  {
+    id: 6,
+    label: "Phone",
+    href: "tel:+918169937832",
+    username: "+91 8169937832",
+    ariaLabel: "Call me at +91 8169937832",
+    icon: PhoneIcon as LucideIcon,
+  },
+  {
+    id: 7,
+    label: "Location",
+    href: "null",
+    username: "Virar, Maharashtra",
+    ariaLabel: "View my location on Google Maps",
+    icon: MapPinIcon as LucideIcon,
   },
 ];

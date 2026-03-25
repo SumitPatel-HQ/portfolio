@@ -3,7 +3,6 @@
 import React, { createContext, useContext, useState } from "react";
 import { ContactCard } from "@/components/ui/contact-card";
 import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogHeader } from "@/components/ui/dialog";
-import { MailIcon, PhoneIcon, MapPinIcon } from "lucide-react";
 import { Input } from "@/components/ui/forms/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/forms/label";
@@ -44,24 +43,6 @@ export function ContactModalProvider({ children }: { children: React.ReactNode }
           <ContactCard
             title="Get in touch"
             description="If you have any questions regarding our Services or need help, please fill out the form here. We do our best to respond within 1 business day."
-            contactInfo={[
-              {
-                icon: MailIcon,
-                label: "Email",
-                value: "hello@sumitpatel.dev",
-              },
-              {
-                icon: PhoneIcon,
-                label: "Phone",
-                value: "+91 123 456 7890",
-              },
-              {
-                icon: MapPinIcon,
-                label: "Location",
-                value: "Remote / Worldwide",
-                className: "md:col-span-2 lg:col-span-3",
-              },
-            ]}
           >
             <form
               action=""

@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import {
 	LucideIcon,
 } from 'lucide-react';
+import { socials } from '@/data/socialLinks';
 
 type ContactInfoProps = React.ComponentProps<'div'> & {
 	icon: LucideIcon;
@@ -23,7 +24,14 @@ type ContactCardProps = React.ComponentProps<'div'> & {
 export function ContactCard({
 	title = 'Contact With Us',
 	description = 'If you have any questions regarding our Services or need help, please fill out the form here. We do our best to respond within 1 business day.',
-	contactInfo,
+	contactInfo = socials
+		.filter((s) => ['Email', 'Phone', 'Location'].includes(s.label))
+		.map((s) => ({
+			icon: s.icon,
+			label: s.label,
+			value: s.username || '',
+			className: s.label === 'Location' ? 'md:col-span-2 lg:col-span-3' : '',
+		})),
 	className,
 	formSectionClassName,
 	children,

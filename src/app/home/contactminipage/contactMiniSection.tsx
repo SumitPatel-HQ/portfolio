@@ -11,7 +11,7 @@ export const ContactMiniSection = () => {
   const primaryConnection = socials[0];
   // Filter out Instagram and X for this specific section
   const secondaryConnections = socials.slice(1).filter(
-    (social) => social.label !== "Instagram" && social.label !== "X (Twitter)"
+    (social) => social.label !== "Instagram" && social.label !== "Twitter" && social.label !== "Phone" && social.label !== "Location"
   );
 
   return (
