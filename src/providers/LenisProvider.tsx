@@ -36,8 +36,8 @@ export default function LenisProvider({ children }: { children: ReactNode }) {
          wheelMultiplier: 0.78,
          // Mobile touch needs a higher multiplier so the page keeps up with your finger
          touchMultiplier: mobile ? 1.5 : 1.0,
-         // Higher lerp = snappier catch-up; desktop stays cinematic, mobile feels responsive
-         lerp: mobile ? 0.1 : 0.08,
+         // Higher lerp = snappier catch-up; desktop stays cinematic but responsive, mobile feels snappy
+         lerp: mobile ? 0.1 : 0.12,
          syncTouch: true,
       });
 
