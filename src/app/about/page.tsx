@@ -79,8 +79,8 @@ export default function AboutPage() {
 
             <p className="max-w-xl font-sans text-sm leading-[1.7] text-muted-custom md:text-sm">
               I build systems that sit at the edge of AI and usability — 
-              where a model's output becomes something a real person can 
-              actually use. I'm drawn to problems that require both deep 
+              where a model&apos;s output becomes something a real person can 
+              actually use. I&apos;m drawn to problems that require both deep 
               technical work and design thinking, because neither alone 
               is enough. Based in Virār, Maharashtra. Currently leading 
               technical direction at NSDC VCET and shipping products 

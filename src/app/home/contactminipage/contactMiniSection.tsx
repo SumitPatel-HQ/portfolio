@@ -2,9 +2,17 @@
 
 import React from "react";
 import { useContactModal } from "@/context/ContactModalContext";
+import { socials } from "@/data/socialLinks";
 
 export const ContactMiniSection = () => {
   const { openModal } = useContactModal();
+
+  // Separate the first connection (usually Email) from the others for specific layout
+  const primaryConnection = socials[0];
+  // Filter out Instagram and X for this specific section
+  const secondaryConnections = socials.slice(1).filter(
+    (social) => social.label !== "Instagram" && social.label !== "X (Twitter)"
+  );
 
   return (
     <section
@@ -18,24 +26,67 @@ export const ContactMiniSection = () => {
             className="mt-4 animate-none text-4xl font-extrabold uppercase leading-tight tracking-tight text-foreground sm:text-5xl md:text-6xl"
           >
             Got a project in mind?
-            <span className="block animate-none text-primary">Let&apos;s talk.</span>
+            <span className="block animate-none text-primary">
+              Let&apos;s talk.
+            </span>
           </h2>
 
           <p className="mt-5 mb-8 max-w-2xl text-base leading-relaxed text-white/70 md:text-lg">
             I design and build clean, high-impact digital experiences for modern
-            products. If you have an idea worth shipping, I&apos;d love to hear it.
+            products. If you have an idea worth shipping, I&apos;d love to hear
+            it.
           </p>
 
-          <div className="border-t w-full border-white/10" />
+          <div className="border-t w-full border-white/10 opacity-80" />
           <div className="pt-6">
-            <p className="text-sm uppercase tracking-[0.12em] text-white/55 ">Email</p>
-            <a
-              href="mailto:hello@sumitpatel.dev"
-              aria-label="Send an email to hello@sumitpatel.dev"
-              className="mt-2 inline-flex text-lg font-semibold text-foreground underline decoration-border-custom underline-offset-4 transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-            >
-              hello@sumitpatel.dev
-            </a>
+            <p className="mb-4 text-sm uppercase tracking-[0.12em] text-white/55">
+              Connect with me
+            </p>
+            <div className="flex flex-wrap items-center gap-6">
+              {/* Primary Connection (Email) */}
+              {primaryConnection && (
+                <a
+                  href={primaryConnection.href}
+                  className="group flex items-center gap-3 transition-all duration-300"
+                  aria-label={primaryConnection.ariaLabel}
+                >
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/50 transition-all duration-300 group-hover:bg-accent group-hover:text-background group-hover:border-accent">
+                    {React.createElement(primaryConnection.icon, {
+                      className: "h-5 w-5",
+                    })}
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-[10px] font-extralight uppercase tracking-tight text-muted-custom">
+                      {primaryConnection.label}
+                    </span>
+                    <span className="text-sm font-medium text-foreground underline decoration-white/10 decoration-1 underline-offset-4 transition-all group-hover:text-accent group-hover:decoration-accent">
+                      {primaryConnection.username}
+                    </span>
+                  </div>
+                </a>
+              )}
+
+              {/* Secondary Connections (Socials) */}
+              {secondaryConnections.map((social) => (
+                <React.Fragment key={social.id}>
+                  {/* Divider for desktop */}
+                  <div className="hidden h-8 w-px bg-white/10 md:block" />
+                  <a
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group flex items-center gap-2 transition-all duration-300"
+                    aria-label={social.ariaLabel}
+                  >
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/50 transition-all duration-300 group-hover:bg-accent group-hover:text-background group-hover:border-accent">
+                      {React.createElement(social.icon, {
+                        className: "h-5 w-5",
+                      })}
+                    </div>
+                  </a>
+                </React.Fragment>
+              ))}
+            </div>
           </div>
         </div>
 

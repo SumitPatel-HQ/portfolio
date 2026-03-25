@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import React from 'react';
 import { useContactModal } from '@/context/ContactModalContext';
+import { socials } from '@/data/socialLinks';
 
 interface MenuContentProps {
   onNavigate?: () => void;
@@ -13,13 +14,6 @@ const menuItems: { label: string; href?: string }[] = [
   { label: 'Experience', href: '/experience' },
   { label: 'About Me', href: '/about' },
   { label: 'Contact', href: '#' },
-];
-
-const socials = [
-  { label: 'Instagram', href: '#' },
-  { label: 'LinkedIn', href: '#' },
-  { label: 'Twitter', href: '#' },
-  { label: 'Facebook', href: '#' },
 ];
 
 const titleLetters = ['S', 'U', 'M', 'I', 'T'];
@@ -61,10 +55,10 @@ export const MenuContent: React.FC<MenuContentProps> = ({ onNavigate }) => {
 
         <div className="menu-content-info grid grid-cols-1 gap-2 text-left text-[13px] font-medium uppercase tracking-[0.085em] leading-[1.33] text-foreground-secondary lg:grid-cols-2 lg:items-start lg:gap-x-0 lg:text-right">
           <div className="space-y-1 lg:self-start">
-            <p>Akaru</p>
-            <p>9 quai Andre Lassagne</p>
-            <p>69001 Lyon</p>
-            <p>France</p>
+            <p>Sumit</p>
+            {/* <p>9 quai Andre Lassagne</p> */}
+            <p>401303 Virar</p>
+            <p>Maharashtra</p>
           </div>
 
           {/* can be scaled for conact section */}
@@ -74,11 +68,19 @@ export const MenuContent: React.FC<MenuContentProps> = ({ onNavigate }) => {
           </div> */}
 
           <div className="space-y-1 lg:self-start">
-            {socials.map((social) => (
-              <a key={social.label} href={social.href} className="block transition-opacity hover:opacity-70">
-                {social.label}
-              </a>
-            ))}
+            {socials
+              .filter((social) => social.label !== 'Email')
+              .map((social) => (
+                <a
+                  key={social.label}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block transition-opacity hover:opacity-70"
+                >
+                  {social.label}
+                </a>
+              ))}
           </div>
 
           {/* contact number */}

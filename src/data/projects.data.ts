@@ -7,13 +7,15 @@ export type ProjectItem = {
   heroImage: string;
   logo: string;
   logoAlt: string;
+  // liveUrl: string;
+  // repoUrl: string;
 };
 
 export const PROJECTS: ProjectItem[] = [
   {
     id: "biltfour",
-    name: "Insert Project",
-    tags: "Design Systems • E-commerce • Brand Strategy • AI Workflows • Physical Product Design",
+    name: "Healthcare Management System",
+    tags: "Design Systems, E-commerce • Brand Strategy • AI Workflows • Physical Product Design",
     description:
       "End-to-end product design and launch strategy for a digital and physical commerce experience with a component-driven system.",
     href: "/work/biltfour",
@@ -28,7 +30,7 @@ export const PROJECTS: ProjectItem[] = [
     description:
       "A transformation program focused on onboarding, governance, and scale-ready workflows for enterprise operations.",
     href: "/work/sap-ix",
-    heroImage: "https://www.figma.com/api/mcp/asset/21afc401-e279-409d-b709-c32b65f4829f",
+    heroImage: "/img.png",
     logo: "SAP IX",
     logoAlt: "SAP IX logo",
   },
@@ -89,5 +91,6 @@ export const PROJECTS: ProjectItem[] = [
   },
 ];
 
-export const PROJECTS_TEXTURE_IMAGE =
-  "https://www.figma.com/api/mcp/asset/9c304206-003b-4e40-a884-1812e63e6fb1";
+// Using undefined or empty to trigger the high-performance, zero-latency 
+// SVG noise implementation in the TextureOverlay component.
+export const PROJECTS_TEXTURE_IMAGE = "";

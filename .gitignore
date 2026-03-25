@@ -43,3 +43,6 @@ next-env.d.ts
 /guidelines
 *.md
 *.txt
+.github
+docs/
+changes.diff
