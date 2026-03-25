@@ -33,12 +33,12 @@ export default function LenisProvider({ children }: { children: ReactNode }) {
          orientation: "vertical",
          gestureOrientation: "vertical",
          smoothWheel: true,
-         wheelMultiplier: 0.78,
+         wheelMultiplier: 0.85,
          // Mobile touch needs a higher multiplier so the page keeps up with your finger
          touchMultiplier: mobile ? 1.5 : 1.0,
-         // Higher lerp = snappier catch-up; desktop stays cinematic but responsive, mobile feels snappy
+         // Slightly faster lerp for desktop to feel snappy but not glitchy
          lerp: mobile ? 0.1 : 0.12,
-         syncTouch: true,
+         syncTouch: false,
       });
 
       lenisRef.current = lenis;

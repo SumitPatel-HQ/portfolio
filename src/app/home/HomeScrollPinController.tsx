@@ -9,27 +9,60 @@ import { useLenis } from "@/providers/LenisProvider";
 type HomeScrollPinControllerProps = {
   heroRef: RefObject<HTMLElement | null>;
   featuredRef: RefObject<HTMLElement | null>;
+  contactRef: RefObject<HTMLElement | null>;
 };
 
-const HERO_PIN_DISTANCE_VIEWPORTS = 0.25;
-const FEATURED_PIN_DISTANCE_VIEWPORTS = 0.4;
+const HERO_PIN_DISTANCE_VIEWPORTS = 0.85;
+const FEATURED_PIN_DISTANCE_VIEWPORTS = 0.85;
+const SNAP_COOLDOWN_MS = 150;
+const SCROLL_END_DEBOUNCE_MS = 150;
+const RECENT_WHEEL_UP_INTENT_MS = 260;
 
 export function HomeScrollPinController({
   heroRef,
   featuredRef,
+  contactRef,
 }: HomeScrollPinControllerProps) {
   const { isReady: isGSAPReady } = useGSAP();
   const { isReady: isLenisReady, lenis } = useLenis();
 
   useEffect(() => {
-    if (!isGSAPReady || !isLenisReady || !heroRef.current || !featuredRef.current || !lenis) {
+    if (!isGSAPReady || !isLenisReady || !heroRef.current || !featuredRef.current || !contactRef.current || !lenis) {
       return;
     }
 
     const media = gsap.matchMedia();
 
-    media.add("(min-width: 1024px)", () => {
+    // Set a very low minimum width to ensure it is almost always active during testing
+    media.add("(min-width: 320px)", () => {
       let isSnapping = false;
+      let snapCooldownUntil = 0;
+      let lastScrollDirection = 0;
+      let lastWheelUpAt = 0;
+      let hasRecoveredUpInFeaturedZone = false;
+      let scrollEndTimer: ReturnType<typeof setTimeout> | null = null;
+
+      const isSnapCooldownActive = () => performance.now() < snapCooldownUntil;
+
+      const snapTo = (target: HTMLElement) => {
+        if (isSnapping || isSnapCooldownActive() || !lenis) return;
+        isSnapping = true;
+        
+        // Stop Lenis interaction during snap to prevent fighting with user input
+        lenis.stop();
+        
+        lenis.scrollTo(target, {
+          force: true,
+          duration: 0.85,
+          lock: false,
+          easing: (t) => Math.min(1, 1 - Math.pow(1 - t, 4)),
+          onComplete: () => {
+             lenis.start();
+             isSnapping = false;
+             snapCooldownUntil = performance.now() + SNAP_COOLDOWN_MS;
+          }
+        });
+      };
 
       const heroTrigger = ScrollTrigger.create({
         id: "home-hero-pin",
@@ -38,43 +71,19 @@ export function HomeScrollPinController({
         end: () => `+=${window.innerHeight * HERO_PIN_DISTANCE_VIEWPORTS}`,
         pin: true,
         pinSpacing: true,
-        scrub: true,
+        scrub: 1,
         onUpdate: (self) => {
-          if (isSnapping) return;
-
-          // Downward Snap: Cross even 2% of the pin range while moving down
-          if (self.direction === 1 && self.progress > 0.02 && self.progress < 0.98) {
-            isSnapping = true;
-            lenis.scrollTo(featuredRef.current!, {
-              force: true,
-              duration: 1.1,
-              easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-              onComplete: () => {
-                isSnapping = false;
-              }
-            });
+          if (self.direction !== 0) {
+            lastScrollDirection = self.direction;
           }
 
-          // Upward Snap: Cross back from transition zone to Hero start
-          if (self.direction === -1 && self.progress < 0.98 && self.progress > 0.02) {
-            isSnapping = true;
-            lenis.scrollTo(heroRef.current!, {
-              force: true,
-              duration: 1.1,
-              easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-              onComplete: () => {
-                isSnapping = false;
-              }
-            });
+          if (isSnapping || isSnapCooldownActive()) return;
+
+          // Downward snap in the middle range to avoid pin-edge flicker.
+          if (self.direction === 1 && self.progress > 0.35 && self.progress < 0.9) {
+            snapTo(featuredRef.current!);
           }
         },
-        snap: {
-          snapTo: [0, 1],
-          delay: 0,
-          duration: { min: 0.1, max: 0.2 },
-          directional: true,
-          ease: "expo.out"
-        }
       });
 
       const featuredTrigger = ScrollTrigger.create({
@@ -84,44 +93,111 @@ export function HomeScrollPinController({
         end: () => `+=${window.innerHeight * FEATURED_PIN_DISTANCE_VIEWPORTS}`,
         pin: true,
         pinSpacing: true,
-        scrub: true,
+        scrub: 1,
+        onEnter: () => {
+          hasRecoveredUpInFeaturedZone = false;
+        },
+        onEnterBack: () => {
+          hasRecoveredUpInFeaturedZone = false;
+        },
+        onLeave: () => {
+          hasRecoveredUpInFeaturedZone = false;
+        },
+        onLeaveBack: () => {
+          hasRecoveredUpInFeaturedZone = false;
+        },
         onUpdate: (self) => {
-          if (isSnapping) return;
+          if (self.direction !== 0) {
+            lastScrollDirection = self.direction;
+          }
 
-          // Upward Snap: If we are in the featured pin zone and scroll up, jump to Hero
-          if (self.direction === -1 && self.progress < 0.95 && self.progress > 0.01) {
-            isSnapping = true;
-            lenis.scrollTo(heroRef.current!, {
-              force: true,
-              duration: 1.1,
-              easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-              onComplete: () => {
-                isSnapping = false;
-              }
-            });
+          if (isSnapping || isSnapCooldownActive()) return;
+
+          // Upward snap window is intentionally wider so users do not need repeated wheel gestures.
+          if (self.direction === -1 && self.progress < 0.85 && self.progress > 0.08) {
+            snapTo(heroRef.current!);
           }
         },
-        snap: {
-          snapTo: [0, 1],
-          delay: 0,
-          duration: { min: 0.1, max: 0.2 },
-          directional: true,
-          ease: "expo.out"
-        }
       });
 
-      ScrollTrigger.refresh();
+      // If users miss the upward snap window, recover once when scrolling settles.
+      const recoverUpwardSnapOnScrollEnd = () => {
+        if (isSnapping || isSnapCooldownActive() || !featuredTrigger.isActive || hasRecoveredUpInFeaturedZone) {
+          return;
+        }
+
+        const isRecentWheelUp = performance.now() - lastWheelUpAt < RECENT_WHEEL_UP_INTENT_MS;
+        const isUpwardIntent = lastScrollDirection === -1 || isRecentWheelUp;
+        const isInRecoveryZone = featuredTrigger.progress > 0.12 && featuredTrigger.progress < 0.88;
+
+        if (isUpwardIntent && isInRecoveryZone) {
+          hasRecoveredUpInFeaturedZone = true;
+          snapTo(heroRef.current!);
+        }
+      };
+
+      const onLenisScroll = () => {
+        if (scrollEndTimer) {
+          clearTimeout(scrollEndTimer);
+        }
+
+        scrollEndTimer = setTimeout(() => {
+          recoverUpwardSnapOnScrollEnd();
+        }, SCROLL_END_DEBOUNCE_MS);
+      };
+
+      // External mouse wheels can emit coarse discrete deltas.
+      // This fallback preserves upward intent and snaps from featured when that intent is clear.
+      const onWheel = (event: WheelEvent) => {
+        if (event.deltaY < 0) {
+          lastScrollDirection = -1;
+          lastWheelUpAt = performance.now();
+
+          if (
+            !isSnapping &&
+            !isSnapCooldownActive() &&
+            featuredTrigger.isActive &&
+            !hasRecoveredUpInFeaturedZone &&
+            featuredTrigger.progress > 0.02 &&
+            featuredTrigger.progress < 0.98
+          ) {
+            hasRecoveredUpInFeaturedZone = true;
+            snapTo(heroRef.current!);
+          }
+        } else if (event.deltaY > 0) {
+          lastScrollDirection = 1;
+        }
+      };
+
+      lenis.on("scroll", onLenisScroll);
+      window.addEventListener("wheel", onWheel, { passive: true });
+
+      // Contact snapping removed to prevent the "trapped" loop and allow natural scrolling at the end of the page
+
+      // Refresh ScrollTrigger after a bit to ensure all layout/pin positions are correct
+      const timer = setTimeout(() => {
+          ScrollTrigger.refresh();
+      }, 100);
 
       return () => {
         heroTrigger.kill();
         featuredTrigger.kill();
+        clearTimeout(timer);
+        if (scrollEndTimer) {
+          clearTimeout(scrollEndTimer);
+        }
+        lenis.off("scroll", onLenisScroll);
+        window.removeEventListener("wheel", onWheel);
+        // CRITICAL: Ensure Lenis is started if we unmount during a snap
+        lenis?.start();
       };
     });
 
     return () => {
       media.revert();
     };
-  }, [featuredRef, heroRef, isGSAPReady, isLenisReady, lenis]);
+  }, [featuredRef, heroRef, contactRef, isGSAPReady, isLenisReady, lenis]);
 
   return null;
 }
+
