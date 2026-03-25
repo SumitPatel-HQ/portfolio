@@ -94,7 +94,7 @@ export function BlobCursor({
 
     // Initial check (optional, but good for refresh)
     if (target.matches && target.matches(":hover") && !restrictToTags) {
-      setIsVisible(true);
+      requestAnimationFrame(() => setIsVisible(true));
     }
 
     return () => {
@@ -105,7 +105,7 @@ export function BlobCursor({
         target.removeEventListener("click", onClick);
       }
     };
-  }, [targetRef, cursorX, cursorY, onClick]);
+  }, [targetRef, cursorX, cursorY, onClick, restrictToTags]);
 
   return (
     <motion.div

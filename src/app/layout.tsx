@@ -4,6 +4,8 @@ import "./globals.css";
 import { Footer } from "@/components/layout/Footer";
 import { ContactModalProvider } from "@/context/ContactModalContext";
 import { Menu } from "@/components/menu/Menu";
+import LenisProvider from "@/providers/LenisProvider";
+import GSAPProvider from "@/providers/GSAPProvider";
 
 // Load Inter font with CSS variables
 const inter = Inter({
@@ -25,13 +27,17 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark scroll-smooth" suppressHydrationWarning>
       <body className={`${inter.variable} font-sans antialiased min-h-screen flex flex-col bg-background text-foreground`}>
-        <ContactModalProvider>
-          <Menu />
-          <main className="flex-1 flex flex-col">
-            {children}
-          </main>
-          <Footer />
-        </ContactModalProvider>
+        <LenisProvider>
+          <GSAPProvider>
+            <ContactModalProvider>
+              <Menu />
+              <main className="flex-1 flex flex-col">
+                {children}
+              </main>
+              <Footer />
+            </ContactModalProvider>
+          </GSAPProvider>
+        </LenisProvider>
       </body>
     </html>
   );
