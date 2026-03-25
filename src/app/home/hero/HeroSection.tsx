@@ -1,13 +1,23 @@
 "use client";
 
-import React from 'react';
+import React, { useRef } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 // import { motion } from 'framer-motion';
 import StripesBackground from "@/components/ui/visuals/StripesBackground";
 import { useContactModal } from "@/context/ContactModalContext";
+import { BlobCursor } from "@/components/ui/BlobCursor";
 
 export const HeroSection = () => {
   const { openModal } = useContactModal();
+  const nameRef = useRef<HTMLDivElement>(null);
+  const sumitRef = useRef<HTMLHeadingElement>(null);
+  const patelRef = useRef<HTMLHeadingElement>(null);
+  const router = useRouter();
+
+  const handleNameClick = () => {
+    router.push('/about');
+  };
 
   return (
     <main className="min-h-screen bg-background text-foreground relative overflow-hidden flex flex-col">
@@ -25,8 +35,16 @@ export const HeroSection = () => {
         </div>
 
         <div className="flex-1 flex flex-col justify-center ">
-          <h1 className="text-hero font-extrabold leading-[0.9] tracking-hero border-b border-white/10 max-md:text-hero-mobile scale-y-[1.2] ">SUMIT</h1>
-          <h1 className="text-hero font-extrabold leading-[0.9] tracking-hero text-right max-md:text-hero-mobile scale-y-[1.2] mt-10 pr-[0.05em]">PATEL</h1>
+          <div ref={nameRef} className="flex flex-col">
+            <BlobCursor 
+              targetRef={nameRef} 
+              onClick={handleNameClick} 
+              iconColor="text-black" 
+              restrictToTags={['h1']}
+            />
+            <h1 ref={sumitRef} className="text-hero font-extrabold leading-[0.9] tracking-hero border-b border-white/10 max-md:text-hero-mobile scale-y-[1.2] relative z-20 w-fit">SUMIT</h1>
+            <h1 ref={patelRef} className="text-hero font-extrabold leading-[0.9] tracking-hero text-right max-md:text-hero-mobile scale-y-[1.2] mt-10 pr-[0.05em] relative z-20 ml-auto w-fit">PATEL</h1>
+          </div>
         </div>
 
         <div className="h-hero-bottom flex items-center justify-between border-t border-white/10 max-md:flex-col max-md:h-auto max-md:gap-10 max-md:pb-10">

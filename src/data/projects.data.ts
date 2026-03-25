@@ -91,5 +91,6 @@ export const PROJECTS: ProjectItem[] = [
   },
 ];
 
-export const PROJECTS_TEXTURE_IMAGE =
-  "https://www.figma.com/api/mcp/asset/9c304206-003b-4e40-a884-1812e63e6fb1";
+// Using undefined or empty to trigger the high-performance, zero-latency 
+// SVG noise implementation in the TextureOverlay component.
+export const PROJECTS_TEXTURE_IMAGE = "";

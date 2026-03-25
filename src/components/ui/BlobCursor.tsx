@@ -9,9 +9,17 @@ interface BlobCursorProps {
   targetRef: RefObject<any>;
   onClick?: (e: MouseEvent) => void;
   icon?: LucideIcon;
+  iconColor?: string;
+  restrictToTags?: string[];
 }
 
-export function BlobCursor({ targetRef, onClick, icon: Icon = ArrowUpRight }: BlobCursorProps) {
+export function BlobCursor({ 
+  targetRef, 
+  onClick, 
+  icon: Icon = ArrowUpRight,
+  iconColor = "text-white",
+  restrictToTags
+}: BlobCursorProps) {
   const [isVisible, setIsVisible] = useState(false);
 
   const cursorX = useMotionValue(-100);
@@ -25,8 +33,10 @@ export function BlobCursor({ targetRef, onClick, icon: Icon = ArrowUpRight }: Bl
     const target = targetRef.current;
     if (!target) return;
 
-    const handleMouseEnter = () => setIsVisible(true);
-    const handleMouseLeave = () => setIsVisible(false);
+    const handleMouseLeave = () => {
+      setIsVisible(false);
+      target.classList.remove("hide-default-cursor");
+    };
 
     // Inject a global style to force no-cursor on target and all its descendants
     const styleId = "blob-cursor-style";
@@ -49,36 +59,47 @@ export function BlobCursor({ targetRef, onClick, icon: Icon = ArrowUpRight }: Bl
       document.head.appendChild(style);
     }
 
-    target.classList.add("hide-default-cursor");
-
     const handleMouseMove = (e: MouseEvent) => {
       const targetElement = e.target as HTMLElement;
+      
       if (targetElement.closest(".show-default-cursor")) {
         setIsVisible(false);
+        target.classList.remove("hide-default-cursor");
         return;
       }
-      setIsVisible(true);
-      cursorX.set(e.clientX);
-      cursorY.set(e.clientY);
+
+      // If restrictToTags is provided, only show when hovering over those tags
+      // Otherwise, show it for the whole target container
+      const shouldShow = restrictToTags 
+        ? restrictToTags.some(tag => !!targetElement.closest(tag))
+        : true;
+
+      setIsVisible(shouldShow);
+      
+      if (shouldShow) {
+        target.classList.add("hide-default-cursor");
+        cursorX.set(e.clientX);
+        cursorY.set(e.clientY);
+      } else {
+        target.classList.remove("hide-default-cursor");
+      }
     };
 
     target.addEventListener("mousemove", handleMouseMove);
-    target.addEventListener("mouseenter", handleMouseEnter);
     target.addEventListener("mouseleave", handleMouseLeave);
 
     if (onClick) {
       target.addEventListener("click", onClick);
     }
 
-    // Check if mouse is already inside the container when mounted
-    if (target.matches && target.matches(":hover")) {
-      requestAnimationFrame(() => setIsVisible(true));
+    // Initial check (optional, but good for refresh)
+    if (target.matches && target.matches(":hover") && !restrictToTags) {
+      setIsVisible(true);
     }
 
     return () => {
       target.classList.remove("hide-default-cursor");
       target.removeEventListener("mousemove", handleMouseMove);
-      target.removeEventListener("mouseenter", handleMouseEnter);
       target.removeEventListener("mouseleave", handleMouseLeave);
       if (onClick) {
         target.removeEventListener("click", onClick);
@@ -106,7 +127,7 @@ export function BlobCursor({ targetRef, onClick, icon: Icon = ArrowUpRight }: Bl
       <div className="absolute inset-0 rounded-full  bg-foreground-secondary/12 shadow-[0_8px_32px_0_rgba(0,0,0,0.36)] backdrop-blur-[1.9px]" />
 
       {/* Sharp Icon */}
-      <Icon className="relative z-10 h-8 w-8 text-white stroke-[1px]" />
+      <Icon className={`relative z-10 h-8 w-8 stroke-[1px] ${iconColor}`} />
     </motion.div>
   );
 }
