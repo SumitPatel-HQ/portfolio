@@ -104,6 +104,12 @@ export function BlobCursor({
       if (onClick) {
         target.removeEventListener("click", onClick);
       }
+
+      // Clean up the injected style element
+      const styleElement = document.getElementById(styleId);
+      if (styleElement && styleElement.parentNode) {
+        styleElement.parentNode.removeChild(styleElement);
+      }
     };
   }, [targetRef, cursorX, cursorY, onClick, restrictToTags]);
 
