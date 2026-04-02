@@ -6,6 +6,7 @@ import { ContactModalProvider } from "@/context/ContactModalContext";
 import { Menu } from "@/components/menu/Menu";
 import LenisProvider from "@/providers/LenisProvider";
 import GSAPProvider from "@/providers/GSAPProvider";
+import { Analytics } from "@vercel/analytics/next";
 
 // Load Inter font with CSS variables
 const inter = Inter({
@@ -35,6 +36,7 @@ export default function RootLayout({
                 {children}
               </main>
               <Footer />
+              <Analytics />
             </ContactModalProvider>
           </GSAPProvider>
         </LenisProvider>
