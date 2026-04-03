@@ -11,6 +11,7 @@ export function middleware(request: NextRequest) {
 
   const { pathname } = request.nextUrl;
   const authToken = request.cookies.get('auth-token')?.value;
+  const storedPincode = process.env.AUTH_PINCODE;
 
   // Paths that should not be protected
   const isPublicFile = pathname.startsWith('/_next') || 
@@ -20,15 +21,17 @@ export function middleware(request: NextRequest) {
 
   const isAuthPage = pathname === '/auth';
 
-  // If not authenticated and not on the auth page, redirect to auth
-  if (!authToken && !isAuthPage && !isPublicFile) {
+  // If not authenticated (or changed pincode) and not on the auth page, redirect to auth
+  const isAuthenticated = authToken && authToken === storedPincode;
+
+  if (!isAuthenticated && !isAuthPage && !isPublicFile) {
     const url = request.nextUrl.clone();
     url.pathname = '/auth';
     return NextResponse.redirect(url);
   }
 
   // If already authenticated and on the auth page, redirect to home
-  if (authToken && isAuthPage) {
+  if (isAuthenticated && isAuthPage) {
     const url = request.nextUrl.clone();
     url.pathname = '/';
     return NextResponse.redirect(url);

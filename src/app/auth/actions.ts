@@ -9,8 +9,7 @@ export async function verifyPincode(formData: FormData) {
 
   if (pincode === storedPincode) {
     const cookieStore = await cookies();
-    cookieStore.set('auth-token', 'true', {
-      maxAge: 60 * 60 * 24 * 7, // 1 week
+    cookieStore.set('auth-token', storedPincode || 'true', {
       path: '/',
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
