@@ -198,9 +198,7 @@ export default function AboutPage() {
       <HorizontalSection />
 
       {/* CONTACT SECTION */}
-      <div className="pb-20">
-        <ContactMiniSection />
-      </div>
+      <ContactMiniSection />
     </main>
   );
 }
