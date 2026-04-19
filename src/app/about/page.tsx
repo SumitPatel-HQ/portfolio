@@ -35,22 +35,39 @@ export default function AboutPage() {
     <main className="bg-background text-foreground min-h-screen">
       {/* SECTION 1: IDENTITY SPLIT PANEL */}
       <section className="relative h-screen overflow-hidden">
-        <div className="flex h-full flex-col md:flex-row">
+        <div className="flex h-full w-full">
           {/* LEFT PANEL */}
-          
-          <div className="relative h-screen w-full shrink-0">
-            
+          <div className="overflow-hidden relative h-full w-full md:w-1/2 shrink-0">
             <Image
               src="/images/about/img1.png"
               alt="Sumit Patel Portrait"
               fill
-              className="  object-cover object-top grayscale brightness-75 mix-blend-normal"
+              className="scale-120 object-cover object-top grayscale brightness-75"
+              style={{
+                WebkitMaskImage:
+                  "linear-gradient(to right, rgba(0,0,0,1) 56%, rgba(0,0,0,0.95) 66%, rgba(0,0,0,0.82) 74%, rgba(0,0,0,0.58) 82%, rgba(0,0,0,0.28) 90%, rgba(0,0,0,0.08) 96%, rgba(0,0,0,0) 100%)",
+                maskImage:
+                  "linear-gradient(to right, rgba(0,0,0,1) 56%, rgba(0,0,0,0.95) 66%, rgba(0,0,0,0.82) 74%, rgba(0,0,0,0.58) 82%, rgba(0,0,0,0.28) 90%, rgba(0,0,0,0.08) 96%, rgba(0,0,0,0) 100%)",
+              }}
               priority
-              sizes="100vw"
+              sizes="(max-width: 768px) 100vw, 50vw"
             />
-           
-            {/* Bottom edge fade overlay */}
-            <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,var(--background)_0%,transparent_30%)]" />
+
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0 z-10"
+              style={{
+                background:
+                  "linear-gradient(to right, rgba(10,10,10,0) 46%, rgba(10,10,10,0.22) 64%, rgba(10,10,10,0.55) 80%, var(--background) 100%)",
+              }}
+            />
+
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -right-[12%] top-0 z-10 h-full w-[46%] blur-2xl"
+              style={{ backgroundColor: "var(--background)", opacity: 0.52 }}
+            />
+
 
             {/* IDENTITY OVERLAY - BOTTOM LEFT */}
             <motion.div
@@ -69,7 +86,8 @@ export default function AboutPage() {
             </motion.div>
           </div>
 
-
+          {/* RIGHT PANEL - EMPTY FOR NOW */}
+          <div className="hidden md:block h-full md:w-1/2 bg-background" />
         </div>
       </section>
 
@@ -80,7 +98,6 @@ export default function AboutPage() {
       <div className="pb-20">
         <ContactMiniSection />
       </div>
-
     </main>
   );
 }

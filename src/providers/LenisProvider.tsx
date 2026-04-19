@@ -28,17 +28,17 @@ export default function LenisProvider({ children }: { children: ReactNode }) {
       const mobile = window.matchMedia("(max-width: 768px)").matches;
 
       const lenis = new Lenis({
-         duration: mobile ? 1.18 : 1.45,
+         duration: mobile ? 1.2 : 1.5,
          easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
          orientation: "vertical",
          gestureOrientation: "vertical",
          smoothWheel: true,
-         wheelMultiplier: 0.85,
+         wheelMultiplier: 1.0,
          // Mobile touch needs a higher multiplier so the page keeps up with your finger
          touchMultiplier: mobile ? 1.5 : 1.0,
-         // Slightly faster lerp for desktop to feel snappy but not glitchy
-         lerp: mobile ? 0.1 : 0.12,
-         syncTouch: false,
+         // Slightly slower lerp for a more "buttery" feel
+         lerp: mobile ? 0.08 : 0.1,
+         syncTouch: true,
       });
 
       lenisRef.current = lenis;
