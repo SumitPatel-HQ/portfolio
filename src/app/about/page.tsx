@@ -7,13 +7,22 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import HorizontalSection from "@/components/about/HorizontalSection";
 import { ContactMiniSection } from "@/app/home/contactminipage/contactMiniSection";
-import { SiReact, SiNextdotjs, SiTypescript, SiTailwindcss } from 'react-icons/si';
+import { SiReact, SiNextdotjs, SiTypescript, SiTailwindcss,SiDocker,SiPython, SiFastapi,SiVercel,SiGit,SiGithub,SiSupabase,SiGooglecloud,SiN8N} from 'react-icons/si';
 
 const techLogos = [
-  { node: <SiReact />, title: "React", href: "https://react.dev", color: "#61DAFB" },
-  { node: <SiNextdotjs />, title: "Next.js", href: "https://nextjs.org", color: "#FFFFFF" },
-  { node: <SiTypescript />, title: "TypeScript", href: "https://www.typescriptlang.org", color: "#3178C6" },
-  { node: <SiTailwindcss />, title: "Tailwind CSS", href: "https://tailwindcss.com", color: "#06B6D4" },
+  { node: <SiReact />, title: "React", href: "https://react.dev" },
+  { node: <SiNextdotjs />, title: "Next.js", href: "https://nextjs.org" },
+  { node: <SiTypescript />, title: "TypeScript", href: "https://www.typescriptlang.org" },
+  { node: <SiTailwindcss />, title: "Tailwind CSS", href: "https://tailwindcss.com" },
+  { node: <SiDocker />, title: "Docker", href: "https://www.docker.com" },
+  { node: <SiPython />, title: "Python", href: "https://www.python.org" },
+  { node: <SiFastapi />, title: "FastAPI", href: "https://fastapi.tiangolo.com" },
+  { node: <SiVercel />, title: "Vercel", href: "https://vercel.com" },
+  { node: <SiGit />, title: "Git", href: "https://git-scm.com" },
+  { node: <SiGithub />, title: "GitHub", href: "https://github.com" },
+  { node: <SiSupabase />, title: "Supabase", href: "https://supabase.com" },
+  { node: <SiGooglecloud />, title: "Google Cloud", href: "https://cloud.google.com" },
+  { node: <SiN8N />, title: "n8n", href: "https://n8n.io" },
 ];
 
 // Register GSAP plugins
@@ -146,7 +155,7 @@ export default function AboutPage() {
               className="flex flex-col gap-2"
             >
               <h3 className="text-[11px] font-bold uppercase tracking-[0.2em] text-accent">Education</h3>
-              <p className="text-base text-foreground font-medium">B.E Computer Science</p>
+              <p className="text-base text-foreground font-medium">T.E  Artificial Intelligence and Data Science</p>
             </motion.div>
 
             {/* SECTION 7: CORE TECH STACK */}
@@ -162,7 +171,7 @@ export default function AboutPage() {
                 {techLogos.map((tech) => (
                   <motion.a
                     key={tech.title}
-                    href={tech.href}
+                    
                     target="_blank"
                     rel="noopener noreferrer"
                     initial={{ opacity: 0.7, scale: 1 }}
@@ -177,10 +186,8 @@ export default function AboutPage() {
                     }}
                     className="group relative h-8 w-8 flex items-center justify-center text-white"
                   >
-                    <span className="absolute -top-10 left-1/2 -translate-x-1/2 scale-0 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-300 px-3 py-1.5 bg-[#1A1A1A]/90 backdrop-blur-sm text-white text-xs rounded-md whitespace-nowrap border border-white/10 pointer-events-none z-20">
-                      {tech.title}
-                    </span>
-                    <div className="relative z-10 text-3xl transition-all duration-300">
+                    
+                    <div className="relative z-10 text-3xl transition-all duration-300 cursor-pointer">
                       {tech.node}
                     </div>
                   </motion.a>
