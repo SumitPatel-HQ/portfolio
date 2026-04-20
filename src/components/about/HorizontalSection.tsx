@@ -103,70 +103,72 @@ const HorizontalSection = () => {
   }, []);
 
   return (
-    <section 
-      ref={containerRef} 
-      className="relative min-h-screen bg-[#0a0a0a] overflow-hidden"
-    >
-      {/* PINNING CONTAINER */}
-      <div className="relative h-screen flex items-center">
-        {/* CARDS WRAPPER */}
-        <div 
-          ref={wrapperRef} 
-          className="flex flex-nowrap h-full"
-        >
-          {CARDS.map((card, i) => (
-            <div 
-              key={card.id} 
-              className="relative w-screen h-full flex-shrink-0 flex items-center justify-center p-8 md:p-24"
-            >
-              {/* ARCHITECTURAL BACKGROUND NUMBER */}
+    <div className="w-full">
+      <section 
+        ref={containerRef} 
+        className="relative min-h-screen bg-[#0a0a0a] overflow-hidden"
+      >
+        {/* PINNING CONTAINER */}
+        <div className="relative h-screen flex items-center">
+          {/* CARDS WRAPPER */}
+          <div 
+            ref={wrapperRef} 
+            className="flex flex-nowrap h-full"
+          >
+            {CARDS.map((card, i) => (
               <div 
-                className="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0"
-                style={{
-                  WebkitTextStroke: "1px rgba(255, 255, 255, 0.05)",
-                  color: "transparent",
-                }}
+                key={card.id} 
+                className="relative w-screen h-full flex-shrink-0 flex items-center justify-center p-8 md:p-24"
               >
-                <span className="text-[20rem] md:text-[40rem] font-black leading-none opacity-20">
-                  {card.id}
-                </span>
+                {/* ARCHITECTURAL BACKGROUND NUMBER */}
+                <div 
+                  className="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0"
+                  style={{
+                    WebkitTextStroke: "1px rgba(255, 255, 255, 0.05)",
+                    color: "transparent",
+                  }}
+                >
+                  <span className="text-[20rem] md:text-[40rem] font-black leading-none opacity-20">
+                    {card.id}
+                  </span>
+                </div>
+  
+                {/* CARD CONTENT */}
+                <div className={`relative z-10 max-w-4xl card-content-${i}`}>
+                  <span className="text-accent font-sans text-xs font-bold uppercase tracking-[0.3em] mb-4 block">
+                    {card.id} / 0{CARDS.length}
+                  </span>
+                  <h2 className="text-foreground font-sans text-5xl md:text-8xl font-black tracking-tighter mb-8 leading-[0.9]">
+                    {card.title}
+                  </h2>
+                  <p className="text-muted-custom font-sans text-xl md:text-2xl leading-relaxed mb-6 italic">
+                    {card.description}
+                  </p>
+                  <p className="text-muted-custom/60 font-sans text-base md:text-lg leading-relaxed max-w-2xl">
+                    {card.content}
+                  </p>
+                </div>
               </div>
-
-              {/* CARD CONTENT */}
-              <div className={`relative z-10 max-w-4xl card-content-${i}`}>
-                <span className="text-accent font-sans text-xs font-bold uppercase tracking-[0.3em] mb-4 block">
-                  {card.id} / 0{CARDS.length}
-                </span>
-                <h2 className="text-foreground font-sans text-5xl md:text-8xl font-black tracking-tighter mb-8 leading-[0.9]">
-                  {card.title}
-                </h2>
-                <p className="text-muted-custom font-sans text-xl md:text-2xl leading-relaxed mb-6 italic">
-                  {card.description}
-                </p>
-                <p className="text-muted-custom/60 font-sans text-base md:text-lg leading-relaxed max-w-2xl">
-                  {card.content}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* PROGRESS INDICATORS */}
-        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex gap-4 z-30">
-          {CARDS.map((_, i) => (
-            <div 
-              key={i} 
-              className="w-12 h-[2px] bg-white/10 relative overflow-hidden"
-            >
+            ))}
+          </div>
+  
+          {/* PROGRESS INDICATORS */}
+          <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex gap-4 z-30">
+            {CARDS.map((_, i) => (
               <div 
-                ref={(el) => { progressRefs.current[i] = el; }}
-                className="absolute top-0 left-0 h-full bg-accent w-0"
-              />
-            </div>
-          ))}
+                key={i} 
+                className="w-12 h-[2px] bg-white/10 relative overflow-hidden"
+              >
+                <div 
+                  ref={(el) => { progressRefs.current[i] = el; }}
+                  className="absolute top-0 left-0 h-full bg-accent w-0"
+                />
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </div>
   );
 };
 

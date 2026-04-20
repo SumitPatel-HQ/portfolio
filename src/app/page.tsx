@@ -12,24 +12,30 @@ export default function Home() {
   const contactSectionRef = useRef<HTMLElement>(null);
 
   return (
-    <div className="flex flex-col flex-1 w-full">
+    <div className="flex flex-col flex-1 w-full overflow-hidden">
       <HomeScrollPinController
         heroRef={heroSectionRef}
         featuredRef={featuredSectionRef}
         contactRef={contactSectionRef}
       />
 
-      <section ref={heroSectionRef} className="min-h-screen w-full">
-        <HeroSection />
-      </section>
+      <div className="w-full">
+        <section ref={heroSectionRef} className="min-h-screen w-full">
+          <HeroSection />
+        </section>
+      </div>
 
-      <section ref={featuredSectionRef} className="min-h-screen w-full">
-        <FeaturedWork />
-      </section>
+      <div className="w-full">
+        <section ref={featuredSectionRef} className="min-h-screen w-full">
+          <FeaturedWork />
+        </section>
+      </div>
 
-      <section ref={contactSectionRef}>
-        <ContactMiniSection />
-      </section>
+      <div className="w-full">
+        <section ref={contactSectionRef}>
+          <ContactMiniSection />
+        </section>
+      </div>
     </div>
   );
 }

@@ -47,7 +47,7 @@ export default function ProjectsPage() {
     return Math.max(280, window.innerHeight * (isMobile ? 0.65 : 0.48));
   }, []);
   
-  const mainRef = useRef<HTMLElement>(null);
+  const mainRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<ScrollTrigger | null>(null);
   const activeIndexRef = useRef(0);
   const router = useRouter();
@@ -175,45 +175,47 @@ export default function ProjectsPage() {
   }, [onNext, onPrev]);
 
   return (
-    <main ref={mainRef} className="relative flex min-h-screen w-full flex-col overflow-hidden bg-background text-foreground">
-      <BlobCursor targetRef={mainRef} onClick={handleContainerClick} />
-      <ProjectsStage
-        imageUrl={activeProject.heroImage}
-        imageAlt={activeProject.logoAlt}
-        textureUrl={PROJECTS_TEXTURE_IMAGE}
-      />
-
-      <section className="absolute bottom-0 left-0 right-0 z-30 px-6 pb-6 md:px-[68px] md:pb-8">
-        <div className="flex max-w-[1080px] flex-col gap-8 md:gap-12">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeProject.id}
-              custom={direction}
-              variants={overlayVariants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              transition={{ duration: 0.52, ease: [0.32, 0.72, 0, 1] }}
-              className="flex flex-col gap-[clamp(2.2rem,4.4vw,72px)]"
-            >
-              <ProjectsOverlay project={activeProject} />
-            </motion.div>
-          </AnimatePresence>
-
-          <ProjectsLogoRail
-            projects={PROJECTS}
-            activeIndex={activeIndex}
-            onSelect={handleSelect}
-          />
-        </div>
-      </section>
-
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-56 bg-gradient-to-t from-[#0f0f0f] via-transparent to-transparent" />
-      <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-40 bg-gradient-to-b from-black/35 via-transparent to-transparent" />
-      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-52 bg-gradient-to-r from-black/40 via-transparent to-transparent" />
-      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-52 bg-gradient-to-l from-black/35 via-transparent to-transparent" />
-      <div className="pointer-events-none absolute bottom-0 left-0 right-0 z-10 h-[1px] bg-white/12" />
-      <div className="pointer-events-none absolute left-0 right-0 top-0 z-10 h-[1px] bg-white/10" />
-    </main>
+    <div className="w-full">
+      <div ref={mainRef} className="relative flex min-h-screen w-full flex-col overflow-hidden bg-background text-foreground">
+        <BlobCursor targetRef={mainRef} onClick={handleContainerClick} />
+        <ProjectsStage
+          imageUrl={activeProject.heroImage}
+          imageAlt={activeProject.logoAlt}
+          textureUrl={PROJECTS_TEXTURE_IMAGE}
+        />
+  
+        <section className="absolute bottom-0 left-0 right-0 z-30 px-6 pb-6 md:px-[68px] md:pb-8">
+          <div className="flex max-w-[1080px] flex-col gap-8 md:gap-12">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeProject.id}
+                custom={direction}
+                variants={overlayVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={{ duration: 0.52, ease: [0.32, 0.72, 0, 1] }}
+                className="flex flex-col gap-[clamp(2.2rem,4.4vw,72px)]"
+              >
+                <ProjectsOverlay project={activeProject} />
+              </motion.div>
+            </AnimatePresence>
+  
+            <ProjectsLogoRail
+              projects={PROJECTS}
+              activeIndex={activeIndex}
+              onSelect={handleSelect}
+            />
+          </div>
+        </section>
+  
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-56 bg-gradient-to-t from-[#0f0f0f] via-transparent to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-40 bg-gradient-to-b from-black/35 via-transparent to-transparent" />
+        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-52 bg-gradient-to-r from-black/40 via-transparent to-transparent" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-52 bg-gradient-to-l from-black/35 via-transparent to-transparent" />
+        <div className="pointer-events-none absolute bottom-0 left-0 right-0 z-10 h-[1px] bg-white/12" />
+        <div className="pointer-events-none absolute left-0 right-0 top-0 z-10 h-[1px] bg-white/10" />
+      </div>
+    </div>
   );
 }

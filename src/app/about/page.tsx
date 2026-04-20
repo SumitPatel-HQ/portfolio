@@ -7,7 +7,6 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import HorizontalSection from "@/components/about/HorizontalSection";
 import { ContactMiniSection } from "@/app/home/contactminipage/contactMiniSection";
-import { Code, BookOpen, Briefcase } from "lucide-react";
 import { SiReact, SiNextdotjs, SiTypescript, SiTailwindcss } from 'react-icons/si';
 
 const techLogos = [
@@ -16,7 +15,6 @@ const techLogos = [
   { node: <SiTypescript />, title: "TypeScript", href: "https://www.typescriptlang.org", color: "#3178C6" },
   { node: <SiTailwindcss />, title: "Tailwind CSS", href: "https://tailwindcss.com", color: "#06B6D4" },
 ];
-
 
 // Register GSAP plugins
 if (typeof window !== "undefined") {
@@ -95,102 +93,101 @@ export default function AboutPage() {
         </div>
 
         {/* RIGHT PANEL - CONTENT */}
-        <div className="flex-1 min-h-[50vh] md:h-screen overflow-y-auto px-8 py-16 md:p-12 lg:p-20 flex flex-col justify-center gap-12 bg-background md:bg-transparent relative z-20">
-          {/* DESCRIPTION BLOCK */}
-          <motion.div
-            custom={1}
-            initial="hidden"
-            animate="visible"
-            variants={fadeUpVariants}
-            className="max-w-[500px]"
-          >
-            <p className="text-foreground-secondary leading-relaxed text-lg xl:text-xl">
-              I am a passionate <span className="text-foreground font-bold">Full Stack Web Developer</span> specializing in the modern web ecosystem. My expertise lies in crafting high-performance, scalable applications with precision and clean architecture.
-            </p>
-          </motion.div>
+        <div className="flex-1 min-h-[50vh] md:h-screen overflow-y-auto px-8 py-16 md:p-12 lg:p-20 xl:pl-28 flex flex-col justify-center bg-background md:bg-transparent relative z-20">
+          <div className="max-w-[540px] flex flex-col gap-14">
 
-          {/* CARD GRID */}
-          <motion.div
-            custom={2}
-            initial="hidden"
-            animate="visible"
-            variants={fadeUpVariants}
-            className="grid grid-cols-1 xl:grid-cols-3 gap-4 w-full max-w-[650px]"
-          >
-            {/* CARD 1: LANGUAGES */}
-            <div className="bg-white/5 backdrop-blur-md border border-white/10 p-5 transition-all duration-300 hover:bg-white/10 flex flex-col items-start gap-4">
-              <Code className="w-5 h-5 text-accent" />
-              <div>
-                <h3 className="text-role-tag font-bold uppercase tracking-[0.25em] text-foreground/90 mb-2">Languages</h3>
-                <p className="text-sm leading-relaxed text-foreground-secondary/70">
-                  HTML<br />
-                  CSS<br />
-                  JavaScript<br />
-                  React<br />
-                  Node.js
-                </p>
+            {/* SECTION 1 & 2: HEADLINE & SUBTEXT */}
+            <motion.div
+              custom={1}
+              initial="hidden"
+              animate="visible"
+              variants={fadeUpVariants}
+              className="flex flex-col gap-4"
+            >
+              <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground leading-[1.15]">
+                I build scalable web systems.
+              </h2>
+              <p className="text-[#A0A0A0] text-lg leading-relaxed max-w-[480px]">
+                Full Stack Developer focused on performance, clean architecture, and real-world usability.
+              </p>
+            </motion.div>
+
+            {/* SECTION 3 & 4: IMPACT & CURRENT STATUS */}
+            <motion.div
+              custom={2}
+              initial="hidden"
+              animate="visible"
+              variants={fadeUpVariants}
+              className="flex flex-col md:flex-row md:items-start gap-10 md:gap-16"
+            >
+              <div className="flex flex-col gap-1 shrink-0">
+                {/* <h3 className="text-[11px] font-bold uppercase tracking-[0.2em] text-accent mb-1">Impact</h3> */}
+                <div className="flex items-baseline gap-3">
+                  <span className="text-5xl md:text-6xl font-extrabold tracking-tighter text-foreground">5+</span>
+                  <span className="text-sm text-[#A0A0A0] font-medium leading-tight max-w-[80px]">Projects Shipped</span>
+                </div>
               </div>
-            </div>
 
-            {/* CARD 2: EDUCATION */}
-            <div className="bg-white/5 backdrop-blur-md border border-white/10 p-5 transition-all duration-300 hover:bg-white/10 flex flex-col items-start gap-4">
-              <BookOpen className="w-5 h-5 text-accent" />
-              <div>
-                <h3 className="text-role-tag font-bold uppercase tracking-[0.25em] text-foreground/90 mb-2">Education</h3>
-                <p className="text-sm leading-relaxed text-foreground-secondary/70">
-                  B.E. Computer Science
-                </p>
+              <div className="flex flex-col gap-3">
+                <h3 className="text-[11px] font-bold uppercase tracking-[0.2em] text-accent">Currently</h3>
+                <div className="flex flex-col gap-2 text-[#A0A0A0] text-base">
+                  <p><span className="text-foreground font-medium">Building:</span> AI-powered DB assistant</p>
+                  <p><span className="text-foreground font-medium">Exploring:</span> System design / performance</p>
+                </div>
               </div>
-            </div>
+            </motion.div>
 
-            {/* CARD 3: PROJECTS */}
-            <div className="bg-white/5 backdrop-blur-md border border-white/10 p-5 transition-all duration-300 hover:bg-white/10 flex flex-col items-start gap-4">
-              <Briefcase className="w-5 h-5 text-accent" />
-              <div>
-                <h3 className="text-role-tag font-bold uppercase tracking-[0.25em] text-foreground/90 mb-2">Projects</h3>
-                <p className="text-sm leading-relaxed text-foreground-secondary/70">
-                  Built 5+ modern web projects
-                </p>
+            {/* SECTION 5: EDUCATION */}
+            <motion.div
+              custom={3}
+              initial="hidden"
+              animate="visible"
+              variants={fadeUpVariants}
+              className="flex flex-col gap-2"
+            >
+              <h3 className="text-[11px] font-bold uppercase tracking-[0.2em] text-accent">Education</h3>
+              <p className="text-base text-foreground font-medium">B.E Computer Science</p>
+            </motion.div>
+
+            {/* SECTION 7: CORE TECH STACK */}
+            <motion.div
+              custom={5}
+              initial="hidden"
+              animate="visible"
+              variants={fadeUpVariants}
+              className="flex flex-col gap-4 pt-4 border-t border-white/5"
+            >
+              <h3 className="text-[11px] font-bold uppercase tracking-[0.2em] text-accent">Core Tech Stack</h3>
+              <div className="flex flex-wrap items-center justify-start gap-6">
+                {techLogos.map((tech) => (
+                  <motion.a
+                    key={tech.title}
+                    href={tech.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    initial={{ opacity: 0.7, scale: 1 }}
+                    animate={{ opacity: 0.7, scale: 1 }}
+                    whileHover={{
+                      scale: 1.15,
+                      opacity: 1,
+                      transition: {
+                        duration: 0.2,
+                        ease: "easeOut",
+                      },
+                    }}
+                    className="group relative h-8 w-8 flex items-center justify-center text-white"
+                  >
+                    <span className="absolute -top-10 left-1/2 -translate-x-1/2 scale-0 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-300 px-3 py-1.5 bg-[#1A1A1A]/90 backdrop-blur-sm text-white text-xs rounded-md whitespace-nowrap border border-white/10 pointer-events-none z-20">
+                      {tech.title}
+                    </span>
+                    <div className="relative z-10 text-3xl transition-all duration-300">
+                      {tech.node}
+                    </div>
+                  </motion.a>
+                ))}
               </div>
-            </div>
-          </motion.div>
-
-          {/* CORE TECH STACK */}
-          <motion.div
-            custom={3}
-            initial="hidden"
-            animate="visible"
-            variants={fadeUpVariants}
-            className="flex flex-col gap-4 pt-4"
-          >
-            <h3 className="text-role-tag font-bold uppercase tracking-[0.25em] text-accent text-xs">Core Tech Stack</h3>
-            <div className="flex flex-wrap items-center justify-start gap-6">
-              {techLogos.map((tech) => (
-                <motion.a
-                  key={tech.title}
-                  href={tech.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  initial={{ opacity: 0.7, scale: 1 }}
-                  animate={{ opacity: 0.7, scale: 1 }}
-                  whileHover={{
-                    scale: 1.2,
-                    opacity: 1,
-                    transition: {
-                      duration: 0.3,
-                      ease: [0.4, 0, 0.2, 1],
-                    },
-                  }}
-                  className="group relative h-8 w-8 flex items-center justify-center text-white"
-                  title={tech.title}
-                >
-                  <div className="relative z-10 text-3xl transition-colors duration-300">
-                    {tech.node}
-                  </div>
-                </motion.a>
-              ))}
-            </div>
-          </motion.div>
+            </motion.div>
+          </div>
         </div>
       </section>
 

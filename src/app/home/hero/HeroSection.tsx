@@ -20,7 +20,7 @@ export const HeroSection = () => {
   };
 
   return (
-    <main className="min-h-screen bg-background text-foreground relative overflow-hidden flex flex-col">
+    <section className="min-h-screen bg-background text-foreground relative overflow-hidden flex flex-col">
 
       <StripesBackground position="full" opacity="opacity-10" />
 
@@ -67,7 +67,7 @@ export const HeroSection = () => {
           </div>
         </div>
       </div>
-    </main>
+    </section>
 
   );
 };

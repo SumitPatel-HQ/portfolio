@@ -107,8 +107,8 @@ export function BlobCursor({
 
       // Clean up the injected style element
       const styleElement = document.getElementById(styleId);
-      if (styleElement && styleElement.parentNode) {
-        styleElement.parentNode.removeChild(styleElement);
+      if (styleElement) {
+        styleElement.remove();
       }
     };
   }, [targetRef, cursorX, cursorY, onClick, restrictToTags]);

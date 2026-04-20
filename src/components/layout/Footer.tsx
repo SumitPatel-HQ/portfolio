@@ -17,7 +17,7 @@ export function Footer() {
   const { openModal } = useContactModal();
 
   // Filter links based on pathname
-  const filteredLinks = pathname === '/' || '/about'
+  const filteredLinks = pathname === '/' || pathname === '/about'
     ? pageLinks.filter(link => link.label !== 'Contact Now')
     : pageLinks;
 
