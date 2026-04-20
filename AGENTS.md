@@ -11,8 +11,9 @@ These instructions apply to the entire repository unless a deeper `AGENTS.md` ov
 
 ## Constraints
 
-- Do not read, edit, move, delete, rename, regenerate, or otherwise modify `.guidelines/`, `.docs/`, or `.agents/`.
-- Do not read, edit, move, delete, rename, regenerate, or otherwise modify `guidelines/` or `docs/` unless the user explicitly instructs otherwise in the current task.
+- Do not read, edit, move, delete, rename, regenerate, or otherwise modify `.guidelines/` or `.prompts/`.
+- Do not edit, move, delete, rename, regenerate, or otherwise modify `.skills/`.
+- Do not read, edit, move, delete, rename, regenerate, or otherwise modify `guidelines/` or `prompts/` unless the user explicitly instructs otherwise in the current task.
 - Do not change behavior unless the user explicitly requests a behavior change.
 - Do not make broad rewrites when a scoped change will satisfy the task.
 - Do not make unrelated refactors, formatting-only churn, dependency changes, or generated-file updates.

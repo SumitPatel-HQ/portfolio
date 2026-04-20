@@ -39,11 +39,14 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-.agents
-/guidelines
-*.md
-!agents.md
+
+# Folders
+.skills/
+.guidelines/
+.prompts/
+
+# Files
 *.txt
-.github
-docs/
 changes.diff
+future _font_.md
+Readme.md
