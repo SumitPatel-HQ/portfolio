@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { ContactCard } from "@/components/ui/contact-card";
+import { ContactCard } from "@/components/Contacts/contact-card";
 import { useLenis } from "@/providers/LenisProvider";
 import {
   Dialog,
@@ -9,12 +9,13 @@ import {
   DialogTitle,
   DialogDescription,
   DialogHeader,
-} from "@/components/ui/dialog";
+} from "@/components/Contacts/dialog";
 
-import { Input } from "@/components/ui/forms/input";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/forms/label";
-import { Textarea } from "@/components/ui/forms/textarea";
+import { Input } from "@/components/Contacts/input";
+import { Button } from "@/components/Contacts/button";
+import { Label } from "@/components/Contacts/label";
+import { useToast } from "@/components/Contacts/toast";
+import { Textarea } from "@/components/Contacts/textarea";
 
 interface ContactModalContextType {
   isOpen: boolean;
@@ -43,6 +44,7 @@ export function ContactModalProvider({
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const { lenis } = useLenis();
+  const { showToast } = useToast();
 
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
@@ -62,11 +64,19 @@ export function ContactModalProvider({
       {children}
 
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className="max-w-5xl p-0 border-none bg-transparent shadow-none">
+        <DialogContent
+          className="max-w-5xl p-0 border-none bg-transparent shadow-none outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-0"
+          onEscapeKeyDown={(e) => {
+            if (document.body.dataset.contactTextareaExpanded === "true") {
+              e.preventDefault();
+              e.stopPropagation();
+            }
+          }}
+        >
           <DialogHeader className="sr-only">
-            <DialogTitle>Contact Us</DialogTitle>
+            <DialogTitle>Contact Me</DialogTitle>
             <DialogDescription>
-              Fill out the form to get in touch.
+              Fill out the form to get in touch. I&apos;ll get back to you as soon as possible.
             </DialogDescription>
           </DialogHeader>
           <ContactCard>
@@ -79,23 +89,30 @@ export function ContactModalProvider({
               }}
             >
               <div className="flex flex-col gap-2 ">
-                <Label>Name</Label>
-                <Input type="text" required />
+                <Label>Name <span className="text-red-500">*</span></Label>
+                <Input type="text" required placeholder="John Doe" />
               </div>
               <div className="flex flex-col gap-2">
-                <Label>Email</Label>
-                <Input type="email" required />
+                <Label>Email <span className="text-red-500">*</span></Label>
+                <Input type="email" required placeholder="john@example.com" />
               </div>
               <div className="flex flex-col gap-2">
                 <Label>Phone</Label>
-                <Input type="phone" />
+                <Input
+                  type="tel"
+                  inputMode="numeric"
+                  placeholder="+91 0123456789"
+                  onInput={(e) => {
+                    e.currentTarget.value = e.currentTarget.value.replace(/[^0-9]/g, "");
+                  }}
+                />
               </div>
-              <div className="flex flex-col gap-2">
-                <Label>Message</Label>
-                <Textarea className="h-32 resize-none" />
+              <div className="flex flex-col gap-2 pt-2">
+                <Label>Message <span className="text-red-500">*</span></Label>
+                <Textarea required className="h-32 resize-none" placeholder="Tell me about your project..." />
               </div>
               <Button
-                className="w-full bg-accent text-background"
+                className="w-full bg-accent text-background font-bold text-base py-6 mt-2 "
                 type="submit"
               >
                 Submit

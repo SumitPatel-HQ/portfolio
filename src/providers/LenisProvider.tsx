@@ -31,7 +31,7 @@ export default function LenisProvider({ children }: { children: ReactNode }) {
          duration: mobile ? 1.2 : 1.5,
          easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
          orientation: "vertical",
-         gestureOrientation: "vertical",
+         gestureOrientation: "both",
          smoothWheel: true,
          wheelMultiplier: 1.0,
          // Mobile touch needs a higher multiplier so the page keeps up with your finger

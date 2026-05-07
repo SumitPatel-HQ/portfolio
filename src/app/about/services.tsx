@@ -2,6 +2,7 @@
 
 import React, { useLayoutEffect, useRef, useState, useEffect, useCallback } from "react";
 import { gsap } from "gsap";
+import { ChevronLeft, ChevronRight, Check } from "lucide-react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { CARDS } from "@/data/what-I-build";
 
@@ -11,20 +12,17 @@ if (typeof window !== "undefined") {
 
 const EASE = "cubic-bezier(0.16, 1, 0.3, 1)";
 const DURATION = 0.5;
-/** Minimum ms between slide advances — prevents accidental double-skip on fast wheels */
-const THROTTLE_MS = 800;
+/** Minimum ms between slide advances — reduced for responsive keyboard/clicks */
+const THROTTLE_MS = 250;
 
-const HorizontalSection = () => {
+const Services = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const wrapperRef  = useRef<HTMLDivElement>(null);
-  const slidesRef   = useRef<(HTMLDivElement | null)[]>([]);
-  const progressRef = useRef<HTMLDivElement>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const slidesRef = useRef<(HTMLDivElement | null)[]>([]);
 
   const [activeSlide, setActiveSlide] = useState(0);
   /** Ref-shadowed so callbacks always read the latest value without re-registration */
   const activeSlideRef = useRef(0);
-  /** Whether the wheel hijack is active (desktop only, set by ScrollTrigger) */
-  const hijackActiveRef = useRef(false);
   /** Timestamp of the last slide change — used for throttling */
   const lastChangeRef = useRef(0);
   /** Whether a transition animation is in flight */
@@ -32,15 +30,15 @@ const HorizontalSection = () => {
 
   // ─── Slide transition ────────────────────────────────────────────────────────
   const transitionSlide = useCallback((outIndex: number, inIndex: number) => {
-    const isNext   = inIndex > outIndex;
+    const isNext = inIndex > outIndex;
     const outSlide = slidesRef.current[outIndex];
-    const inSlide  = slidesRef.current[inIndex];
+    const inSlide = slidesRef.current[inIndex];
     if (!outSlide || !inSlide) return;
 
     // Collect stagger targets — filter nulls so GSAP doesn't warn
     const headline = inSlide.querySelector(".slide-headline");
-    const bullets  = Array.from(inSlide.querySelectorAll(".slide-bullet")).filter(Boolean);
-    const pills    = Array.from(inSlide.querySelectorAll(".slide-pill")).filter(Boolean);
+    const bullets = Array.from(inSlide.querySelectorAll(".slide-bullet")).filter(Boolean);
+    const pills = Array.from(inSlide.querySelectorAll(".slide-pill")).filter(Boolean);
     const staggerTargets = [headline, ...bullets, ...pills].filter(Boolean);
 
     gsap.killTweensOf([outSlide, inSlide, ...staggerTargets]);
@@ -81,14 +79,6 @@ const HorizontalSection = () => {
       );
     }
 
-    // Progress bar
-    if (progressRef.current) {
-      gsap.to(progressRef.current, {
-        scaleX: inIndex / (CARDS.length - 1),
-        duration: DURATION,
-        ease: EASE,
-      });
-    }
   }, []);
 
   // ─── Advance / retreat slide ─────────────────────────────────────────────────
@@ -111,90 +101,20 @@ const HorizontalSection = () => {
     const ctx = gsap.context(() => {
       const mm = gsap.matchMedia();
 
-      // ── Desktop: pin + wheel hijack ────────────────────────────────────────
+      // ── Desktop: absolute stacking ────────────────────────────────────────
       mm.add("(min-width: 768px)", () => {
         // Initial state — slide 0 visible, rest hidden
         slidesRef.current.forEach((slide, i) => {
           if (!slide) return;
           gsap.set(slide, {
-            opacity:       i === 0 ? 1 : 0,
-            xPercent:      i === 0 ? 0 : 4,
+            opacity: i === 0 ? 1 : 0,
+            xPercent: i === 0 ? 0 : 4,
             pointerEvents: i === 0 ? "auto" : "none",
-            zIndex:        i === 0 ? 10 : 1,
+            zIndex: i === 0 ? 10 : 1,
           });
         });
 
-        // Initialize progress bar to 0
-        if (progressRef.current) {
-          gsap.set(progressRef.current, { scaleX: 0 });
-        }
-
-        // Pin the section for the duration of all slides.
-        // We don't use scrub/snap — just pinning so the section sticks while
-        // the wheel handler controls which slide is shown.
-        const totalScrollHeight = window.innerHeight * (CARDS.length - 1);
-
-        ScrollTrigger.create({
-          id: "horizontalPin",
-          trigger: containerRef.current,
-          start: "top top",
-          end: `+=${totalScrollHeight}`,
-          pin: true,
-          // onToggle fires when the section enters / leaves the viewport
-          onToggle: (self) => {
-            hijackActiveRef.current = self.isActive;
-          },
-          // onLeave / onLeaveBack: make sure we're on the correct boundary slide
-          onLeave: () => {
-            // Ensure we are fully on the last slide when leaving downward
-            if (activeSlideRef.current < CARDS.length - 1) {
-              goToSlide(CARDS.length - 1);
-            }
-          },
-          onLeaveBack: () => {
-            // Ensure we are fully on the first slide when leaving upward
-            if (activeSlideRef.current > 0) {
-              goToSlide(0);
-            }
-          },
-        });
-
-        // ── Wheel hijack ──────────────────────────────────────────────────────
-        const handleWheel = (e: WheelEvent) => {
-          if (!hijackActiveRef.current) return;
-
-          const now     = Date.now();
-          const current = activeSlideRef.current;
-
-          // Scrolling down — advance
-          if (e.deltaY > 0) {
-            if (current < CARDS.length - 1) {
-              e.preventDefault();
-              if (animatingRef.current) return;           // mid-transition: ignore
-              if (now - lastChangeRef.current < THROTTLE_MS) return; // throttle
-              goToSlide(current + 1);
-            }
-            // On the last slide, let the event fall through so the
-            // page naturally scrolls past this section.
-          }
-
-          // Scrolling up — retreat
-          if (e.deltaY < 0) {
-            if (current > 0) {
-              e.preventDefault();
-              if (animatingRef.current) return;
-              if (now - lastChangeRef.current < THROTTLE_MS) return;
-              goToSlide(current - 1);
-            }
-            // On the first slide, let the event fall through upward.
-          }
-        };
-
-        // Must be non-passive so we can call preventDefault
-        window.addEventListener("wheel", handleWheel, { passive: false });
-
         return () => {
-          window.removeEventListener("wheel", handleWheel);
           slidesRef.current.forEach((slide) => {
             if (slide) gsap.set(slide, { clearProps: "all" });
           });
@@ -209,7 +129,7 @@ const HorizontalSection = () => {
             trigger: slide,
             start: "top center",
             end: "bottom center",
-            onEnter: ()     => setActiveSlide(i),
+            onEnter: () => setActiveSlide(i),
             onEnterBack: () => setActiveSlide(i),
           });
         });
@@ -242,19 +162,28 @@ const HorizontalSection = () => {
   // ─── Keyboard navigation ──────────────────────────────────────────────────
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement;
+      if (target && (["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName) || target.isContentEditable)) {
+        return;
+      }
+
       if (!containerRef.current) return;
       const rect = containerRef.current.getBoundingClientRect();
-      // Only act when the section is at least partially in view
-      if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+      // Only act when the section is predominantly in view
+      if (rect.top > window.innerHeight * 0.5 || rect.bottom < window.innerHeight * 0.5) return;
 
       const current = activeSlideRef.current;
 
-      if (e.key === "ArrowRight" || e.key === "ArrowDown") {
-        if (e.key === "ArrowRight") e.preventDefault();
-        if (current < CARDS.length - 1) scrollToSlide(current + 1);
-      } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
-        if (e.key === "ArrowLeft") e.preventDefault();
-        if (current > 0) scrollToSlide(current - 1);
+      if (e.key === "ArrowRight") {
+        if (current < CARDS.length - 1) {
+          e.preventDefault();
+          scrollToSlide(current + 1);
+        }
+      } else if (e.key === "ArrowLeft") {
+        if (current > 0) {
+          e.preventDefault();
+          scrollToSlide(current - 1);
+        }
       }
     };
 
@@ -270,12 +199,25 @@ const HorizontalSection = () => {
       ref={containerRef}
       className="relative bg-[#0a0a0a] min-h-screen z-10"
     >
-      {/* Progress line — teal, 0→100% as slides advance */}
-      <div
-        ref={progressRef}
-        className="hidden md:block absolute bottom-0 left-0 h-[2px] bg-accent z-50 origin-left w-full"
-        style={{ transform: "scaleX(0)" }}
-      />
+      {/* Navigation Arrows */}
+      <div className="hidden md:flex absolute top-1/2 -translate-y-1/2 w-full justify-between px-4 md:px-6 z-40 pointer-events-none">
+        <button
+          onClick={(e) => { e.preventDefault(); scrollToSlide(activeSlide - 1); }}
+          disabled={activeSlide === 0}
+          aria-label="Previous slide"
+          className="pointer-events-auto flex items-center justify-center w-12 h-12 rounded-full bg-white/5 border border-white/10 text-white/60 hover:bg-white/10 hover:text-white transition-all duration-300 disabled:opacity-0 disabled:pointer-events-none backdrop-blur-sm"
+        >
+          <ChevronLeft className="w-6 h-6" />
+        </button>
+        <button
+          onClick={(e) => { e.preventDefault(); scrollToSlide(activeSlide + 1); }}
+          disabled={activeSlide === CARDS.length - 1}
+          aria-label="Next slide"
+          className="pointer-events-auto flex items-center justify-center w-12 h-12 rounded-full bg-white/5 border border-white/10 text-white/60 hover:bg-white/10 hover:text-white transition-all duration-300 disabled:opacity-0 disabled:pointer-events-none backdrop-blur-sm"
+        >
+          <ChevronRight className="w-6 h-6" />
+        </button>
+      </div>
 
       {/* Slide wrapper */}
       <div
@@ -299,23 +241,23 @@ const HorizontalSection = () => {
           >
             {/* LEFT: Content */}
             <div className="flex flex-col justify-center px-8 md:px-0 md:pl-[clamp(3rem,6vw,7rem)] py-16 md:py-0 w-full h-auto md:h-full text-left order-1">
-              <div className="text-accent tracking-[0.15em] text-[11px] font-bold mb-4 md:mb-6 uppercase">
+              <div className="text-accent tracking-[0.15em] text-[11px] font-bold mb-4 md:mb-6 uppercase ml-[2px]">
                 {card.id} / 0{CARDS.length}
               </div>
 
               <h2
                 style={{ fontSize: "clamp(2rem, 3vw, 3.2rem)" }}
-                className="font-bold text-white leading-[1.1] mb-6 slide-headline"
+                className="font-bold text-white leading-[1.1] tracking-tight mb-6 slide-headline"
               >
                 {card.title}
               </h2>
 
-              <div className="flex flex-col gap-3 md:gap-4 mb-7 md:mb-[1.75rem]">
+              <div className="flex flex-col gap-4 md:gap-6 mb-7 md:mb-[1.75rem]">
                 {card.bullets.map((bullet, idx) => (
                   <div key={idx} className="flex items-start slide-bullet">
-                    <span className="text-accent mr-3 mt-[2px] leading-none text-[1.1rem]">→</span>
+                    <Check className="text-accent mr-3 mt-[6px] w-[14px] h-[14px] flex-shrink-0" strokeWidth={2} />
                     <span
-                      className="text-white/60 font-medium"
+                      className="text-white/60 font-normal"
                       style={{ fontSize: "clamp(0.9rem, 1.2vw, 1.05rem)", lineHeight: "1.8" }}
                     >
                       {bullet}
@@ -328,7 +270,7 @@ const HorizontalSection = () => {
                 {card.tags.map((tag, idx) => (
                   <span
                     key={idx}
-                    className="slide-pill border border-white/15 rounded-full px-[12px] py-[4px] text-[11px] tracking-[0.1em] text-white/50 bg-transparent uppercase font-bold"
+                   className="inline-flex items-center rounded-full border border-white/10 hover:border-accent transition-colors duration-300 bg-foreground-secondary/10 px-3.5 py-1.5 text-[clamp(0.8rem,1.1vw,0.95rem)] font-extralight text-foreground-secondary shadow-[0_4px_12px_0_rgba(0,0,0,0.2)] backdrop-blur-[2px] cursor-default"
                   >
                     {tag}
                   </span>
@@ -349,17 +291,22 @@ const HorizontalSection = () => {
       </div>
 
       {/* Dot indicators */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 gap-3 z-30 hidden md:flex">
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3 z-30 hidden md:flex items-center">
         {CARDS.map((_, i) => (
           <button
             key={i}
             aria-label={`Go to slide ${i + 1}`}
-            className={`h-[3px] rounded-[2px] transition-all duration-300 ${
-              activeSlide === i
-                ? "bg-accent w-[20px] shadow-[0_0_10px_rgba(0,212,212,0.3)]"
-                : "bg-white/15 w-[6px] hover:bg-white/30"
+            className={`h-[8px] rounded-full transition-[width,background-color] duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${
+              activeSlide === i 
+                ? "w-[24px] bg-accent shadow-[0_0_8px_rgba(0,212,212,0.3)] cursor-auto" 
+                : "w-[8px] bg-white/40 hover:bg-white/60 cursor-pointer"
             }`}
-            onClick={(e) => { e.preventDefault(); scrollToSlide(i); }}
+            onClick={(e) => {
+              e.preventDefault();
+              if (activeSlide !== i) {
+                scrollToSlide(i);
+              }
+            }}
           />
         ))}
       </div>
@@ -367,4 +314,4 @@ const HorizontalSection = () => {
   );
 };
 
-export default HorizontalSection;
+export default Services;

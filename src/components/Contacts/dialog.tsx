@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import * as DialogPrimitive from "@radix-ui/react-dialog"
+import { X } from "lucide-react"
 
 
 import { cn } from "@/lib/utils"
@@ -21,7 +22,7 @@ const DialogOverlay = React.forwardRef<
   <DialogPrimitive.Overlay
     ref={ref}
     className={cn(
-      "fixed inset-0 z-50 bg-black/80  data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+      "fixed inset-0 z-50 bg-black/90 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
       className
     )}
     {...props}
@@ -44,6 +45,10 @@ const DialogContent = React.forwardRef<
       {...props}
     >
       {children}
+      <DialogPrimitive.Close className="absolute -top-3 -right-3 md:-top-5 md:-right-5 rounded-full p-2 bg-background/80 hover:bg-background text-foreground border border-border-custom transition-all duration-500 hover:scale-110 active:scale-95 focus:outline-none backdrop-blur-xl group z-[60] shadow-2xl">
+        <X className="h-5 w-5 transition-transform duration-500" />
+        <span className="sr-only">Close</span>
+      </DialogPrimitive.Close>
 
     </DialogPrimitive.Content>
   </DialogPortal>

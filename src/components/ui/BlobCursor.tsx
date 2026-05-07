@@ -1,8 +1,45 @@
 "use client";
 
-import React, { useEffect, useState, RefObject } from "react";
+import React, { RefObject, useEffect, useRef, useState } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import { ArrowUpRight, LucideIcon } from "lucide-react";
+
+const BLOB_CURSOR_STYLE_ID = "blob-cursor-style";
+const blobCursorStyleOwners = new Set<symbol>();
+
+function acquireBlobCursorStyle() {
+  const owner = Symbol("blobCursorStyleOwner");
+  blobCursorStyleOwners.add(owner);
+
+  if (!document.getElementById(BLOB_CURSOR_STYLE_ID)) {
+    const style = document.createElement("style");
+    style.id = BLOB_CURSOR_STYLE_ID;
+    style.innerHTML = `
+      .hide-default-cursor, .hide-default-cursor * {
+        cursor: none !important;
+      }
+      .hide-default-cursor .show-default-cursor,
+      .hide-default-cursor .show-default-cursor * {
+        cursor: auto !important;
+      }
+      .hide-default-cursor .mouse-pointer,
+      .hide-default-cursor .mouse-pointer * {
+        cursor: pointer !important;
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  return owner;
+}
+
+function releaseBlobCursorStyle(owner: symbol) {
+  if (!blobCursorStyleOwners.delete(owner) || blobCursorStyleOwners.size > 0) {
+    return;
+  }
+
+  document.getElementById(BLOB_CURSOR_STYLE_ID)?.remove();
+}
 
 interface BlobCursorProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -21,6 +58,8 @@ export function BlobCursor({
   restrictToTags
 }: BlobCursorProps) {
   const [isVisible, setIsVisible] = useState(false);
+  const onClickRef = useRef(onClick);
+  const restrictToTagsRef = useRef(restrictToTags);
 
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
@@ -30,39 +69,39 @@ export function BlobCursor({
   const cursorYSpring = useSpring(cursorY, springConfig);
 
   useEffect(() => {
+    onClickRef.current = onClick;
+  }, [onClick]);
+
+  useEffect(() => {
+    restrictToTagsRef.current = restrictToTags;
+  }, [restrictToTags]);
+
+  useEffect(() => {
     const target = targetRef.current;
     if (!target) return;
+    const styleOwner = acquireBlobCursorStyle();
+    let visibilityFrame: number | null = null;
+
+    const cancelVisibilityFrame = () => {
+      if (visibilityFrame === null) {
+        return;
+      }
+
+      cancelAnimationFrame(visibilityFrame);
+      visibilityFrame = null;
+    };
 
     const handleMouseLeave = () => {
+      cancelVisibilityFrame();
       setIsVisible(false);
       target.classList.remove("hide-default-cursor");
     };
-
-    // Inject a global style to force no-cursor on target and all its descendants
-    const styleId = "blob-cursor-style";
-    if (!document.getElementById(styleId)) {
-      const style = document.createElement("style");
-      style.id = styleId;
-      style.innerHTML = `
-        .hide-default-cursor, .hide-default-cursor * {
-          cursor: none !important;
-        }
-        .hide-default-cursor .show-default-cursor, 
-        .hide-default-cursor .show-default-cursor * {
-          cursor: auto !important;
-        }
-        .hide-default-cursor .mouse-pointer,
-        .hide-default-cursor .mouse-pointer * {
-          cursor: pointer !important;
-        }
-      `;
-      document.head.appendChild(style);
-    }
 
     const handleMouseMove = (e: MouseEvent) => {
       const targetElement = e.target as HTMLElement;
       
       if (targetElement.closest(".show-default-cursor")) {
+        cancelVisibilityFrame();
         setIsVisible(false);
         target.classList.remove("hide-default-cursor");
         return;
@@ -70,8 +109,9 @@ export function BlobCursor({
 
       // If restrictToTags is provided, only show when hovering over those tags
       // Otherwise, show it for the whole target container
-      const shouldShow = restrictToTags 
-        ? restrictToTags.some(tag => !!targetElement.closest(tag))
+      const tagRestrictions = restrictToTagsRef.current;
+      const shouldShow = tagRestrictions 
+        ? tagRestrictions.some(tag => !!targetElement.closest(tag))
         : true;
 
       setIsVisible(shouldShow);
@@ -81,37 +121,47 @@ export function BlobCursor({
         cursorX.set(e.clientX);
         cursorY.set(e.clientY);
       } else {
+        cancelVisibilityFrame();
         target.classList.remove("hide-default-cursor");
+      }
+    };
+
+    const handleClick = (e: MouseEvent) => {
+      const currentOnClick = onClickRef.current;
+      if (!currentOnClick) return;
+      
+      const targetElement = e.target as HTMLElement;
+      const tagRestrictions = restrictToTagsRef.current;
+      const shouldTrigger = tagRestrictions 
+        ? tagRestrictions.some(tag => !!targetElement.closest(tag))
+        : true;
+        
+      if (shouldTrigger) {
+        currentOnClick(e);
       }
     };
 
     target.addEventListener("mousemove", handleMouseMove);
     target.addEventListener("mouseleave", handleMouseLeave);
-
-    if (onClick) {
-      target.addEventListener("click", onClick);
-    }
+    target.addEventListener("click", handleClick);
 
     // Initial check (optional, but good for refresh)
-    if (target.matches && target.matches(":hover") && !restrictToTags) {
-      requestAnimationFrame(() => setIsVisible(true));
+    if (target.matches && target.matches(":hover") && !restrictToTagsRef.current) {
+      visibilityFrame = requestAnimationFrame(() => {
+        visibilityFrame = null;
+        setIsVisible(true);
+      });
     }
 
     return () => {
+      cancelVisibilityFrame();
       target.classList.remove("hide-default-cursor");
       target.removeEventListener("mousemove", handleMouseMove);
       target.removeEventListener("mouseleave", handleMouseLeave);
-      if (onClick) {
-        target.removeEventListener("click", onClick);
-      }
-
-      // Clean up the injected style element
-      const styleElement = document.getElementById(styleId);
-      if (styleElement) {
-        styleElement.remove();
-      }
+      target.removeEventListener("click", handleClick);
+      releaseBlobCursorStyle(styleOwner);
     };
-  }, [targetRef, cursorX, cursorY, onClick, restrictToTags]);
+  }, [targetRef, cursorX, cursorY]);
 
   return (
     <motion.div

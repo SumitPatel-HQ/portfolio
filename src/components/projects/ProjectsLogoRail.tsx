@@ -10,8 +10,9 @@ type ProjectsLogoRailProps = {
 
 export function ProjectsLogoRail({ projects, activeIndex, onSelect }: ProjectsLogoRailProps) {
   return (
-    <div className="show-default-cursor relative z-20 flex w-fit items-center gap-5 rounded-[12px] bg-foreground/[0.03] p-5 backdrop-blur-[11px] shadow-[0_2px_20px_rgba(0,0,0,0.15)] max-[900px]:gap-3 max-[900px]:p-3 ">
-      {projects.map((project, index) => {
+    <div className="w-full overflow-x-auto" data-lenis-prevent>
+      <div className="show-default-cursor relative z-20 flex w-max items-center gap-5 rounded-[12px] bg-foreground/[0.03] p-5 backdrop-blur-[11px] shadow-[0_2px_20px_rgba(0,0,0,0.15)] max-[900px]:gap-3 max-[900px]:p-3 ">
+        {projects.map((project, index) => {
         const isActive = index === activeIndex;
 
         return (
@@ -32,6 +33,7 @@ export function ProjectsLogoRail({ projects, activeIndex, onSelect }: ProjectsLo
           </button>
         );
       })}
+      </div>
     </div>
   );
 }

@@ -35,6 +35,7 @@ export const HeroSection = () => {
         </div>
 
         <div className="flex-1 flex flex-col justify-center ">
+      
           <div ref={nameRef} className="flex flex-col relative">
             <BlobCursor
               targetRef={nameRef}
@@ -42,7 +43,9 @@ export const HeroSection = () => {
               iconColor="text-black"
               restrictToTags={['h1']}
             />
+
             <h1 ref={sumitRef} className="text-hero font-extrabold leading-[0.9] tracking-hero max-md:text-hero-mobile scale-y-[1.2] relative z-20 w-fit uppercase">Sumit</h1>
+
             <div className="w-full border-b border-white/10 relative z-10 mt-4" />
             <h1 ref={patelRef} className="text-hero font-extrabold leading-[0.9] tracking-hero text-right max-md:text-hero-mobile scale-y-[1.2] mt-4 pr-[0.05em] relative z-20 ml-auto w-fit uppercase">Patel</h1>
           </div>

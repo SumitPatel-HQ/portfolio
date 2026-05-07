@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Footer } from "@/components/layout/Footer";
 import { ContactModalProvider } from "@/context/ContactModalContext";
+import { ToastProvider } from "@/components/Contacts/toast";
 import { Menu } from "@/components/menu/Menu";
 import LenisProvider from "@/providers/LenisProvider";
 import GSAPProvider from "@/providers/GSAPProvider";
@@ -31,15 +32,17 @@ export default function RootLayout({
       <body className={`${inter.variable} font-sans antialiased min-h-screen flex flex-col bg-background text-foreground`}>
         <LenisProvider>
           <GSAPProvider>
-            <ContactModalProvider>
-              <Menu />
-              <main className="flex-1 flex flex-col">
-                {children}
-              </main>
-              <Footer />
-              <Analytics />
-              <SpeedInsights />
-            </ContactModalProvider>
+            <ToastProvider>
+              <ContactModalProvider>
+                <Menu />
+                <main className="flex-1 flex flex-col">
+                  {children}
+                </main>
+                <Footer />
+                <Analytics />
+                <SpeedInsights />
+              </ContactModalProvider>
+            </ToastProvider>
           </GSAPProvider>
         </LenisProvider>
       </body>
