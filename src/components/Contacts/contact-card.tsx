@@ -28,7 +28,6 @@ export function ContactCard({
       icon: s.icon,
       label: s.label,
       value: s.username || "",
-      className: s.label === "Location" ? "md:col-span-2 lg:col-span-3" : "",
     })),
   className,
   formSectionClassName,
@@ -51,10 +50,40 @@ export function ContactCard({
           <p className="text-muted-custom max-w-xl text-sm font-thin md:text-base lg:text-lg">
             {description}
           </p>
-          <div className="grid gap-4 md:grid md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
             {contactInfo?.map((info, index) => (
               <ContactInfo key={index} {...info} />
             ))}
+          </div>
+
+          <div className="pt-3">
+            <div className="h-px w-full bg-border-custom/50 mb-6" />
+            <p className="text-[11px] font-medium tracking-wider text-muted-custom mb-3">
+              SOCIALS
+            </p>
+            <div className="flex flex-wrap items-center gap-3">
+              {socials
+                .filter((s) =>
+                  ["GitHub", "LinkedIn", "Instagram", "Twitter"].includes(s.label)
+                )
+                .map((social) => {
+                  const Icon = social.icon;
+                  return (
+                    <a
+                      key={social.id}
+                      href={social.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group flex items-center gap-2 transition-all duration-300"
+                      aria-label={social.ariaLabel}
+                    >
+                      <div className="flex h-12 w-12 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-white/50 transition-all duration-300 group-hover:bg-accent group-hover:text-background group-hover:border-accent">
+                        <Icon className="h-5 w-5" />
+                      </div>
+                    </a>
+                  );
+                })}
+            </div>
           </div>
         </div>
       </div>
@@ -78,8 +107,11 @@ function ContactInfo({
   ...props
 }: ContactInfoProps) {
   return (
-    <div className={cn("flex items-center gap-3 py-3", className)} {...props}>
-      <div className="bg-background-dark/50 rounded-lg p-3 text-primary">
+    <div
+      className={cn("group flex items-center gap-3 py-3", className)}
+      {...props}
+    >
+      <div className="flex h-12 w-12 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-white/50 transition-all duration-300 group-hover:bg-accent group-hover:text-background group-hover:border-accent">
         <Icon className="h-5 w-5" />
       </div>
       <div>

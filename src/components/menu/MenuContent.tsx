@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import { useContactModal } from "@/context/ContactModalContext";
 import { socials } from "@/data/socialLinks";
+import { MoveUpRight } from "lucide-react";
+import { ResumeModal } from "@/components/ResumeModal";
 
 interface MenuContentProps {
   onNavigate?: () => void;
@@ -20,6 +22,7 @@ const titleLetters = ["S", "U", "M", "I", "T"];
 
 export const MenuContent: React.FC<MenuContentProps> = ({ onNavigate }) => {
   const { openModal } = useContactModal();
+  const [isResumeOpen, setIsResumeOpen] = useState(false);
 
   return (
     <div className="flex h-full w-full flex-col px-6 pb-20 pt-24 font-sans sm:px-10 sm:pt-28 lg:px-16 lg:pb-24 lg:pt-32 xl:px-24">
@@ -35,9 +38,7 @@ export const MenuContent: React.FC<MenuContentProps> = ({ onNavigate }) => {
                     }}
                     className="group menu-content-pages inline-flex items-center gap-3 text-[44px] font-[350] leading-[1] tracking-[-0.015em] text-foreground transition-transform duration-300 ease-out hover:translate-x-1 hover:opacity-85 sm:text-[56px] lg:text-[64px] bg-transparent border-none p-0 cursor-pointer"
                   >
-                    <span className="text-[0.43em] translate-y-[-0.05em]  opacity-0 group-hover:opacity-100 transition-opacity duration-200 group-hover:scale-150">
-                      ↗
-                    </span>
+                    <MoveUpRight className="size-[0.43em] translate-y-[0.1em] opacity-0 scale-50 group-hover:translate-y-[-0.05em] group-hover:opacity-100 group-hover:scale-110 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]" />
                     <span>{item.label}</span>
                   </button>
                 ) : (
@@ -46,9 +47,7 @@ export const MenuContent: React.FC<MenuContentProps> = ({ onNavigate }) => {
                     onClick={onNavigate}
                     className="group menu-content-pages inline-flex items-center gap-3 text-[44px] font-[350] leading-[1] tracking-[-0.015em] text-foreground transition-transform duration-300 ease-out hover:translate-x-1 hover:opacity-85 sm:text-[56px] lg:text-[64px]"
                   >
-                    <span className="text-[0.43em] translate-y-[-0.05em]  opacity-0 group-hover:opacity-100 transition-opacity duration-200 group-hover:scale-150">
-                      ↗
-                    </span>
+                    <MoveUpRight className="size-[0.43em] translate-y-[0.1em] opacity-0 scale-50 group-hover:translate-y-[-0.05em] group-hover:opacity-100 group-hover:scale-110 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]" />
                     <span>{item.label}</span>
                   </Link>
                 )}
@@ -60,9 +59,13 @@ export const MenuContent: React.FC<MenuContentProps> = ({ onNavigate }) => {
         <div className="menu-content-info grid grid-cols-1 gap-2 text-left text-[13px] font-medium uppercase tracking-[0.085em] leading-[1.33] text-foreground-secondary lg:grid-cols-2 lg:items-start lg:gap-x-0 lg:text-right">
           <div className="space-y-1 lg:self-start">
             <p>Sumit</p>
-            {/* <p>9 quai Andre Lassagne</p> */}
             <p>401303 Virar</p>
             <p>Maharashtra</p>
+            <p
+              onClick={() => setIsResumeOpen(true)}
+              className="cursor-pointer transition-all hover:opacity-70">
+              View Resume
+            </p>
           </div>
 
           {/* can be scaled for conact section */}
@@ -83,7 +86,7 @@ export const MenuContent: React.FC<MenuContentProps> = ({ onNavigate }) => {
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block transition-opacity hover:opacity-70"
+                  className="block transition-all hover:opacity-70"
                 >
                   {social.label}
                 </a>
@@ -137,6 +140,13 @@ export const MenuContent: React.FC<MenuContentProps> = ({ onNavigate }) => {
           </div>
         </div>
       </div>
+      {/* RESUME PDF MODAL */}
+      <ResumeModal
+        isOpen={isResumeOpen}
+        onClose={() => setIsResumeOpen(false)}
+      />
     </div>
+
+
   );
 };

@@ -54,13 +54,13 @@ export default function ProjectsPage() {
   const { isReady: isGSAPReady } = useGSAP();
   const { lenis } = useLenis();
 
-  const handleContainerClick = (e: MouseEvent) => {
+  const handleContainerClick = useCallback((e: MouseEvent) => {
     const target = e.target as HTMLElement;
     if (target?.closest?.("button") || target?.closest?.("a")) {
       return;
     }
     router.push(activeProject.href);
-  };
+  }, [activeProject.href, router]);
 
   const scrollToIndex = useCallback((index: number) => {
     const trigger = triggerRef.current;

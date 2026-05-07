@@ -8,11 +8,16 @@ interface HomeLinkProps {
   label: string | null;
   onNavigate?: () => void;
   animatedRef: React.RefObject<HTMLDivElement | null>;
+  isContactModalOpen?: boolean;
 }
 
-export const HomeLink: React.FC<HomeLinkProps> = ({ label, onNavigate, animatedRef }) => {
+export const HomeLink: React.FC<HomeLinkProps> = ({ label, onNavigate, animatedRef, isContactModalOpen }) => {
   return (
     <div
+      style={{ 
+        opacity: isContactModalOpen ? 0 : 1, 
+        pointerEvents: isContactModalOpen ? 'none' : 'auto' 
+      }}
       className="fixed top-8 left-8 z-[100] flex items-center justify-center overflow-hidden py-5 px-5 max-md:top-6 max-md:left-6 max-md:py-4 max-md:px-4 pointer-events-none"
     >
       <div ref={animatedRef} className="menu-home-link-target" style={{ pointerEvents: label ? 'auto' : 'none' }}>

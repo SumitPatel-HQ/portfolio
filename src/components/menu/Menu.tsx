@@ -92,7 +92,12 @@ export const Menu = () => {
 
   return (
     <>
-      <HomeLink label={homeLabel} onNavigate={closeMenu} animatedRef={homeLinkRef} />
+      <HomeLink 
+        label={homeLabel} 
+        onNavigate={closeMenu} 
+        animatedRef={homeLinkRef} 
+        isContactModalOpen={isContactModalOpen}
+      />
       <MenuButton
         isOpen={isOpen}
         toggleMenu={toggleMenu}

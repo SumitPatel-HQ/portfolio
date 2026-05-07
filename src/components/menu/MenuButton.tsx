@@ -51,10 +51,14 @@ export const MenuButton: React.FC<MenuButtonProps> = ({
       animate={{ 
         opacity: isContactModalOpen ? 0 : 1, 
         pointerEvents: isContactModalOpen ? 'none' : 'auto',
-        y: isContactModalOpen ? -20 : 0,
         backgroundColor: isOpen ? 'rgba(26, 26, 26, 0)' : '#1A1A1A',
       }}
-      transition={{ layout: springTransition, default: { duration: 0.35, ease: smoothEase } }}
+      transition={{ 
+        layout: springTransition, 
+        opacity: { duration: 0 },
+        pointerEvents: { duration: 0 },
+        default: { duration: 0.35, ease: smoothEase } 
+      }}
       className={`fixed top-8 right-8 z-[100] flex items-center justify-center overflow-hidden py-5 rounded-full text-foreground cursor-pointer shadow-lg max-md:top-6 max-md:right-6 max-md:py-4 ${
         isOpen ? "px-5 max-md:px-4 !shadow-none" : "px-8 max-md:px-6"
       }`}

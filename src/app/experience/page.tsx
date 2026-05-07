@@ -2,8 +2,8 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { SkillBar } from '@/components/ui/skills/SkillBar';
-import { SkillPill } from '@/components/ui/skills/SkillPill';
+import { SkillBar } from '../../../trash/skills/SkillBar';
+import { SkillPill } from '../../../trash/skills/SkillPill';
 
 const EXPERIENCES = [
   {

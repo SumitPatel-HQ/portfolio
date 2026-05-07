@@ -132,7 +132,7 @@ export const FeaturedWork = () => {
 
                 <h3
                   className={cn(
-                    "uppercase md:text-5xl sm:text-3xl text-2xl font-bold sm:py-6 py-2 leading-[0.95] relative transition-colors duration-300",
+                    "uppercase md:text-5xl sm:text-3xl text-2xl font-bold sm:py-6 py-2 leading-[0.95] relative transition-colors duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
                     focusedItem?.key === item.key
                       ? "text-foreground sm:mix-blend-difference sm:z-20"
                       : "text-foreground/85"
@@ -143,9 +143,9 @@ export const FeaturedWork = () => {
 
                 <span
                   className={cn(
-                    "hidden sm:flex p-4 rounded-full border border-black/20 dark:border-white/20 transition-all duration-300 ease-out",
+                    "hidden sm:flex p-4 rounded-full transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
                     focusedItem?.key === item.key
-                      ? "mix-blend-difference z-20 bg-white text-black"
+                      ? "bg-accent text-background z-20"
                       : "text-foreground"
                   )}
                   aria-hidden="true"
@@ -155,7 +155,7 @@ export const FeaturedWork = () => {
 
                 <span
                   className={cn(
-                    "h-[2px] bg-black dark:bg-white absolute bottom-0 left-0 transition-all duration-300 ease-linear",
+                    "h-[2px] bg-black dark:bg-white absolute bottom-0 left-0 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
                     focusedItem?.key === item.key ? "w-full" : "w-0"
                   )}
                   aria-hidden="true"
