@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { TextureOverlay } from "@/components/ui/visuals/TextureOverlay";
 
@@ -10,20 +11,51 @@ type ProjectsStageProps = {
 };
 
 export function ProjectsStage({ imageUrl, imageAlt, textureUrl }: ProjectsStageProps) {
+  const [imageError, setImageError] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
+
   return (
     <div className="absolute inset-0 overflow-hidden">
       <AnimatePresence mode="wait">
-        <motion.img
+        <motion.div
           key={imageUrl}
-          src={imageUrl}
-          alt={imageAlt}
-          className="absolute inset-0 h-full w-full object-cover"
-          initial={{ opacity: 0.12, scale: 1.05, x: 10 }}
-          animate={{ opacity: 0.36, scale: 1, x: 0 }}
-          exit={{ opacity: 0.12, scale: 0.98, x: -10 }}
-          transition={{ duration: 0.7, ease: [0.32, 0.72, 0, 1] }}
-        />
+          className="absolute inset-0"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          {!imageError ? (
+            <motion.img
+              src={imageUrl}
+              alt={imageAlt}
+              className="absolute inset-0 h-full w-full object-cover"
+              initial={{ opacity: 0.12, scale: 1.05, x: 10 }}
+              animate={{ 
+                opacity: imageLoaded ? 0.36 : 0.12, 
+                scale: 1, 
+                x: 0 
+              }}
+              exit={{ opacity: 0.12, scale: 0.98, x: -10 }}
+              transition={{ duration: 0.7, ease: [0.32, 0.72, 0, 1] }}
+              onLoad={() => setImageLoaded(true)}
+              onError={() => {
+                console.error(`Failed to load image: ${imageUrl}`);
+                setImageError(true);
+              }}
+            />
+          ) : (
+            <div className="absolute inset-0 flex items-center justify-center bg-gray-900">
+              <div className="text-center">
+                <p className="text-gray-500 text-sm">Image unavailable</p>
+                <p className="text-gray-600 text-xs mt-1">{imageAlt}</p>
+              </div>
+            </div>
+          )}
+        </motion.div>
       </AnimatePresence>
+      
+      {/* Gradient overlays */}
       <div 
         className="absolute inset-0" 
         style={{
@@ -38,4 +70,3 @@ export function ProjectsStage({ imageUrl, imageAlt, textureUrl }: ProjectsStageP
     </div>
   );
 }
-

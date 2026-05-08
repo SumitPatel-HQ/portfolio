@@ -3,7 +3,6 @@
 import React, { useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-// import { motion } from 'framer-motion';
 import StripesBackground from "@/components/ui/visuals/StripesBackground";
 import { useContactModal } from "@/context/ContactModalContext";
 import { BlobCursor } from "@/components/ui/BlobCursor";
@@ -36,10 +35,22 @@ export const HeroSection = () => {
 
         <div className="flex-1 flex flex-col justify-center ">
       
-          <div ref={nameRef} className="flex flex-col relative">
+           <div 
+            ref={nameRef} 
+            className="flex flex-col relative"
+            role="button"
+            tabIndex={0}
+            aria-label="Navigate to about page"
+            onClick={handleNameClick}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                handleNameClick();
+              }
+            }}
+          >
             <BlobCursor
               targetRef={nameRef}
-              onClick={handleNameClick}
               iconColor="text-black"
               restrictToTags={['h1']}
             />
@@ -61,10 +72,14 @@ export const HeroSection = () => {
           <div className="flex justify-end items-center gap-3 max-md:w-full max-md:justify-start max-md:flex-wrap">
             <button
               onClick={openModal}
+              aria-label="Open contact form to send a message"
               className="py-3.5 px-18px text-status font-semibold uppercase border border-accent min-w-btn text-center bg-accent text-black cursor-pointer transition-all duration-300 hover:bg-white hover:text-black hover:border-white hover:-translate-y-0.5 max-md:min-w-btn-mobile">
               Get in touch
             </button>
-            <Link href="/projects" className="py-3.5 px-18px text-status font-semibold uppercase border border-white/30 min-w-btn text-center bg-white/8 cta-secondary-text cursor-pointer transition-all duration-300 hover:bg-white hover:border-white hover:-translate-y-0.5 max-md:min-w-btn-mobile">
+            <Link 
+              href="/projects" 
+              aria-label="View all projects portfolio"
+              className="py-3.5 px-18px text-status font-semibold uppercase border border-white/30 min-w-btn text-center bg-white/8 cta-secondary-text cursor-pointer transition-all duration-300 hover:bg-white hover:border-white hover:-translate-y-0.5 max-md:min-w-btn-mobile">
               View Projects
             </Link>
           </div>

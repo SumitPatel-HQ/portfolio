@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect, useRef } from "react";
 import { ContactCard } from "@/components/Contacts/contact-card";
 import { useLenis } from "@/providers/LenisProvider";
 import {
@@ -43,8 +43,14 @@ export function ContactModalProvider({
   children: React.ReactNode;
 }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { lenis } = useLenis();
   const { showToast } = useToast();
+
+  const nameRef = useRef<HTMLInputElement>(null);
+  const emailRef = useRef<HTMLInputElement>(null);
+  const phoneRef = useRef<HTMLInputElement>(null);
+  const messageRef = useRef<HTMLTextAreaElement>(null);
 
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
@@ -83,18 +89,50 @@ export function ContactModalProvider({
             <form
               action=""
               className="w-full space-y-4"
-              onSubmit={(e) => {
+              onSubmit={async (e) => {
                 e.preventDefault();
-                closeModal();
+                if (isSubmitting) return;
+
+                const name = nameRef.current?.value ?? "";
+                const email = emailRef.current?.value ?? "";
+                const phone = phoneRef.current?.value ?? "";
+                const message = messageRef.current?.value ?? "";
+
+                setIsSubmitting(true);
+                try {
+                  const res = await fetch("/api/contact", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ name, email, phone, message }),
+                  });
+
+                  if (res.ok) {
+                    showToast("Message sent successfully!", "success");
+                    closeModal();
+                  } else {
+                    const data = await res.json().catch(() => ({}));
+                    showToast(
+                      data.error || "Failed to send message. Please try again.",
+                      "error",
+                    );
+                  }
+                } catch {
+                  showToast(
+                    "Failed to send message. Please try again.",
+                    "error",
+                  );
+                } finally {
+                  setIsSubmitting(false);
+                }
               }}
             >
               <div className="flex flex-col gap-2 ">
                 <Label>Name <span className="text-red-500">*</span></Label>
-                <Input type="text" required placeholder="John Doe" />
+                <Input type="text" required placeholder="John Doe" ref={nameRef} />
               </div>
               <div className="flex flex-col gap-2">
                 <Label>Email <span className="text-red-500">*</span></Label>
-                <Input type="email" required placeholder="john@example.com" />
+                <Input type="email" required placeholder="john@example.com" ref={emailRef} />
               </div>
               <div className="flex flex-col gap-2">
                 <Label>Phone</Label>
@@ -102,6 +140,7 @@ export function ContactModalProvider({
                   type="tel"
                   inputMode="numeric"
                   placeholder="+91 0123456789"
+                  ref={phoneRef}
                   onInput={(e) => {
                     e.currentTarget.value = e.currentTarget.value.replace(/[^0-9]/g, "");
                   }}
@@ -109,13 +148,14 @@ export function ContactModalProvider({
               </div>
               <div className="flex flex-col gap-2 pt-2">
                 <Label>Message <span className="text-red-500">*</span></Label>
-                <Textarea required className="h-32 resize-none" placeholder="Tell me about your project..." />
+                <Textarea required className="h-32 resize-none" placeholder="Tell me about your project..." ref={messageRef} />
               </div>
               <Button
                 className="w-full bg-accent text-background font-bold text-base py-6 mt-2 "
                 type="submit"
+                disabled={isSubmitting}
               >
-                Submit
+                {isSubmitting ? "Sending..." : "Submit"}
               </Button>
             </form>
           </ContactCard>

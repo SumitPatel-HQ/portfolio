@@ -27,7 +27,7 @@ export function ProjectsOverlay({ project }: ProjectsOverlayProps) {
           <div className="flex flex-wrap gap-2.5 max-w-[700px]">
             {project.tags.split(/[,•]/).map(t => t.trim()).filter(Boolean).map((tag, index) => (
               <span
-                key={index}
+                key={`${project.id}-${tag}-${index}`}
                 className="inline-flex items-center rounded-full border border-white/10 bg-foreground-secondary/10 px-3.5 py-1.5 text-[clamp(0.8rem,1.1vw,0.95rem)] font-extralight text-foreground-secondary shadow-[0_4px_12px_0_rgba(0,0,0,0.2)] backdrop-blur-[2px]"
               >
                 {tag}

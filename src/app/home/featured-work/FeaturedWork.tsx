@@ -6,6 +6,7 @@ import { AnimatePresence, motion, useMotionValue, useSpring } from "framer-motio
 import { MoveUpRight as ArrowIcon } from "lucide-react";
 import { createPortal } from "react-dom";
 import { cn } from "@/lib/utils";
+import { useIsClient } from "@/hooks/useIsClient";
 
 interface VisualItem {
   key: number;
@@ -39,26 +40,41 @@ const visualData: VisualItem[] = [
 export const FeaturedWork = () => {
   const [focusedItem, setFocusedItem] = useState<VisualItem | null>(null);
   const [isLargeScreen, setIsLargeScreen] = useState(false);
+  const isClient = useIsClient();
 
   const cursorX = useMotionValue(0);
   const cursorY = useMotionValue(0);
   const smoothX = useSpring(cursorX, { stiffness: 300, damping: 40 });
   const smoothY = useSpring(cursorY, { stiffness: 300, damping: 40 });
 
-  const PREVIEW_WIDTH = 300;
-  const PREVIEW_HEIGHT = 400;
-  const PREVIEW_GAP = 24;
-  const VIEWPORT_PADDING = 16;
+  // Configuration constants
+  const CONFIG = {
+    PREVIEW_WIDTH: 300,
+    PREVIEW_HEIGHT: 400,
+    PREVIEW_GAP: 24,
+    VIEWPORT_PADDING: 16,
+    MOBILE_BREAKPOINT: 768,
+  } as const;
+
+  // Derived values
+  const PREVIEW_WIDTH = CONFIG.PREVIEW_WIDTH;
+  const PREVIEW_HEIGHT = CONFIG.PREVIEW_HEIGHT;
+  const PREVIEW_GAP = CONFIG.PREVIEW_GAP;
+  const VIEWPORT_PADDING = CONFIG.VIEWPORT_PADDING;
 
   useEffect(() => {
-    const updateScreen = () => {
-      setIsLargeScreen(window.innerWidth >= 768);
+    const mediaQuery = window.matchMedia(`(min-width: ${CONFIG.MOBILE_BREAKPOINT}px)`);
+    
+    const handleChange = (e: MediaQueryListEvent | MediaQueryList) => {
+      setIsLargeScreen('matches' in e ? e.matches : (e as MediaQueryList).matches);
     };
 
-    updateScreen();
-    window.addEventListener("resize", updateScreen);
-    return () => window.removeEventListener("resize", updateScreen);
-  }, []);
+    handleChange(mediaQuery);
+    mediaQuery.addEventListener('change', handleChange);
+    
+    return () => mediaQuery.removeEventListener('change', handleChange);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // CONFIG.MOBILE_BREAKPOINT is a constant
 
   const handlePointerMove = (event: React.MouseEvent<HTMLElement>) => {
     if (!isLargeScreen) {
@@ -165,7 +181,7 @@ export const FeaturedWork = () => {
           ))}
         </ul>
 
-        {typeof document !== "undefined" &&
+        {isClient &&
           createPortal(
             <AnimatePresence>
               {isLargeScreen && focusedItem && (
