@@ -1,70 +1,97 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 interface MenuButtonProps {
   isOpen: boolean;
   toggleMenu: () => void;
   isContactModalOpen?: boolean;
+  isIntroComplete?: boolean;
+  isHome?: boolean;
 }
 
-export const MenuButton: React.FC<MenuButtonProps> = ({ 
-  isOpen, 
-  toggleMenu, 
-  isContactModalOpen 
+export const MenuButton: React.FC<MenuButtonProps> = ({
+  isOpen,
+  toggleMenu,
+  isContactModalOpen,
+  isIntroComplete = true,
+  isHome = false
 }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   const smoothEase = [0.4, 0, 0.2, 1] as const;
+
+  // Hydration-safe mounting: prevent animations during SSR/hydration
+  useEffect(() => {
+    // Use requestAnimationFrame to ensure we're past the hydration phase
+    const rafId = requestAnimationFrame(() => {
+      setIsMounted(true);
+    });
+    return () => cancelAnimationFrame(rafId);
+  }, []);
 
   const visualState: 'idle' | 'hover' | 'open' | 'openHover' = isOpen
     ? (isHovered ? 'openHover' : 'open')
     : (isHovered ? 'hover' : 'idle');
 
-  const lineTransition = {
+  // Disable all transitions during initial mount/hydration
+  const getTransition = (baseTransition: object) =>
+    isMounted ? baseTransition : { duration: 0 };
+
+  const lineTransition = getTransition({
     duration: 0.4,
     ease: smoothEase,
-  };
+  });
 
-  const dotTransition = {
+  const dotTransition = getTransition({
     duration: 0.35,
     ease: smoothEase,
-  };
+  });
 
-  const textTransition = {
+  const textTransition = getTransition({
     duration: 0.4,
     ease: smoothEase,
-  };
+  });
 
-  const springTransition = { type: 'spring' as const, bounce: 0, duration: 0.4 };
+  const springTransition = isMounted
+    ? { type: 'spring' as const, bounce: 0, duration: 0.4 }
+    : { duration: 0 };
+
+  // Define idle state for initial render to prevent hydration mismatch
+  const initialVariant = 'idle';
 
   return (
     <motion.button
-      layout
+      layout={isMounted}
       onClick={toggleMenu}
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
       type="button"
       aria-label="Toggle menu"
       aria-expanded={isOpen}
-      whileTap={{ scale: 0.97 }}
-      animate={{ 
-        opacity: isContactModalOpen ? 0 : 1, 
-        pointerEvents: isContactModalOpen ? 'none' : 'auto',
+      whileTap={isMounted ? { scale: 0.97 } : undefined}
+      initial={false}
+      animate={{
+        opacity: (isContactModalOpen || (isHome && !isIntroComplete)) ? 0 : 1,
+        pointerEvents: (isContactModalOpen || (isHome && !isIntroComplete)) ? 'none' : 'auto',
         backgroundColor: isOpen ? 'rgba(26, 26, 26, 0)' : '#1A1A1A',
       }}
-      transition={{ 
-        layout: springTransition, 
-        opacity: { duration: 0 },
+      style={{
+        opacity: (isHome && !isIntroComplete) ? 0 : 1
+      }}
+      transition={{
+        layout: springTransition,
+        opacity: isMounted ? { duration: 0.4, ease: smoothEase } : { duration: 0 },
         pointerEvents: { duration: 0 },
-        default: { duration: 0.35, ease: smoothEase } 
+        default: isMounted ? { duration: 0.35, ease: smoothEase } : { duration: 0 }
       }}
       className={`fixed top-8 right-8 z-[100] flex items-center justify-center overflow-hidden py-5 rounded-full text-foreground cursor-pointer shadow-lg max-md:top-6 max-md:right-6 max-md:py-4 ${
         isOpen ? "px-5 max-md:px-4 !shadow-none" : "px-8 max-md:px-6"
       }`}
     >
-      <motion.span 
-        layout
+      <motion.span
+        layout={isMounted}
         className={`flex items-center ${isOpen ? "" : "translate-x-3 max-md:translate-x-2"}`}
       >
         <motion.span
@@ -78,6 +105,7 @@ export const MenuButton: React.FC<MenuButtonProps> = ({
           className="relative flex w-12 justify-center shrink-0 whitespace-nowrap"
         >
           <motion.span
+            initial={isMounted ? false : initialVariant}
             animate={visualState}
             variants={{
               idle: { x: 0 },
@@ -92,7 +120,8 @@ export const MenuButton: React.FC<MenuButtonProps> = ({
         </motion.span>
 
         <motion.span
-          layout
+          layout={isMounted}
+          initial={isMounted ? false : initialVariant}
           animate={visualState}
           variants={{
             idle: { x: 0 },
@@ -105,6 +134,7 @@ export const MenuButton: React.FC<MenuButtonProps> = ({
           aria-hidden="true"
         >
           <motion.span
+            initial={isMounted ? false : initialVariant}
             animate={visualState}
             variants={{
               idle: { opacity: 1, scale: 0.3 },
@@ -117,6 +147,7 @@ export const MenuButton: React.FC<MenuButtonProps> = ({
           />
 
           <motion.span
+            initial={isMounted ? false : initialVariant}
             animate={visualState}
             variants={{
               idle: { y: 0, rotate: 0, opacity: 0, scaleX: 0 },
@@ -129,6 +160,7 @@ export const MenuButton: React.FC<MenuButtonProps> = ({
           />
 
           <motion.span
+            initial={isMounted ? false : initialVariant}
             animate={visualState}
             variants={{
               idle: { y: 0, rotate: 0, opacity: 0, scaleX: 0 },

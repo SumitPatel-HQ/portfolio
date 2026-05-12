@@ -104,6 +104,20 @@
   .no-arrows::-webkit-scrollbar-button {
     display: none;
   }
+
+  .hero-intro-title {
+    opacity: 0;
+    clip-path: inset(42% 0% 42% 0%);
+    filter: blur(10px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-intro-title {
+      opacity: 1;
+      clip-path: none;
+      filter: none;
+    }
+  }
 }
 
 @utility scrollbar-custom {

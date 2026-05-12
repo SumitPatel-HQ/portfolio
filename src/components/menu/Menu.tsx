@@ -8,6 +8,7 @@ import { HomeLink } from './HomeLink';
 import { useMenuAnimation } from './useMenuAnimation';
 import { useContactModal } from '@/context/ContactModalContext';
 import { useLenis } from '@/providers/LenisProvider';
+import { useIntro } from '@/context/IntroContext';
 
 const menuItemsLinks = [
   { label: 'Projects', href: '/projects' },
@@ -17,6 +18,7 @@ const menuItemsLinks = [
 
 export const Menu = () => {
   const pathname = usePathname();
+  const { isIntroComplete } = useIntro();
   const [isOpen, setIsOpen] = useState(false);
   const [animatedHomeLabel, setAnimatedHomeLabel] = useState<string | null>(null);
   const { isOpen: isContactModalOpen } = useContactModal();
@@ -31,9 +33,11 @@ export const Menu = () => {
   const closedLabel = pathname === '/' ? null : currentPageLabel;
   const homeLabel = isOpen ? (animatedHomeLabel ?? currentPageLabel) : closedLabel;
 
+  const isHome = pathname === '/';
+
   const { containerRef, homeLinkRef } = useMenuAnimation({
     isOpen,
-    isHome: pathname === '/',
+    isHome,
     onOpenStart: () => {
       setAnimatedHomeLabel(currentPageLabel);
     },
@@ -102,6 +106,8 @@ export const Menu = () => {
         isOpen={isOpen}
         toggleMenu={toggleMenu}
         isContactModalOpen={isContactModalOpen}
+        isIntroComplete={isIntroComplete}
+        isHome={isHome}
       />
 
       {/* Menu Overlay */}

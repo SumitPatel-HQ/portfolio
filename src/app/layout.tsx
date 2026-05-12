@@ -5,6 +5,7 @@ import { Footer } from "@/components/layout/Footer";
 import { ContactModalProvider } from "@/context/ContactModalContext";
 import { ToastProvider } from "@/components/Contacts/toast";
 import { Menu } from "@/components/menu/Menu";
+import { IntroProvider } from "@/context/IntroContext";
 import LenisProvider from "@/providers/LenisProvider";
 import GSAPProvider from "@/providers/GSAPProvider";
 import { Analytics } from "@vercel/analytics/next";
@@ -34,10 +35,12 @@ export default function RootLayout({
           <GSAPProvider>
             <ToastProvider>
               <ContactModalProvider>
-                <Menu />
-                <main className="flex-1 flex flex-col">
-                  {children}
-                </main>
+                <IntroProvider>
+                  <Menu />
+                  <main className="flex-1 flex flex-col">
+                    {children}
+                  </main>
+                </IntroProvider>
                 <Footer />
                 <Analytics />
                 <SpeedInsights />
