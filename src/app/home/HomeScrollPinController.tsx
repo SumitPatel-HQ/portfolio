@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@/providers/GSAPProvider";
 import { useLenis } from "@/providers/LenisProvider";
+import { useIntro } from "@/context/IntroContext";
 
 type HomeScrollPinControllerProps = {
   heroRef: RefObject<HTMLElement | null>;
@@ -25,9 +26,10 @@ export function HomeScrollPinController({
 }: HomeScrollPinControllerProps) {
   const { isReady: isGSAPReady } = useGSAP();
   const { isReady: isLenisReady, lenis } = useLenis();
+  const { isIntroComplete } = useIntro();
 
   useEffect(() => {
-    if (!isGSAPReady || !isLenisReady || !heroRef.current || !featuredRef.current || !contactRef.current || !lenis) {
+    if (!isGSAPReady || !isLenisReady || !isIntroComplete || !heroRef.current || !featuredRef.current || !contactRef.current || !lenis) {
       return;
     }
 
@@ -188,7 +190,7 @@ export function HomeScrollPinController({
     return () => {
       ctx.revert();
     };
-  }, [featuredRef, heroRef, contactRef, isGSAPReady, isLenisReady, lenis]);
+  }, [featuredRef, heroRef, contactRef, isGSAPReady, isLenisReady, isIntroComplete, lenis]);
 
   return null;
 }

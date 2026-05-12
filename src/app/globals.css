@@ -105,17 +105,113 @@
     display: none;
   }
 
-  .hero-intro-title {
-    opacity: 0;
-    clip-path: inset(42% 0% 42% 0%);
-    filter: blur(10px);
+  .hero-root {
+    isolation: isolate;
+    contain: paint;
   }
 
+  /* Hero Typography Initial States - match GSAP's first locked frame. */
+  .hero-intro-title {
+    opacity: 0;
+    display: block;
+    will-change: transform, opacity, filter, clip-path;
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
+  }
+
+  .hero-intro-title[data-hero-title="sumit"] {
+    clip-path: inset(100% 0% -20% 0%);
+    filter: blur(12px);
+    transform: translate3d(0, 3px, 0) translateY(10%);
+  }
+
+  .hero-intro-title[data-hero-title="patel"] {
+    clip-path: inset(-20% 0% 100% 0%);
+    filter: blur(16px);
+    transform: translate3d(0, -2px, 0) translateY(-14%);
+  }
+
+  .hero-title-scale {
+    display: block;
+    transform: scaleY(1.2) translateZ(0);
+    transform-origin: center center;
+    backface-visibility: hidden;
+  }
+
+  /* Hero Chrome Elements Initial States */
+  .hero-chrome-top,
+  .hero-chrome-bottom {
+    opacity: 0;
+    will-change: transform, opacity, filter;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+
+  .hero-chrome-top {
+    transform: translate3d(0, 9px, 0);
+    filter: blur(5px);
+  }
+
+  .hero-chrome-bottom {
+    transform: translate3d(0, 7px, 0);
+    filter: blur(4px);
+  }
+
+  /* Hero Stripes Initial State */
+  .hero-stripes {
+    opacity: 0;
+    transform: translate3d(6px, 0, 0);
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+  }
+
+  /* Hero Divider Initial State */
+  .hero-divider {
+    opacity: 0;
+    transform: scaleX(0) translateZ(0);
+    transform-origin: left center;
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+  }
+
+  /* Hero Intro Overlay - always starts visible for animation sequence */
+  [data-hero-intro] {
+    opacity: 1;
+    visibility: visible;
+    contain: paint;
+    isolation: isolate;
+  }
+
+  .hero-intro-bar {
+    transform: scaleY(0) translateZ(0);
+    transform-origin: center center;
+    backface-visibility: hidden;
+  }
+
+  /* Reduced motion overrides - show everything immediately */
   @media (prefers-reduced-motion: reduce) {
-    .hero-intro-title {
+    .hero-intro-title,
+    .hero-chrome-top,
+    .hero-chrome-bottom,
+    .hero-stripes {
       opacity: 1;
       clip-path: none;
       filter: none;
+      transform: none;
+    }
+
+    .hero-title-scale {
+      transform: scaleY(1.2);
+    }
+
+    .hero-divider {
+      opacity: 1;
+      transform: scaleX(1);
+    }
+
+    [data-hero-intro] {
+      opacity: 0;
+      visibility: hidden;
     }
   }
 }
