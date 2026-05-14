@@ -31,6 +31,10 @@ export function AboutScrollPinController({
       return;
     }
 
+    // Force scroll position to 0 synchronously before creating ScrollTriggers.
+    window.scrollTo(0, 0);
+    lenis.scrollTo(0, { immediate: true });
+
     const ctx = gsap.context(() => {
       const media = gsap.matchMedia();
 
@@ -126,12 +130,6 @@ export function AboutScrollPinController({
             clearTimeout(scrollEndTimer);
           }
 
-          // Downward snap to contact (more responsive for trackpads)
-          if (!isSnapping && !isSnapCooldownActive() && section2Trigger.isActive && e.direction === 1 && section2Trigger.progress > 0.12) {
-            snapTo(contactRef.current!);
-            return;
-          }
-
           scrollEndTimer = setTimeout(() => {
             if (isSnapping || isSnapCooldownActive() || !section2Trigger.isActive || hasRecoveredUpInSection2Zone) {
               return;
@@ -192,9 +190,6 @@ export function AboutScrollPinController({
             if (section1Trigger.isActive) {
               e.preventDefault();
               snapTo(section2Ref.current!);
-            } else if (section2Trigger.isActive) {
-              e.preventDefault();
-              snapTo(contactRef.current!);
             }
           } else if (e.key === "ArrowUp" || e.key === "PageUp") {
             if (contactTrigger.isActive && !section2Trigger.isActive) {
@@ -229,13 +224,21 @@ export function AboutScrollPinController({
           lenis.off("scroll", onLenisScroll);
           window.removeEventListener("wheel", onWheel);
           window.removeEventListener("keydown", handleKeyDown);
-          lenis?.start();
+          // Unconditionally restart Lenis — navigation during a snap must never
+          // leave Lenis in a stopped state on the next page.
+          lenis.start();
         };
       });
-    }, section1Ref.current?.parentElement || undefined);
+    // Scope to document.body so ctx.revert() also removes the pin-spacer <div>s
+    // that GSAP injects as siblings of the pinned element (outside parentElement).
+    }, document.body);
 
     return () => {
+      // Revert all GSAP artefacts (triggers, spacers, inline styles) created
+      // by this controller, then force a fresh ScrollTrigger calculation so
+      // the Home page initialises with a clean slate.
       ctx.revert();
+      ScrollTrigger.refresh();
     };
   }, [section2Ref, section1Ref, contactRef, isGSAPReady, isLenisReady, lenis]);
 

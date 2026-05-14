@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback, useMemo, useEffect } from 'react';
+import React, { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import { MenuButton } from './MenuButton';
 import { MenuContent } from './MenuContent';
@@ -8,7 +8,6 @@ import { HomeLink } from './HomeLink';
 import { useMenuAnimation } from './useMenuAnimation';
 import { useContactModal } from '@/context/ContactModalContext';
 import { useLenis } from '@/providers/LenisProvider';
-import { useIntro } from '@/context/IntroContext';
 
 const menuItemsLinks = [
   { label: 'Projects', href: '/projects' },
@@ -18,33 +17,63 @@ const menuItemsLinks = [
 
 export const Menu = () => {
   const pathname = usePathname();
-  const { isIntroComplete } = useIntro();
   const [isOpen, setIsOpen] = useState(false);
-  const [animatedHomeLabel, setAnimatedHomeLabel] = useState<string | null>(null);
   const { isOpen: isContactModalOpen } = useContactModal();
   const { lenis } = useLenis();
 
-  const currentPageLabel = useMemo(() => {
-    if (pathname === '/') return 'Home';
+  const targetClosedLabel = useMemo(() => {
+    if (pathname === '/') return null;
     const currentItem = menuItemsLinks.find(item => item.href === pathname);
-    return currentItem ? currentItem.label : 'Home';
+    return currentItem ? currentItem.label : null;
   }, [pathname]);
 
-  const closedLabel = pathname === '/' ? null : currentPageLabel;
-  const homeLabel = isOpen ? (animatedHomeLabel ?? currentPageLabel) : closedLabel;
+  const [displayedLabel, setDisplayedLabel] = useState<string | null>(targetClosedLabel);
+  const isClosingRef = useRef(false);
+  const targetLabelRef = useRef(targetClosedLabel);
+  targetLabelRef.current = targetClosedLabel;
 
-  const isHome = pathname === '/';
-
-  const { containerRef, homeLinkRef } = useMenuAnimation({
+  const { containerRef } = useMenuAnimation({
     isOpen,
-    isHome,
-    onOpenStart: () => {
-      setAnimatedHomeLabel(currentPageLabel);
+    onCloseStart: () => {
+      isClosingRef.current = true;
     },
     onCloseComplete: () => {
-      setAnimatedHomeLabel(null);
+      isClosingRef.current = false;
+      setDisplayedLabel(targetLabelRef.current);
     },
   });
+
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+
+    if (isOpen) {
+      if (targetClosedLabel === null) {
+        // We are on the Home page. Delay the "Home" label appearance by 400ms
+        // so it starts fading in right as the black overlay reaches the top of the screen.
+        timeoutId = setTimeout(() => {
+          setDisplayedLabel('Home');
+        }, 800);
+      } else {
+        setDisplayedLabel(targetClosedLabel);
+      }
+    } else {
+      if (isClosingRef.current) {
+        // We are currently playing the close animation
+        setDisplayedLabel((prev) => {
+          if (targetClosedLabel === null || targetClosedLabel !== prev) {
+            return null; // Hide it so it animates out with the menu
+          }
+          return prev;
+        });
+      } else {
+        // We are already closed, e.g. back button navigation
+        setDisplayedLabel(targetClosedLabel);
+      }
+    }
+
+    return () => clearTimeout(timeoutId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen, targetClosedLabel]);
 
   const toggleMenu = useCallback(() => {
     setIsOpen(prev => !prev);
@@ -96,19 +125,21 @@ export const Menu = () => {
 
   return (
     <>
-      <HomeLink 
-        label={homeLabel} 
-        onNavigate={closeMenu} 
-        animatedRef={homeLinkRef} 
+      <HomeLink
+        label={displayedLabel}
+        onNavigate={closeMenu}
         isContactModalOpen={isContactModalOpen}
       />
-      <MenuButton
-        isOpen={isOpen}
-        toggleMenu={toggleMenu}
-        isContactModalOpen={isContactModalOpen}
-        isIntroComplete={isIntroComplete}
-        isHome={isHome}
-      />
+      <div
+        className="hero-menu-btn-wrap fixed top-8 right-8 z-[100] max-md:top-6 max-md:right-6"
+        style={pathname === '/' ? { opacity: 0, visibility: 'hidden' } : undefined}
+      >
+        <MenuButton
+          isOpen={isOpen}
+          toggleMenu={toggleMenu}
+          isContactModalOpen={isContactModalOpen}
+        />
+      </div>
 
       {/* Menu Overlay */}
       <div

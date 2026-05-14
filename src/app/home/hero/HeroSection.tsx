@@ -34,7 +34,7 @@ export const HeroSection = () => {
 
   const handleNameClick = (e: React.MouseEvent | React.KeyboardEvent) => {
     const target = e.target as HTMLElement;
-    if (target.tagName !== 'H1') return;
+    if (!target.closest('h1')) return;
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (!isIntroComplete && !reduceMotion) return;

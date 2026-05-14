@@ -110,9 +110,9 @@ export const lockHeroIntroScroll = (smoothScroll?: SmoothScrollController | null
   const previousBodyOverflow = body.style.overflow;
   const previousBodyOverscrollBehavior = body.style.overscrollBehavior;
   const previousBodyTouchAction = body.style.touchAction;
-  
+
   // Store the scroll position when lock starts
-  const scrollPosition = window.scrollY || window.pageYOffset || 0;
+
   let isReleased = false;
 
   const preventScroll = (event: Event) => {
@@ -128,22 +128,22 @@ export const lockHeroIntroScroll = (smoothScroll?: SmoothScrollController | null
 
   // Stop smooth scrolling first
   smoothScroll?.stop();
-  
+
   // Force scroll to the stored position immediately
-  window.scrollTo(0, scrollPosition);
-  
+  window.scrollTo(0, 0);
+
   // Apply scroll lock styles
   html.style.overflow = 'hidden';
   html.style.overscrollBehavior = 'none';
   body.style.overflow = 'hidden';
   body.style.overscrollBehavior = 'none';
   body.style.touchAction = 'none';
-  
+
   // Prevent scroll on html element as well (for Safari/iOS)
-  html.style.position = 'fixed';
-  html.style.width = '100%';
-  html.style.height = '100%';
-  html.style.top = `-${scrollPosition}px`;
+  // html.style.position = 'fixed';
+  // html.style.width = '100%';
+  // html.style.height = '100%';
+  // html.style.top = ...
 
   // Add event listeners with capture phase to intercept all scroll events
   window.addEventListener('wheel', preventScroll, { passive: false, capture: true });
@@ -164,21 +164,21 @@ export const lockHeroIntroScroll = (smoothScroll?: SmoothScrollController | null
       window.removeEventListener('touchmove', preventScroll, { capture: true });
       window.removeEventListener('touchstart', preventScroll, { capture: true });
       window.removeEventListener('keydown', preventScrollKeys, { capture: true });
-      
+
       // Restore styles
       html.style.overflow = previousHtmlOverflow;
       html.style.overscrollBehavior = previousHtmlOverscrollBehavior;
-      html.style.position = '';
-      html.style.width = '';
-      html.style.height = '';
-      html.style.top = '';
+      // html.style.position = '';
+      // html.style.width = '';
+      // html.style.height = '';
+      // // html.style.top = ...
       body.style.overflow = previousBodyOverflow;
       body.style.overscrollBehavior = previousBodyOverscrollBehavior;
       body.style.touchAction = previousBodyTouchAction;
-      
+
       // Restore scroll position before re-enabling smooth scroll
-      window.scrollTo(0, scrollPosition);
-      
+      window.scrollTo(0, 0);
+
       // Re-enable smooth scrolling
       smoothScroll?.start();
       isReleased = true;
@@ -253,6 +253,9 @@ export const useHeroAnimation = ({
     setIntroComplete(false);
     setIsIntroComplete(false);
 
+    // Resolve outside any scoped context — the wrapper lives outside heroRootRef.
+    const menuBtnWrap = document.querySelector<HTMLElement>(".hero-menu-btn-wrap");
+
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     if (reduceMotion) {
@@ -261,6 +264,7 @@ export const useHeroAnimation = ({
         stripesRef.current, topChromeRef.current, bottomChromeRef.current,
         sumitRef.current, patelRef.current, nameDividerRef.current
       ], { clearProps: "all", opacity: 1, y: 0, clipPath: "inset(0% 0% 0% 0%)" });
+      if (menuBtnWrap) gsap.set(menuBtnWrap, { clearProps: "all", opacity: 1, y: 0 });
       gsap.set(introOverlayRef.current, { autoAlpha: 0, pointerEvents: "none" });
       setIsIntroComplete(true);
       setIntroComplete(true);
@@ -296,6 +300,9 @@ export const useHeroAnimation = ({
       // UI Chrome: Near-final position — soft blur carried by inertia, no snap
       gsap.set(topChromeRef.current, { autoAlpha: 0, y: 9, filter: "blur(5px)", force3D: true });
       gsap.set(bottomChromeRef.current, { autoAlpha: 0, y: 7, filter: "blur(4px)", force3D: true });
+
+      // Menu button: mirrors top chrome entry — same physical carry, same inertia signature
+      if (menuBtnWrap) gsap.set(menuBtnWrap, { autoAlpha: 0, y: 9, filter: "blur(5px)", force3D: true });
 
       // Environment: Begin at exact final position — reveals only through opacity.
       // Subtle asymmetrical x-offset to introduce cinematic tonal irregularity.
@@ -367,7 +374,6 @@ export const useHeroAnimation = ({
         animationStatus.current = 'complete';
         snapToHeroTop();
         unlockScroll();
-        setIntroComplete(true);
         setIsIntroComplete(true);
       };
 
@@ -444,6 +450,10 @@ export const useHeroAnimation = ({
           ease: EASE_PATEL
         }, 2.64)
 
+        .call(() => {
+          setIntroComplete(true);
+        }, [], 3.04)
+
         .to(topChromeRef.current, {
           autoAlpha: 1,
           y: 0,
@@ -460,6 +470,18 @@ export const useHeroAnimation = ({
           ease: EASE_CHROME_B,
           onComplete: finishIntro,
         }, 3.36);
+
+      // Menu button enters simultaneously with the top chrome — same physical model.
+      // Added imperatively (not chained) because the element lives outside heroRootRef.
+      if (menuBtnWrap) {
+        timeline.to(menuBtnWrap, {
+          autoAlpha: 1,
+          y: 0,
+          filter: "blur(0px)",
+          duration: 2.35,
+          ease: EASE_CHROME_T,
+        }, 3.04);
+      }
 
       waitForHeroIntroStart(abortController.signal)
         .then(() => {
@@ -479,6 +501,11 @@ export const useHeroAnimation = ({
       unlockScroll();
       window.history.scrollRestoration = previousScrollRestoration;
       ctx.revert();
+
+      // Ensure global elements are cleared of intro animation styles when leaving the home page.
+      // This prevents the menu button from remaining hidden due to GSAP's revert to initial hidden state.
+      gsap.set(".hero-menu-btn-wrap", { clearProps: "opacity,visibility,filter,transform" });
+
       if (animationStatus.current !== 'complete') {
         animationStatus.current = 'idle';
       }

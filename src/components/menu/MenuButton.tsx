@@ -7,16 +7,12 @@ interface MenuButtonProps {
   isOpen: boolean;
   toggleMenu: () => void;
   isContactModalOpen?: boolean;
-  isIntroComplete?: boolean;
-  isHome?: boolean;
 }
 
 export const MenuButton: React.FC<MenuButtonProps> = ({
   isOpen,
   toggleMenu,
   isContactModalOpen,
-  isIntroComplete = true,
-  isHome = false
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
@@ -73,12 +69,9 @@ export const MenuButton: React.FC<MenuButtonProps> = ({
       whileTap={isMounted ? { scale: 0.97 } : undefined}
       initial={false}
       animate={{
-        opacity: (isContactModalOpen || (isHome && !isIntroComplete)) ? 0 : 1,
-        pointerEvents: (isContactModalOpen || (isHome && !isIntroComplete)) ? 'none' : 'auto',
+        opacity: isContactModalOpen ? 0 : 1,
+        pointerEvents: isContactModalOpen ? 'none' : 'auto',
         backgroundColor: isOpen ? 'rgba(26, 26, 26, 0)' : '#1A1A1A',
-      }}
-      style={{
-        opacity: (isHome && !isIntroComplete) ? 0 : 1
       }}
       transition={{
         layout: springTransition,
@@ -86,7 +79,7 @@ export const MenuButton: React.FC<MenuButtonProps> = ({
         pointerEvents: { duration: 0 },
         default: isMounted ? { duration: 0.35, ease: smoothEase } : { duration: 0 }
       }}
-      className={`fixed top-8 right-8 z-[100] flex items-center justify-center overflow-hidden py-5 rounded-full text-foreground cursor-pointer shadow-lg max-md:top-6 max-md:right-6 max-md:py-4 ${
+      className={`flex items-center justify-center overflow-hidden py-5 rounded-full text-foreground cursor-pointer shadow-lg max-md:py-4 ${
         isOpen ? "px-5 max-md:px-4 !shadow-none" : "px-8 max-md:px-6"
       }`}
     >

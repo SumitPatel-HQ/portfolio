@@ -190,6 +190,7 @@
 
   /* Reduced motion overrides - show everything immediately */
   @media (prefers-reduced-motion: reduce) {
+
     .hero-intro-title,
     .hero-chrome-top,
     .hero-chrome-bottom,

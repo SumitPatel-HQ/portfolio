@@ -3,26 +3,27 @@ import gsap from 'gsap';
 
 interface UseMenuAnimationProps {
   isOpen: boolean;
-  isHome: boolean;
   onOpenStart?: () => void;
+  onOpenComplete?: () => void;
+  onCloseStart?: () => void;
   onCloseComplete?: () => void;
 }
 
-export const useMenuAnimation = ({ isOpen, isHome, onOpenStart, onCloseComplete }: UseMenuAnimationProps) => {
+export const useMenuAnimation = ({ isOpen, onOpenStart, onOpenComplete, onCloseStart, onCloseComplete }: UseMenuAnimationProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const homeLinkRef = useRef<HTMLDivElement>(null);
   const masterTimelineRef = useRef<gsap.core.Timeline | null>(null);
   const activeTweenRef = useRef<gsap.core.Tween | null>(null);
   const onOpenStartRef = useRef(onOpenStart);
+  const onOpenCompleteRef = useRef(onOpenComplete);
+  const onCloseStartRef = useRef(onCloseStart);
   const onCloseCompleteRef = useRef(onCloseComplete);
 
   useEffect(() => {
     onOpenStartRef.current = onOpenStart;
-  }, [onOpenStart]);
-
-  useEffect(() => {
+    onOpenCompleteRef.current = onOpenComplete;
+    onCloseStartRef.current = onCloseStart;
     onCloseCompleteRef.current = onCloseComplete;
-  }, [onCloseComplete]);
+  }, [onOpenStart, onOpenComplete, onCloseStart, onCloseComplete]);
 
   useEffect(() => {
     let ctx: gsap.Context | null = null;
@@ -31,7 +32,6 @@ export const useMenuAnimation = ({ isOpen, isHome, onOpenStart, onCloseComplete 
       if (!containerRef.current) return;
 
       ctx = gsap.context(() => {
-        const getHomeLinkTarget = () => homeLinkRef.current ?? '.menu-home-link-target';
         const openStartLabel = 'open-start';
         const openEndLabel = 'open-end';
         const closeStartLabel = 'close-start';
@@ -54,7 +54,6 @@ export const useMenuAnimation = ({ isOpen, isHome, onOpenStart, onCloseComplete 
           scaleY: 0.2,
           autoAlpha: 0
         });
-        gsap.set(getHomeLinkTarget(), { yPercent: 0, autoAlpha: 1 });
 
         // Set initial state for overlay container
         gsap.set(containerRef.current, { pointerEvents: 'none', clipPath: 'inset(100% 0% 0% 0%)' });
@@ -121,43 +120,25 @@ export const useMenuAnimation = ({ isOpen, isHome, onOpenStart, onCloseComplete 
         overwrite: true,
         onComplete: () => {
           activeTweenRef.current = null;
+          onOpenCompleteRef.current?.();
         }
       });
-
-      // Handle HomeLink animation separately and only if on Home page
-      const homeLinkTarget = homeLinkRef.current ?? '.menu-home-link-target';
-      if (isHome) {
-        gsap.fromTo(homeLinkTarget,
-          { yPercent: 200, autoAlpha: 0 },
-          { yPercent: 0, autoAlpha: 1, duration: 1.6, ease: 'expo.inOut', delay: 0.24 }
-        );
-      } else {
-        gsap.to(homeLinkTarget, { yPercent: 0, autoAlpha: 1, duration: 0.4, ease: 'expo.out' });
-      }
     } else {
       // Menu is closed
-      // On first load when already at closeEndLabel, skip animation
-      if (masterTimelineRef.current.time() === masterTimelineRef.current.duration()) {
-        return;
-      }
+      const isAlreadyClosed = masterTimelineRef.current.time() === masterTimelineRef.current.duration();
 
-      masterTimelineRef.current.pause().seek(closeStartLabel, false);
+      if (!isAlreadyClosed) {
+        onCloseStartRef.current?.();
+        masterTimelineRef.current.pause().seek(closeStartLabel, false);
 
-      activeTweenRef.current = masterTimelineRef.current.tweenTo(closeEndLabel, {
-        overwrite: true,
-        onComplete: () => {
-          activeTweenRef.current = null;
-          gsap.set(containerRef.current, { pointerEvents: 'none' });
-          onCloseCompleteRef.current?.();
-        }
-      });
-
-      // Handle HomeLink exit animation separately and only if on Home page
-      const homeLinkTarget = homeLinkRef.current ?? '.menu-home-link-target';
-      if (isHome) {
-        gsap.to(homeLinkTarget, { yPercent: -110, autoAlpha: 0, duration: 0.5, ease: 'expo.in' });
-      } else {
-        gsap.to(homeLinkTarget, { yPercent: 0, autoAlpha: 1, duration: 0.4, ease: 'expo.out' });
+        activeTweenRef.current = masterTimelineRef.current.tweenTo(closeEndLabel, {
+          overwrite: true,
+          onComplete: () => {
+            activeTweenRef.current = null;
+            gsap.set(containerRef.current, { pointerEvents: 'none' });
+            onCloseCompleteRef.current?.();
+          }
+        });
       }
     }
 
@@ -165,7 +146,7 @@ export const useMenuAnimation = ({ isOpen, isHome, onOpenStart, onCloseComplete 
       activeTweenRef.current?.kill();
       activeTweenRef.current = null;
     };
-  }, [isOpen, isHome]);
+  }, [isOpen]);
 
-  return { containerRef, homeLinkRef };
+  return { containerRef };
 };

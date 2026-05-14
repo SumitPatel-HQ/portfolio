@@ -9,6 +9,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Services from "./services";
 import { ContactMiniSection } from "@/app/home/contactminipage/contactMiniSection";
 import { AboutScrollPinController } from "./AboutScrollPinController";
+import { useLenis } from "@/providers/LenisProvider";
 import { SiReact, SiNextdotjs, SiTypescript, SiTailwindcss, SiDocker, SiPython, SiFastapi, SiVercel, SiGit, SiGithub, SiSupabase, SiGooglecloud, SiN8N } from 'react-icons/si';
 import { FileText, FolderKanban } from "lucide-react";
 import { ResumeModal } from "@/components/ResumeModal";
@@ -53,10 +54,23 @@ export default function AboutPage() {
   const contactRef = useRef<HTMLDivElement>(null);
   const [isResumeOpen, setIsResumeOpen] = useState(false);
   const router = useRouter();
+  const { lenis } = useLenis();
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
+  // Synchronously reset scroll to top before the first paint so that
+  // ScrollTrigger always sees Y=0 when it initialises pin positions.
+  React.useLayoutEffect(() => {
+    if (typeof window !== 'undefined') {
+      window.history.scrollRestoration = 'manual';
+      window.scrollTo(0, 0);
+    }
   }, []);
+
+  // Ensure Lenis also resets its internal scroll state
+  React.useEffect(() => {
+    if (lenis) {
+      lenis.scrollTo(0, { immediate: true });
+    }
+  }, [lenis]);
 
   return (
     <>
