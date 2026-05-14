@@ -59,8 +59,8 @@ export default function ProjectsPage() {
     if (target?.closest?.("button") || target?.closest?.("a")) {
       return;
     }
-    router.push(activeProject.href);
-  }, [activeProject.href, router]);
+    window.open(activeProject.href, "_blank", "noopener,noreferrer");
+  }, [activeProject.href]);
 
   const scrollToIndex = useCallback((index: number) => {
     const trigger = triggerRef.current;
@@ -185,7 +185,7 @@ export default function ProjectsPage() {
         />
   
         <section className="absolute bottom-0 left-0 right-0 z-30 px-6 pb-6 md:px-[68px] md:pb-8">
-          <div className="flex max-w-[1080px] flex-col gap-8 md:gap-12">
+          <div className="flex max-w-[1080px] flex-col gap-8 md:gap-5">
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeProject.id}

@@ -12,21 +12,22 @@ import { AboutScrollPinController } from "./AboutScrollPinController";
 import { SiReact, SiNextdotjs, SiTypescript, SiTailwindcss, SiDocker, SiPython, SiFastapi, SiVercel, SiGit, SiGithub, SiSupabase, SiGooglecloud, SiN8N } from 'react-icons/si';
 import { FileText, FolderKanban } from "lucide-react";
 import { ResumeModal } from "@/components/ResumeModal";
+import { getProfileImageUrl } from "@/lib/imagekit";
 
 const techLogos = [
-  { node: <SiReact />, title: "React", href: "https://react.dev" },
-  { node: <SiNextdotjs />, title: "Next.js", href: "https://nextjs.org" },
-  { node: <SiTypescript />, title: "TypeScript", href: "https://www.typescriptlang.org" },
-  { node: <SiTailwindcss />, title: "Tailwind CSS", href: "https://tailwindcss.com" },
-  { node: <SiDocker />, title: "Docker", href: "https://www.docker.com" },
-  { node: <SiPython />, title: "Python", href: "https://www.python.org" },
-  { node: <SiFastapi />, title: "FastAPI", href: "https://fastapi.tiangolo.com" },
-  { node: <SiVercel />, title: "Vercel", href: "https://vercel.com" },
-  { node: <SiGit />, title: "Git", href: "https://git-scm.com" },
-  { node: <SiGithub />, title: "GitHub", href: "https://github.com" },
-  { node: <SiSupabase />, title: "Supabase", href: "https://supabase.com" },
-  { node: <SiGooglecloud />, title: "Google Cloud", href: "https://cloud.google.com" },
-  { node: <SiN8N />, title: "n8n", href: "https://n8n.io" },
+  { node: <SiReact />, title: "React" },
+  { node: <SiNextdotjs />, title: "Next.js" },
+  { node: <SiTypescript />, title: "TypeScript" },
+  { node: <SiTailwindcss />, title: "Tailwind CSS" },
+  { node: <SiDocker />, title: "Docker" },
+  { node: <SiPython />, title: "Python" },
+  { node: <SiFastapi />, title: "FastAPI" },
+  { node: <SiVercel />, title: "Vercel" },
+  { node: <SiGit />, title: "Git" },
+  { node: <SiGithub />, title: "GitHub" },
+  { node: <SiSupabase />, title: "Supabase" },
+  { node: <SiGooglecloud />, title: "Google Cloud" },
+  { node: <SiN8N />, title: "n8n" },
 ];
 
 // Register GSAP plugins
@@ -71,18 +72,21 @@ export default function AboutPage() {
           {/* LEFT PANEL */}
           <div className="overflow-hidden relative h-[70vh] md:h-screen w-full md:w-1/2 shrink-0 z-10">
             <Image
-              src="/images/about/img1.png"
+              src={getProfileImageUrl("image.jpg")}
               alt="Sumit Patel Portrait"
               fill
-              className="scale-120 object-cover object-top grayscale brightness-75"
+              className="object-cover grayscale object-top brightness-75 scale-[1.2] transform-gpu"
               style={{
                 WebkitMaskImage:
                   "linear-gradient(to right, rgba(0,0,0,1) 56%, rgba(0,0,0,0.95) 66%, rgba(0,0,0,0.82) 74%, rgba(0,0,0,0.58) 82%, rgba(0,0,0,0.28) 90%, rgba(0,0,0,0.08) 96%, rgba(0,0,0,0) 100%)",
                 maskImage:
                   "linear-gradient(to right, rgba(0,0,0,1) 56%, rgba(0,0,0,0.95) 66%, rgba(0,0,0,0.82) 74%, rgba(0,0,0,0.58) 82%, rgba(0,0,0,0.28) 90%, rgba(0,0,0,0.08) 96%, rgba(0,0,0,0) 100%)",
+                backfaceVisibility: "hidden",
+                WebkitBackfaceVisibility: "hidden",
               }}
               priority
-              sizes="(max-width: 768px) 100vw, 50vw"
+              unoptimized
+              sizes="(max-width: 768px) 100vw, 60vw"
             />
 
             <div
@@ -164,7 +168,7 @@ export default function AboutPage() {
                 className="flex flex-col md:flex-row md:items-start gap-10 md:gap-16"
               >
                 <div className="flex flex-col gap-1 shrink-0">
-                
+
                   <div className="flex items-baseline gap-3">
                     <span className="text-5xl md:text-6xl font-extrabold tracking-tighter text-foreground">5+</span>
                     <span className="text-sm text-[#A0A0A0] font-medium leading-tight max-w-[80px]">Projects Shipped</span>
@@ -190,7 +194,7 @@ export default function AboutPage() {
               >
                 <h3 className="text-[11px] font-bold uppercase tracking-[0.2em] text-accent">Education</h3>
                 <p className="text-base text-foreground font-medium">T.E  Artificial Intelligence and Data Science</p>
-                
+
               </motion.div>
 
               {/* SECTION 7: CORE TECH STACK */}

@@ -1,11 +1,11 @@
 "use client";
 
-import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useContactModal } from '@/context/ContactModalContext';
 
 const pageLinks = [
+  { label: 'Home', href: '/' },
   { label: 'Projects', href: '/projects' },
   { label: 'Experience', href: '/experience' },
   { label: 'About Me', href: '/about' },

@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { Github, ArrowUpRight } from "lucide-react";
 
 import type { ProjectItem } from "@/data/projects.data";
 
@@ -25,7 +26,7 @@ export function ProjectsOverlay({ project }: ProjectsOverlayProps) {
           transition={{ duration: 0.44, delay: 0.14, ease: "easeOut" }}
         >
           <div className="flex flex-wrap gap-2.5 max-w-[700px]">
-            {project.tags.split(/[,•]/).map(t => t.trim()).filter(Boolean).map((tag, index) => (
+            {project.tags.map((tag, index) => (
               <span
                 key={`${project.id}-${tag}-${index}`}
                 className="inline-flex items-center rounded-full border border-white/10 bg-foreground-secondary/10 px-3.5 py-1.5 text-[clamp(0.8rem,1.1vw,0.95rem)] font-extralight text-foreground-secondary shadow-[0_4px_12px_0_rgba(0,0,0,0.2)] backdrop-blur-[2px]"
@@ -37,13 +38,35 @@ export function ProjectsOverlay({ project }: ProjectsOverlayProps) {
         </motion.div>
       </div>
       <motion.p
-        className="max-w-4xl text-[clamp(1rem,1.2vw,1.25rem)] leading-[1.22] tracking-[-0.01em] text-foreground-secondary/50 font-normal"
+        className="max-w-2xl text-[clamp(1rem,1.2vw,1.25rem)] leading-[1.22] tracking-[-0.01em] text-foreground-secondary/50 font-normal"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.42, delay: 0.22, ease: "easeOut" }}
       >
         {project.description}
       </motion.p>
+      { (project.repoUrl || project.href.includes("github.com")) && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.28, ease: "easeOut" }}
+        >
+          <a
+            href={project.repoUrl || project.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group show-default-cursor cursor-pointer inline-flex items-center gap-3 text-foreground hover:text-accent hover:opacity-70 transition-all duration-300 font-medium text-[1.05rem]"
+          >
+            <Github className="w-5 h-5 opacity-80 group-hover:opacity-100 transition-opacity" />
+            <span className="uppercase tracking-wider">
+              GitHub Repository
+            </span>
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/5 hover:opacity-70 transition-all duration-300">
+              <ArrowUpRight className="w-[18px] h-[18px]" strokeWidth={2} />
+            </div>
+          </a>
+        </motion.div>
+      )}
     </div>
   );
 }
