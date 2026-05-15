@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback, useMemo, useEffect, useRef } from 'react';
+import React, { useState, useCallback, useMemo, useEffect, useRef, useLayoutEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import { MenuButton } from './MenuButton';
 import { MenuContent } from './MenuContent';
@@ -8,6 +8,7 @@ import { HomeLink } from './HomeLink';
 import { useMenuAnimation } from './useMenuAnimation';
 import { useContactModal } from '@/context/ContactModalContext';
 import { useLenis } from '@/providers/LenisProvider';
+import { useIntro } from '@/context/IntroContext';
 
 const menuItemsLinks = [
   { label: 'Projects', href: '/projects' },
@@ -20,6 +21,7 @@ export const Menu = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { isOpen: isContactModalOpen } = useContactModal();
   const { lenis } = useLenis();
+  const { isIntroComplete } = useIntro();
 
   const targetClosedLabel = useMemo(() => {
     if (pathname === '/') return null;
@@ -30,7 +32,10 @@ export const Menu = () => {
   const [displayedLabel, setDisplayedLabel] = useState<string | null>(targetClosedLabel);
   const isClosingRef = useRef(false);
   const targetLabelRef = useRef(targetClosedLabel);
-  targetLabelRef.current = targetClosedLabel;
+  
+  useLayoutEffect(() => {
+    targetLabelRef.current = targetClosedLabel;
+  }, [targetClosedLabel]);
 
   const { containerRef } = useMenuAnimation({
     isOpen,
@@ -72,7 +77,6 @@ export const Menu = () => {
     }
 
     return () => clearTimeout(timeoutId);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, targetClosedLabel]);
 
   const toggleMenu = useCallback(() => {
@@ -112,16 +116,24 @@ export const Menu = () => {
       html.style.overflow = prevHtmlOverflow;
       body.style.overflow = prevBodyOverflow;
       body.style.touchAction = prevBodyTouchAction;
-      if (lenis) lenis.start();
+      
+      // Only restart Lenis if we are not on the home page or if the intro is complete.
+      if (lenis && (pathname !== "/" || isIntroComplete)) {
+        lenis.start();
+      }
     }
 
     return () => {
       html.style.overflow = prevHtmlOverflow;
       body.style.overflow = prevBodyOverflow;
       body.style.touchAction = prevBodyTouchAction;
-      if (lenis) lenis.start();
+      
+      // Safety restart on unmount, respecting intro state.
+      if (lenis && (pathname !== "/" || isIntroComplete)) {
+        lenis.start();
+      }
     };
-  }, [isOpen, lenis]);
+  }, [isOpen, lenis, pathname, isIntroComplete]);
 
   return (
     <>

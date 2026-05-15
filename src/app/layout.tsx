@@ -34,17 +34,17 @@ export default function RootLayout({
         <LenisProvider>
           <GSAPProvider>
             <ToastProvider>
-              <ContactModalProvider>
-                <IntroProvider>
+              <IntroProvider>
+                <ContactModalProvider>
                   <Menu />
                   <main className="flex-1 flex flex-col">
                     {children}
                   </main>
-                </IntroProvider>
-                <Footer />
-                <Analytics />
-                <SpeedInsights />
-              </ContactModalProvider>
+                  <Footer />
+                  <Analytics />
+                  <SpeedInsights />
+                </ContactModalProvider>
+              </IntroProvider>
             </ToastProvider>
           </GSAPProvider>
         </LenisProvider>

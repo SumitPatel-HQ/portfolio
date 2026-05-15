@@ -1,6 +1,8 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
+import { useIntro } from "@/context/IntroContext";
 import { ContactCard } from "@/components/Contacts/contact-card";
 import { useLenis } from "@/providers/LenisProvider";
 import {
@@ -46,6 +48,8 @@ export function ContactModalProvider({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { lenis } = useLenis();
   const { showToast } = useToast();
+  const pathname = usePathname();
+  const { isIntroComplete } = useIntro();
 
   const nameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
@@ -61,9 +65,12 @@ export function ContactModalProvider({
     if (isOpen) {
       lenis.stop();
     } else {
-      lenis.start();
+      // Only restart Lenis if we are not on the home page or if the intro is complete.
+      if (pathname !== "/" || isIntroComplete) {
+        lenis.start();
+      }
     }
-  }, [isOpen, lenis]);
+  }, [isOpen, lenis, pathname, isIntroComplete]);
 
   return (
     <ContactModalContext.Provider value={{ isOpen, openModal, closeModal }}>
