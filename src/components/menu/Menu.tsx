@@ -30,8 +30,41 @@ export const Menu = () => {
   }, [pathname]);
 
   const [displayedLabel, setDisplayedLabel] = useState<string | null>(targetClosedLabel);
-  const isClosingRef = useRef(false);
+  const [isClosing, setIsClosing] = useState(false);
   const targetLabelRef = useRef(targetClosedLabel);
+  
+  // Track previous values to detect changes during render
+  const [prevTargetClosedLabel, setPrevTargetClosedLabel] = useState(targetClosedLabel);
+  const [prevIsOpen, setPrevIsOpen] = useState(isOpen);
+  const [prevIsClosing, setPrevIsClosing] = useState(isClosing);
+
+  // Synchronize displayedLabel during render when dependencies change.
+  // This avoids the "double render" and satisfies linting for synchronous state updates.
+  if (targetClosedLabel !== prevTargetClosedLabel || isOpen !== prevIsOpen || isClosing !== prevIsClosing) {
+    setPrevTargetClosedLabel(targetClosedLabel);
+    setPrevIsOpen(isOpen);
+    setPrevIsClosing(isClosing);
+    
+    if (isOpen) {
+      if (targetClosedLabel !== null) {
+        setDisplayedLabel(targetClosedLabel);
+      } else {
+        // If we're on Home page and menu opens, start with null (Home will fade in via effect)
+        setDisplayedLabel(null);
+      }
+    } else {
+      if (isClosing) {
+        // We are currently playing the close animation.
+        // If the current label is NOT what we want when closed, or we are on Home, hide it.
+        if (targetClosedLabel === null || targetClosedLabel !== displayedLabel) {
+          setDisplayedLabel(null);
+        }
+      } else {
+        // If we're not closing (e.g. back button), sync immediately
+        setDisplayedLabel(targetClosedLabel);
+      }
+    }
+  }
   
   useLayoutEffect(() => {
     targetLabelRef.current = targetClosedLabel;
@@ -40,10 +73,10 @@ export const Menu = () => {
   const { containerRef } = useMenuAnimation({
     isOpen,
     onCloseStart: () => {
-      isClosingRef.current = true;
+      setIsClosing(true);
     },
     onCloseComplete: () => {
-      isClosingRef.current = false;
+      setIsClosing(false);
       setDisplayedLabel(targetLabelRef.current);
     },
   });
@@ -51,29 +84,12 @@ export const Menu = () => {
   useEffect(() => {
     let timeoutId: NodeJS.Timeout;
 
-    if (isOpen) {
-      if (targetClosedLabel === null) {
-        // We are on the Home page. Delay the "Home" label appearance by 400ms
-        // so it starts fading in right as the black overlay reaches the top of the screen.
-        timeoutId = setTimeout(() => {
-          setDisplayedLabel('Home');
-        }, 800);
-      } else {
-        setDisplayedLabel(targetClosedLabel);
-      }
-    } else {
-      if (isClosingRef.current) {
-        // We are currently playing the close animation
-        setDisplayedLabel((prev) => {
-          if (targetClosedLabel === null || targetClosedLabel !== prev) {
-            return null; // Hide it so it animates out with the menu
-          }
-          return prev;
-        });
-      } else {
-        // We are already closed, e.g. back button navigation
-        setDisplayedLabel(targetClosedLabel);
-      }
+    if (isOpen && targetClosedLabel === null) {
+      // We are on the Home page. Delay the "Home" label appearance by 800ms
+      // so it starts fading in right as the black overlay reaches the top of the screen.
+      timeoutId = setTimeout(() => {
+        setDisplayedLabel('Home');
+      }, 800);
     }
 
     return () => clearTimeout(timeoutId);

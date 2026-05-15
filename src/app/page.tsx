@@ -33,7 +33,7 @@ export default function Home() {
   }, [lenis]);
 
   return (
-    <div className="flex flex-col flex-1 w-full overflow-hidden">
+    <div className="flex flex-col flex-1 w-full overflow-x-clip">
       <HomeScrollPinController
         heroRef={heroSectionRef}
         featuredRef={featuredSectionRef}

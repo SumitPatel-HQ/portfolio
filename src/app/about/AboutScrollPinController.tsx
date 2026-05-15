@@ -125,7 +125,7 @@ export function AboutScrollPinController({
           },
         });
 
-        const onLenisScroll = (e: { direction: number }) => {
+        const onLenisScroll = () => {
           if (scrollEndTimer) {
             clearTimeout(scrollEndTimer);
           }

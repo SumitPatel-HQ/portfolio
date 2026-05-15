@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Services from "./services";
@@ -58,7 +58,7 @@ export default function AboutPage() {
 
   // Synchronously reset scroll to top before the first paint so that
   // ScrollTrigger always sees Y=0 when it initialises pin positions.
-  React.useLayoutEffect(() => {
+  useLayoutEffect(() => {
     if (typeof window !== 'undefined') {
       window.history.scrollRestoration = 'manual';
       window.scrollTo(0, 0);
@@ -66,7 +66,7 @@ export default function AboutPage() {
   }, []);
 
   // Ensure Lenis also resets its internal scroll state
-  React.useEffect(() => {
+  useEffect(() => {
     if (lenis) {
       lenis.scrollTo(0, { immediate: true });
     }
