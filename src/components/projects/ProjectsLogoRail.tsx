@@ -1,6 +1,6 @@
 import Image from "next/image";
 import clsx from "clsx";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import React from "react";
 
 import type { ProjectItem } from "@/data/projects.data";

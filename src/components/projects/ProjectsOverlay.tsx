@@ -9,10 +9,10 @@ type ProjectsOverlayProps = {
 
 export function ProjectsOverlay({ project }: ProjectsOverlayProps) {
   return (
-    <div className="pointer-events-auto relative z-20 flex max-w-[980px] flex-col gap-8 px-6">
+    <div className="relative z-20 flex max-w-[980px] flex-col gap-8 px-6">
       <div className="flex flex-col gap-6">
         <motion.h1
-          className="text-[clamp(3rem,5.2vw,4.6rem)] leading-[1.04] text-foreground tracking-[-0.02em] font-medium"
+          className="pointer-events-auto w-fit text-[clamp(3rem,5.2vw,4.6rem)] leading-[1.04] text-foreground tracking-[-0.02em] font-medium"
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.46, delay: 0.08, ease: "easeOut" }}
@@ -20,7 +20,7 @@ export function ProjectsOverlay({ project }: ProjectsOverlayProps) {
           {project.name}
         </motion.h1>
         <motion.div
-          className="flex flex-wrap items-end gap-5"
+          className="pointer-events-auto w-fit flex flex-wrap items-end gap-5"
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.44, delay: 0.14, ease: "easeOut" }}
@@ -38,7 +38,7 @@ export function ProjectsOverlay({ project }: ProjectsOverlayProps) {
         </motion.div>
       </div>
       <motion.p
-        className="max-w-2xl text-[clamp(1rem,1.2vw,1.25rem)] leading-[1.22] tracking-[-0.01em] text-foreground-secondary/50 font-normal"
+        className="pointer-events-auto w-fit max-w-2xl text-[clamp(1rem,1.2vw,1.25rem)] leading-[1.22] tracking-[-0.01em] text-foreground-secondary/50 font-normal"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.42, delay: 0.22, ease: "easeOut" }}
@@ -47,6 +47,7 @@ export function ProjectsOverlay({ project }: ProjectsOverlayProps) {
       </motion.p>
       { (project.repoUrl || project.href.includes("github.com")) && (
         <motion.div
+          className="pointer-events-auto w-fit"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.28, ease: "easeOut" }}

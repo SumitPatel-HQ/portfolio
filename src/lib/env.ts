@@ -81,7 +81,7 @@ export function validateEnvVars(): Record<RequiredEnvVar, string> {
  */
 export function requireEnv(name: RequiredEnvVar): string {
   const value = name.startsWith('NEXT_PUBLIC_') 
-    ? (validateEnvVars() as any)[name] 
+    ? (validateEnvVars() as Record<string, string>)[name] 
     : process.env[name];
     
   if (!value || value.trim().length === 0) {

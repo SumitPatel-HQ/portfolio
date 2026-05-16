@@ -26,7 +26,7 @@ export function SlideDotIndicators({
           key={i}
           type="button"
           aria-label={`Go to slide ${i + 1}`}
-          className={`h-[8px] rounded-full transition-[width,background-color] duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${
+          className={`h-[8px] rounded-full transition-[width,background-color] duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] focus:outline-none focus-visible:ring-0 ${
             activeIndex === i
               ? "w-[24px] bg-accent shadow-[0_0_8px_rgba(0,212,212,0.3)] cursor-auto"
               : "w-[8px] bg-white/40 hover:bg-white/60 cursor-pointer"

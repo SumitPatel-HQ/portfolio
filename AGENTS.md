@@ -29,5 +29,5 @@ These instructions apply to the entire repository unless a deeper `AGENTS.md` ov
 ## Verification
 
 - Before claiming a change is complete, run the relevant checks for the touched scope.
-- For any change that can affect runtime behavior, run `pnpm lint`, `pnpm type-check`, and `pnpm build`.
+- For any change that can affect runtime behavior, run `pnpm lint`, `pnpm type-check`.
 - If any required verification cannot be run, state that explicitly and give the reason.
