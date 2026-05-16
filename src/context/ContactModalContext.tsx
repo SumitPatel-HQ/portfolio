@@ -73,9 +73,10 @@ export function ContactModalProvider({
         <DialogContent
           className="max-w-5xl p-0 border-none bg-transparent shadow-none outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-0"
           onEscapeKeyDown={(e) => {
-            if (document.body.dataset.contactTextareaExpanded === "true") {
-              e.preventDefault();
-              e.stopPropagation();
+            e.stopPropagation();
+            e.preventDefault();
+            if (document.body.dataset.contactTextareaExpanded !== "true") {
+              closeModal();
             }
           }}
         >

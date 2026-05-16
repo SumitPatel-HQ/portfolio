@@ -13,16 +13,17 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
+        e.stopImmediatePropagation();
         onClose();
       }
     };
 
     if (isOpen) {
-      window.addEventListener("keydown", handleKeyDown);
+      window.addEventListener("keydown", handleKeyDown, { capture: true });
     }
 
     return () => {
-      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keydown", handleKeyDown, { capture: true });
     };
   }, [isOpen, onClose]);
 

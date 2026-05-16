@@ -9,6 +9,9 @@ import { ResumeModal } from "@/components/ResumeModal";
 
 interface MenuContentProps {
   onNavigate?: () => void;
+  isMenuOpen?: boolean;
+  isResumeOpen: boolean;
+  setIsResumeOpen: (isOpen: boolean) => void;
 }
 
 const menuItems: { label: string; href?: string }[] = [
@@ -20,9 +23,20 @@ const menuItems: { label: string; href?: string }[] = [
 
 const titleLetters = ["S", "U", "M", "I", "T"];
 
-export const MenuContent: React.FC<MenuContentProps> = ({ onNavigate }) => {
+export const MenuContent: React.FC<MenuContentProps> = ({ 
+  onNavigate, 
+  isMenuOpen,
+  isResumeOpen,
+  setIsResumeOpen
+}) => {
   const { openModal } = useContactModal();
-  const [isResumeOpen, setIsResumeOpen] = useState(false);
+
+  // Reset resume modal when menu closes
+  React.useEffect(() => {
+    if (!isMenuOpen) {
+      setIsResumeOpen(false);
+    }
+  }, [isMenuOpen, setIsResumeOpen]);
 
   return (
     <div className="flex h-full w-full flex-col px-6 pb-20 pt-24 font-sans sm:px-10 sm:pt-28 lg:px-16 lg:pb-24 lg:pt-32 xl:px-24">
