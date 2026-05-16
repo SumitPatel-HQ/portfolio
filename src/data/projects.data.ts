@@ -6,7 +6,7 @@ export type ProjectItem = {
   tags: string[];
   description: string;
   href: string;
-  heroImage: string;
+  images: string[];
   logo: string;
   logoAlt: string;
   repoUrl: string;
@@ -20,7 +20,7 @@ export const PROJECTS: ProjectItem[] = [
     description:
       "SQL workspace for developers and analysts who want accurate, schema-aware queries against their real databases ",
     href: "https://querycraft-ai.vercel.app/",
-    heroImage: getProjectImageUrl("IMG1.png"),
+    images: [getProjectImageUrl("IMG1.png"), getProjectImageUrl("IMG2.jpeg"), getProjectImageUrl("IMG3.png")],
     logo: getLogoUrl("logo1.png"),
     logoAlt: "QueryCraft logo",
     repoUrl: "https://github.com/SumitPatel-HQ/QueryCraft",
@@ -32,7 +32,7 @@ export const PROJECTS: ProjectItem[] = [
     description:
       "A transformation program focused on onboarding, governance, and scale-ready workflows for enterprise operations.",
     href: "/work/sap-ix",
-    heroImage: getProjectImageUrl("IMG1.png"),
+    images: [getProjectImageUrl("IMG1.png")],
     logo: "Sentira",
     logoAlt: "Sentira logo",
     repoUrl: "https://github.com/SumitPatel-HQ/Sentira",
@@ -44,7 +44,7 @@ export const PROJECTS: ProjectItem[] = [
     description:
       "Concept-to-prototype exploration for AI-assisted product workflows, with rapid iterations and usability validation.",
     href: "/work/gemini-labs",
-    heroImage: getProjectImageUrl("IMG1.png"),
+    images: [getProjectImageUrl("IMG1.png")],
     logo: "Gemini",
     logoAlt: "Gemini logo",
     repoUrl: "",
@@ -56,7 +56,7 @@ export const PROJECTS: ProjectItem[] = [
     description:
       "A cloud platform interface refresh unifying brand voice with clearer navigation and conversion-oriented flows.",
     href: "/work/cloudline",
-    heroImage: getProjectImageUrl("IMG1.png"),
+    images: [getProjectImageUrl("IMG1.png")],
     logo: "Cloud",
     logoAlt: "Cloudline logo",
     repoUrl: "",
@@ -68,7 +68,7 @@ export const PROJECTS: ProjectItem[] = [
     description:
       "A collaborative product narrative and interaction system helping cross-functional teams align around outcomes.",
     href: "/work/next-collective",
-    heroImage: getProjectImageUrl("IMG1.png"),
+    images: [getProjectImageUrl("IMG1.png")],
     logo: "NEXT",
     logoAlt: "Next Collective logo",
     repoUrl: "",
@@ -80,7 +80,7 @@ export const PROJECTS: ProjectItem[] = [
     description:
       "Experience design for health insights with clearer activity narratives, habit loops, and user-first personalization.",
     href: "/work/fitbit-flow",
-    heroImage: getProjectImageUrl("IMG1.png"),
+    images: [getProjectImageUrl("IMG1.png")],
     logo: "fitbit",
     logoAlt: "Fitbit logo",
     repoUrl: "",
@@ -92,7 +92,7 @@ export const PROJECTS: ProjectItem[] = [
     description:
       "An immersive concept experience blending spatial storytelling and product interaction for a memorable brand moment.",
     href: "/work/infinite-nature",
-    heroImage: getProjectImageUrl("IMG1.png"),
+    images: [getProjectImageUrl("IMG1.png")],
     logo: "∞ Nature",
     logoAlt: "Infinite Nature logo",
     repoUrl: "",

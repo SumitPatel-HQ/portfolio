@@ -179,12 +179,12 @@ export default function ProjectsPage() {
       <div ref={mainRef} className="relative flex min-h-screen w-full flex-col overflow-hidden bg-background text-foreground">
         <BlobCursor targetRef={mainRef} onClick={handleContainerClick} />
         <ProjectsStage
-          imageUrl={activeProject.heroImage}
+          images={activeProject.images}
           imageAlt={activeProject.logoAlt}
           textureUrl={PROJECTS_TEXTURE_IMAGE}
         />
   
-        <section className="absolute bottom-0 left-0 right-0 z-30 px-6 pb-6 md:px-[68px] md:pb-8">
+        <section className="pointer-events-none absolute bottom-0 left-0 right-0 z-30 px-6 pb-6 md:px-[68px] md:pb-8">
           <div className="flex max-w-[1080px] flex-col gap-8 md:gap-5">
             <AnimatePresence mode="wait">
               <motion.div
@@ -201,11 +201,13 @@ export default function ProjectsPage() {
               </motion.div>
             </AnimatePresence>
   
-            <ProjectsLogoRail
-              projects={PROJECTS}
-              activeIndex={activeIndex}
-              onSelect={handleSelect}
-            />
+            <div className="pointer-events-auto">
+              <ProjectsLogoRail
+                projects={PROJECTS}
+                activeIndex={activeIndex}
+                onSelect={handleSelect}
+              />
+            </div>
           </div>
         </section>
   
