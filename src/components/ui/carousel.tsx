@@ -20,7 +20,7 @@ type CarouselContextType = {
   canScrollNext: boolean;
   scrollPrev: () => void;
   scrollNext: () => void;
-  scrollTo: (index: number) => void;
+  scrollTo: (index: number, jump?: boolean) => void;
 };
 
 const CarouselContext = createContext<CarouselContextType | null>(null);
@@ -55,8 +55,8 @@ export function Carousel({ children, options, className }: CarouselProps) {
   }, [emblaApi]);
 
   const scrollTo = useCallback(
-    (index: number) => {
-      if (emblaApi) emblaApi.scrollTo(index);
+    (index: number, jump?: boolean) => {
+      if (emblaApi) emblaApi.scrollTo(index, jump);
     },
     [emblaApi]
   );
@@ -76,11 +76,16 @@ export function Carousel({ children, options, className }: CarouselProps) {
 
     // eslint-disable-next-line react-hooks/set-state-in-effect
     onInit(emblaApi);
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     onSelect(emblaApi);
     emblaApi.on('reInit', onInit);
     emblaApi.on('reInit', onSelect);
     emblaApi.on('select', onSelect);
+    
+    return () => {
+      emblaApi.off('reInit', onInit);
+      emblaApi.off('reInit', onSelect);
+      emblaApi.off('select', onSelect);
+    };
   }, [emblaApi, onInit, onSelect]);
 
   return (

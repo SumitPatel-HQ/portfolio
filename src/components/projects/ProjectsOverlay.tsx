@@ -5,6 +5,7 @@ import type { ProjectItem } from "@/data/projects.data";
 
 type ProjectsOverlayProps = {
   project: ProjectItem;
+  isTransitioning?: boolean;
 };
 
 export function ProjectsOverlay({ project }: ProjectsOverlayProps) {

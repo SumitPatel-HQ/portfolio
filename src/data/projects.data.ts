@@ -34,7 +34,7 @@ export const PROJECTS: ProjectItem[] = [
     description:
       "A transformation program focused on onboarding, governance, and scale-ready workflows for enterprise operations.",
     href: "/work/sap-ix",
-    imageFolder: "QueryCraft",
+    imageFolder: "Sentira",
     imageAlt: "Sentira images",
     logo: "Sentira",
     logoAlt: "Sentira logo",
@@ -46,10 +46,10 @@ export const PROJECTS: ProjectItem[] = [
     tags: ["AI Product Design", "Prompt UX", "Research Prototyping"],
     description:
       "Concept-to-prototype exploration for AI-assisted product workflows, with rapid iterations and usability validation.",
-    href: "/work/rosey",
-    imageFolder: "QueryCraft",
+    href: "",
+    imageFolder: "Sentira",
     imageAlt: "Rosey images",
-    logo: "Gemini",
+    logo: "Rosey",
     logoAlt: "Gemini logo",
     repoUrl: "",
   },

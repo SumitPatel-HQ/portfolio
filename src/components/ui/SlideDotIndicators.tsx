@@ -5,6 +5,7 @@ interface SlideDotIndicatorsProps {
   activeIndex: number;
   onSelect: (index: number) => void;
   className?: string;
+  isResetting?: boolean; // Bug 1: Disable animation during carousel reset
 }
 
 export function SlideDotIndicators({
@@ -12,6 +13,7 @@ export function SlideDotIndicators({
   activeIndex,
   onSelect,
   className,
+  isResetting = false,
 }: SlideDotIndicatorsProps) {
   if (count <= 1) return null;
 
@@ -26,10 +28,14 @@ export function SlideDotIndicators({
           key={i}
           type="button"
           aria-label={`Go to slide ${i + 1}`}
-          className={`h-[8px] rounded-full transition-[width,background-color] duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] focus:outline-none focus-visible:ring-0 ${
+          className={`h-[8px] rounded-full focus:outline-none focus-visible:ring-0 ${
             activeIndex === i
               ? "w-[24px] bg-accent shadow-[0_0_8px_rgba(0,212,212,0.3)] cursor-auto"
               : "w-[8px] bg-white/40 hover:bg-white/60 cursor-pointer"
+          } ${
+            isResetting
+              ? "" // Bug 1: No transition during reset for instant jump
+              : "transition-[width,background-color] duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]"
           }`}
           onClick={(e) => {
             e.preventDefault();

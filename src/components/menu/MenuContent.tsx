@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import React, { useState } from "react";
+import React from "react";
 import { useContactModal } from "@/context/ContactModalContext";
 import { socials } from "@/data/socialLinks";
 import { MoveUpRight } from "lucide-react";

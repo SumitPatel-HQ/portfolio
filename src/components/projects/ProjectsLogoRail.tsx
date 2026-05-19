@@ -9,6 +9,7 @@ type ProjectsLogoRailProps = {
   projects: ProjectItem[];
   activeIndex: number;
   onSelect: (index: number) => void;
+  isTransitioning?: boolean;
 };
 
 // Refined spring: premium momentum with natural ease
@@ -30,7 +31,7 @@ const contentTransition = {
   mass: 0.4,
 };
 
-export function ProjectsLogoRail({ projects, activeIndex, onSelect }: ProjectsLogoRailProps) {
+export function ProjectsLogoRail({ projects, activeIndex, onSelect, isTransitioning }: ProjectsLogoRailProps) {
   const [isMounted, setIsMounted] = React.useState(false);
 
   React.useEffect(() => {
@@ -50,9 +51,10 @@ export function ProjectsLogoRail({ projects, activeIndex, onSelect }: ProjectsLo
           <button
             key={project.id}
             type="button"
-            onClick={() => onSelect(index)}
+            onClick={() => !isTransitioning && onSelect(index)}
+            disabled={isTransitioning}
             className={clsx(
-              "group relative flex h-[92px] w-[92px] items-center justify-center rounded-[16px] outline-none max-[900px]:h-[68px] max-[900px]:w-[68px] mouse-pointer",
+              "group relative flex h-[92px] w-[92px] items-center justify-center rounded-[16px] outline-none max-[900px]:h-[68px] max-[900px]:w-[68px] mouse-pointer disabled:opacity-50 disabled:cursor-not-allowed",
               isActive
                 ? "text-foreground"
                 : "text-foreground/50 hover:text-foreground/80"
