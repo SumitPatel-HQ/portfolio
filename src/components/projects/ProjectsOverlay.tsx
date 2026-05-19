@@ -5,7 +5,6 @@ import type { ProjectItem } from "@/data/projects.data";
 
 type ProjectsOverlayProps = {
   project: ProjectItem;
-  isTransitioning?: boolean;
 };
 
 export function ProjectsOverlay({ project }: ProjectsOverlayProps) {
@@ -46,7 +45,7 @@ export function ProjectsOverlay({ project }: ProjectsOverlayProps) {
       >
         {project.description}
       </motion.p>
-      { (project.repoUrl || project.href.includes("github.com")) && (
+      {(project.repoUrl || project.href.includes("github.com")) && (
         <motion.div
           className="pointer-events-auto w-fit"
           initial={{ opacity: 0, y: 10 }}

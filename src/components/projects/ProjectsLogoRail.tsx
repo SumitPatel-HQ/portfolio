@@ -9,7 +9,6 @@ type ProjectsLogoRailProps = {
   projects: ProjectItem[];
   activeIndex: number;
   onSelect: (index: number) => void;
-  isTransitioning?: boolean;
 };
 
 // Refined spring: premium momentum with natural ease
@@ -31,7 +30,7 @@ const contentTransition = {
   mass: 0.4,
 };
 
-export function ProjectsLogoRail({ projects, activeIndex, onSelect, isTransitioning }: ProjectsLogoRailProps) {
+export function ProjectsLogoRail({ projects, activeIndex, onSelect }: ProjectsLogoRailProps) {
   const [isMounted, setIsMounted] = React.useState(false);
 
   React.useEffect(() => {
@@ -42,7 +41,13 @@ export function ProjectsLogoRail({ projects, activeIndex, onSelect, isTransition
 
   return (
     <div className="w-full overflow-x-auto" data-lenis-prevent>
-      <div className="show-default-cursor relative z-20 flex w-max items-center gap-2.5 rounded-[20px] bg-foreground/[0.03] p-2.5 backdrop-blur-md ring-1 ring-inset ring-foreground/[0.06] shadow-[0_8px_32px_-8px_rgba(0,0,0,0.12)] max-[900px]:gap-2 max-[900px]:p-2">
+      <div 
+        className="show-default-cursor relative z-20 flex w-max items-center gap-2.5 rounded-[20px] bg-foreground/[0.03] p-2.5 backdrop-blur-md ring-1 ring-inset ring-foreground/[0.06] shadow-[0_8px_32px_-8px_rgba(0,0,0,0.12)] max-[900px]:gap-2 max-[900px]:p-2"
+        style={{
+          willChange: "transform",
+          transform: "translateZ(0)",
+        }}
+      >
         {projects.map((project, index) => {
         const isActive = index === activeIndex;
         const isImagePath = project.logo.startsWith("/") || project.logo.startsWith("http");
@@ -51,10 +56,9 @@ export function ProjectsLogoRail({ projects, activeIndex, onSelect, isTransition
           <button
             key={project.id}
             type="button"
-            onClick={() => !isTransitioning && onSelect(index)}
-            disabled={isTransitioning}
+            onClick={() => onSelect(index)}
             className={clsx(
-              "group relative flex h-[92px] w-[92px] items-center justify-center rounded-[16px] outline-none max-[900px]:h-[68px] max-[900px]:w-[68px] mouse-pointer disabled:opacity-50 disabled:cursor-not-allowed",
+              "group relative flex h-[92px] w-[92px] items-center justify-center rounded-[16px] outline-none max-[900px]:h-[68px] max-[900px]:w-[68px] mouse-pointer",
               isActive
                 ? "text-foreground"
                 : "text-foreground/50 hover:text-foreground/80"

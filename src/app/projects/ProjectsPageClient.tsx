@@ -23,18 +23,15 @@ interface ProjectsPageClientProps {
 const overlayVariants = {
   enter: (direction: number) => ({
     opacity: 0,
-    x: direction > 0 ? 22 : -22,
-    filter: "blur(14px)",
+    x: direction > 0 ? 20 : -20,
   }),
   center: {
     opacity: 1,
     x: 0,
-    filter: "blur(0px)",
   },
   exit: (direction: number) => ({
     opacity: 0,
-    x: direction > 0 ? -22 : 22,
-    filter: "blur(14px)",
+    x: direction > 0 ? -20 : 20,
   }),
 };
 
@@ -50,7 +47,6 @@ const TIMING = {
 export function ProjectsPageClient({ projects }: ProjectsPageClientProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [direction, setDirection] = useState<1 | -1>(1);
-  const [isTransitioning, setIsTransitioning] = useState(false);
 
   const activeProject = useMemo(() => projects[activeIndex], [activeIndex, projects]);
   const totalSteps = Math.max(1, projects.length - 1);
@@ -67,27 +63,9 @@ export function ProjectsPageClient({ projects }: ProjectsPageClientProps) {
   const activeIndexRef = useRef(0);
   const isProgrammaticScrollRef = useRef(false);
   const scrollLockTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const transitionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   
   const { isReady: isGSAPReady } = useGSAP();
   const { lenis } = useLenis();
-
-  // Centralized transition timeout management (CR-2)
-  const clearTransitionTimeout = useCallback(() => {
-    if (transitionTimeoutRef.current) {
-      clearTimeout(transitionTimeoutRef.current);
-      transitionTimeoutRef.current = null;
-    }
-  }, []);
-
-  const startTransition = useCallback(() => {
-    clearTransitionTimeout();
-    setIsTransitioning(true);
-    transitionTimeoutRef.current = setTimeout(() => {
-      setIsTransitioning(false);
-      transitionTimeoutRef.current = null;
-    }, TIMING.TRANSITION_LOCK);
-  }, [clearTransitionTimeout]);
 
   const lockScroll = useCallback(() => {
     isProgrammaticScrollRef.current = true;
@@ -127,7 +105,6 @@ export function ProjectsPageClient({ projects }: ProjectsPageClientProps) {
   }, [lenis, totalSteps]);
 
   const onPrev = useCallback(() => {
-    if (isTransitioning) return;
     const current = activeIndexRef.current;
     const nextIndex = current === 0 ? projects.length - 1 : current - 1;
     setDirection(-1);
@@ -135,11 +112,9 @@ export function ProjectsPageClient({ projects }: ProjectsPageClientProps) {
     setActiveIndex(nextIndex);
     lockScroll();
     scrollToIndex(nextIndex);
-    startTransition();
-  }, [scrollToIndex, projects.length, isTransitioning, lockScroll, startTransition]);
+  }, [scrollToIndex, projects.length, lockScroll]);
 
   const onNext = useCallback(() => {
-    if (isTransitioning) return;
     const current = activeIndexRef.current;
     const nextIndex = current === projects.length - 1 ? 0 : current + 1;
     setDirection(1);
@@ -147,12 +122,11 @@ export function ProjectsPageClient({ projects }: ProjectsPageClientProps) {
     setActiveIndex(nextIndex);
     lockScroll();
     scrollToIndex(nextIndex);
-    startTransition();
-  }, [scrollToIndex, projects.length, isTransitioning, lockScroll, startTransition]);
+  }, [scrollToIndex, projects.length, lockScroll]);
 
   const handleSelect = useCallback((index: number) => {
     const current = activeIndexRef.current;
-    if (index === current || isTransitioning) {
+    if (index === current) {
       return;
     }
 
@@ -161,8 +135,7 @@ export function ProjectsPageClient({ projects }: ProjectsPageClientProps) {
     setActiveIndex(index);
     lockScroll();
     scrollToIndex(index);
-    startTransition();
-  }, [scrollToIndex, isTransitioning, lockScroll, startTransition]);
+  }, [scrollToIndex, lockScroll]);
 
   useEffect(() => {
     activeIndexRef.current = activeIndex;
@@ -233,7 +206,6 @@ export function ProjectsPageClient({ projects }: ProjectsPageClientProps) {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (isTransitioning) return;
       if (e.key === "ArrowLeft") {
         onPrev();
       } else if (e.key === "ArrowRight") {
@@ -243,16 +215,13 @@ export function ProjectsPageClient({ projects }: ProjectsPageClientProps) {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [onNext, onPrev, isTransitioning]);
+  }, [onNext, onPrev]);
 
   // Cleanup timeouts on unmount (CR-1: Memory leak fix)
   useEffect(() => {
     return () => {
       if (scrollLockTimeoutRef.current) {
         clearTimeout(scrollLockTimeoutRef.current);
-      }
-      if (transitionTimeoutRef.current) {
-        clearTimeout(transitionTimeoutRef.current);
       }
     };
   }, []);
@@ -285,29 +254,35 @@ export function ProjectsPageClient({ projects }: ProjectsPageClientProps) {
           </div>
         </div>
   
-        <section className="pointer-events-none absolute bottom-0 left-0 right-0 z-30 px-6 pb-6 md:px-[68px] md:pb-8">
+        <section className="pointer-events-none absolute bottom-0 left-0 right-0 z-30 px-6 pb-6 md:px-[68px] md:pb-8 isolate">
           <div className="flex max-w-[1080px] flex-col gap-8 md:gap-5">
-            <AnimatePresence mode="popLayout">
-              <motion.div
-                key={activeProject.id}
-                custom={direction}
-                variants={overlayVariants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={{ duration: 0.52, ease: [0.32, 0.72, 0, 1] }}
-                className="flex flex-col gap-[clamp(2.2rem,4.4vw,72px)]"
-              >
-                  <ProjectsOverlay project={activeProject} isTransitioning={isTransitioning} />
-              </motion.div>
-            </AnimatePresence>
+            <div className="relative grid grid-cols-1 grid-rows-1 w-full items-end">
+              <AnimatePresence>
+                <motion.div
+                  key={activeProject.id}
+                  custom={direction}
+                  variants={overlayVariants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  transition={{ duration: 0.52, ease: [0.32, 0.72, 0, 1] }}
+                  className="col-start-1 row-start-1 flex w-full flex-col gap-[clamp(2.2rem,4.4vw,72px)] self-end"
+                  style={{
+                    willChange: "transform, opacity",
+                    backfaceVisibility: "hidden",
+                    WebkitBackfaceVisibility: "hidden",
+                  }}
+                >
+                  <ProjectsOverlay project={activeProject} />
+                </motion.div>
+              </AnimatePresence>
+            </div>
   
             <div className="pointer-events-auto w-fit">
               <ProjectsLogoRail
                 projects={projects}
                 activeIndex={activeIndex}
                 onSelect={handleSelect}
-                isTransitioning={isTransitioning}
               />
             </div>
           </div>
