@@ -7,6 +7,10 @@ export const metadata = {
   description: "A showcase of my recent work in engineering, design, and AI.",
 };
 
+// Revalidate this static page every hour (3600 seconds) so it occasionally picks up code/data changes
+// without needing a full `pnpm build`
+export const revalidate = 3600;
+
 export default async function ProjectsPage() {
   // Fetch all images for all projects at build time (Next.js will cache these)
   const projectsWithImages: ProjectWithImages[] = await Promise.all(

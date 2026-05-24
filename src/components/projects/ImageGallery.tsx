@@ -130,7 +130,7 @@ export function ImageGallery({ images, imageAlt, projectId }: ImageGalleryProps)
   // Empty state - no images
   if (images.length === 0) {
     return (
-      <div className="relative aspect-[16/10] w-full rounded-2xl overflow-hidden border border-white/10 bg-gray-900/20">
+      <div className="relative aspect-video w-full rounded-2xl overflow-hidden border border-white/10 bg-gray-900/20">
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="flex flex-col items-center gap-4 text-center px-6">
             <ImageOff className="w-12 h-12 text-white/30" />
@@ -143,7 +143,7 @@ export function ImageGallery({ images, imageAlt, projectId }: ImageGalleryProps)
   }
 
   return (
-    <div className="relative aspect-[16/10] w-full shadow-[0_40px_80px_-15px_rgba(0,0,0,0.7)] rounded-2xl overflow-hidden border border-white/10 group bg-gray-900/20">
+    <div className="relative aspect-[14/9] w-full shadow-[0_40px_80px_-15px_rgba(0,0,0,0.7)] rounded-2xl overflow-hidden border border-white/10 group bg-gray-900/20">
       <Carousel options={OPTIONS} className="w-full h-full">
         <CarouselReset 
           resetKey={projectId !== undefined ? String(projectId) : images.join(',')} 

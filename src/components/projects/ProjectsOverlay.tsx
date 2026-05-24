@@ -9,10 +9,10 @@ type ProjectsOverlayProps = {
 
 export function ProjectsOverlay({ project }: ProjectsOverlayProps) {
   return (
-    <div className="relative z-20 flex max-w-[980px] flex-col gap-8 px-6">
+    <div className="relative z-20 flex max-w-245 flex-col gap-8 px-6">
       <div className="flex flex-col gap-6">
         <motion.h1
-          className="pointer-events-auto w-fit text-[clamp(3rem,5.2vw,4.6rem)] leading-[1.04] text-foreground tracking-[-0.02em] font-medium"
+          className="pointer-events-auto w-fit  text-[clamp(3rem,5.2vw,4.6rem)] leading-[1.04] text-foreground tracking-[-0.02em] font-medium"
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.46, delay: 0.08, ease: "easeOut" }}
