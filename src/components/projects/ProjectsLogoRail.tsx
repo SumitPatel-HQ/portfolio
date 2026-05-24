@@ -32,15 +32,45 @@ const contentTransition = {
 
 export function ProjectsLogoRail({ projects, activeIndex, onSelect }: ProjectsLogoRailProps) {
   const [isMounted, setIsMounted] = React.useState(false);
+  const scrollRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
     setIsMounted(true);
   }, []);
 
+  React.useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    const onWheel = (e: WheelEvent) => {
+      // Map vertical scroll (mouse wheel) to horizontal scroll
+      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+        e.preventDefault();
+        // Slow down the scroll speed by half
+        el.scrollLeft += e.deltaY * 0.5;
+      }
+    };
+
+    const onMouseDown = (e: MouseEvent) => {
+      // Prevent middle-click autoscroll feature (especially on Windows)
+      if (e.button === 1) {
+        e.preventDefault();
+      }
+    };
+
+    el.addEventListener("wheel", onWheel, { passive: false });
+    el.addEventListener("mousedown", onMouseDown);
+
+    return () => {
+      el.removeEventListener("wheel", onWheel);
+      el.removeEventListener("mousedown", onMouseDown);
+    };
+  }, [isMounted]);
+
   if (!isMounted) return <div className="h-[112px] w-full" />;
 
   return (
-    <div className="w-full overflow-x-auto" data-lenis-prevent>
+    <div ref={scrollRef} className="w-full overflow-x-auto scrollbar-hide" data-lenis-prevent>
       <div 
         className="show-default-cursor relative z-20 flex w-max items-center gap-2.5 rounded-[20px] bg-foreground/[0.03] p-2.5 backdrop-blur-md ring-1 ring-inset ring-foreground/[0.06] shadow-[0_8px_32px_-8px_rgba(0,0,0,0.12)] max-[900px]:gap-2 max-[900px]:p-2"
         style={{
