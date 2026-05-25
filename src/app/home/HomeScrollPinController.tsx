@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@/providers/GSAPProvider";
 import { useLenis } from "@/providers/LenisProvider";
+import { useIntro } from "@/context/IntroContext";
 
 type HomeScrollPinControllerProps = {
   heroRef: RefObject<HTMLElement | null>;
@@ -25,12 +26,23 @@ export function HomeScrollPinController({
 }: HomeScrollPinControllerProps) {
   const { isReady: isGSAPReady } = useGSAP();
   const { isReady: isLenisReady, lenis } = useLenis();
+  const { isIntroComplete } = useIntro();
 
   useEffect(() => {
-    if (!isGSAPReady || !isLenisReady || !heroRef.current || !featuredRef.current || !contactRef.current || !lenis) {
+    if (!isGSAPReady || !isLenisReady || !isIntroComplete || !heroRef.current || !featuredRef.current || !contactRef.current || !lenis) {
       return;
     }
 
+    // Force scroll position to 0 synchronously before creating ScrollTriggers.
+    // This prevents a race condition where Next.js or Lenis retains the previous
+    // page's scroll position, causing ScrollTrigger to calculate pins incorrectly.
+    window.scrollTo(0, 0);
+    lenis.scrollTo(0, { immediate: true });
+
+    // Scope to heroRef.current so ctx.revert() correctly captures all
+    // ScrollTrigger instances and pin-spacer divs created by this controller.
+    // Previously this was an invalid array argument which GSAP silently ignored,
+    // leaving pin-spacers and triggers orphaned after navigation.
     const ctx = gsap.context(() => {
       const media = gsap.matchMedia();
 
@@ -49,19 +61,19 @@ export function HomeScrollPinController({
         const snapTo = (target: HTMLElement) => {
           if (isSnapping || isSnapCooldownActive() || !lenis) return;
           isSnapping = true;
-          
+
           lenis.stop();
-          
+
           lenis.scrollTo(target, {
             force: true,
             duration: 0.85,
             lock: false,
             easing: (t) => Math.min(1, 1 - Math.pow(1 - t, 4)),
             onComplete: () => {
-               lenis.start();
-               isSnapping = false;
-               snapCooldownUntil = performance.now() + SNAP_COOLDOWN_MS;
-            }
+              lenis.start();
+              isSnapping = false;
+              snapCooldownUntil = performance.now() + SNAP_COOLDOWN_MS;
+            },
           });
         };
 
@@ -110,7 +122,7 @@ export function HomeScrollPinController({
             if (enteredFeaturedFromBottom && self.progress < 0.25) {
               enteredFeaturedFromBottom = false;
             }
-            
+
             const progressSnapLimit = enteredFeaturedFromBottom ? 0.1 : 0.85;
 
             if (self.direction === -1 && self.progress < progressSnapLimit && self.progress > 0.08) {
@@ -131,10 +143,11 @@ export function HomeScrollPinController({
 
             const isRecentWheelUp = performance.now() - lastWheelUpAt < RECENT_WHEEL_UP_INTENT_MS;
             const isUpwardIntent = lastScrollDirection === -1 || isRecentWheelUp;
-            
+
             const recoveryStart = 0.12;
             const recoveryEnd = enteredFeaturedFromBottom ? 0.15 : 0.88;
-            const isInRecoveryZone = featuredTrigger.progress > recoveryStart && featuredTrigger.progress < recoveryEnd;
+            const isInRecoveryZone =
+              featuredTrigger.progress > recoveryStart && featuredTrigger.progress < recoveryEnd;
 
             if (isUpwardIntent && isInRecoveryZone) {
               hasRecoveredUpInFeaturedZone = true;
@@ -170,7 +183,7 @@ export function HomeScrollPinController({
         window.addEventListener("wheel", onWheel, { passive: true });
 
         const timer = setTimeout(() => {
-            ScrollTrigger.refresh();
+          ScrollTrigger.refresh();
         }, 100);
 
         return () => {
@@ -180,16 +193,19 @@ export function HomeScrollPinController({
           }
           lenis.off("scroll", onLenisScroll);
           window.removeEventListener("wheel", onWheel);
-          lenis?.start();
+          // Unconditionally restart Lenis — navigation during a snap must never
+          // leave Lenis in a stopped state on the next page.
+          lenis.start();
         };
       });
-    }, [heroRef, featuredRef, contactRef]);
+    // Scope to heroRef.current so ctx.revert() captures triggers/spacers
+    // created within the home page scroll controller.
+    }, heroRef.current ?? undefined);
 
     return () => {
       ctx.revert();
     };
-  }, [featuredRef, heroRef, contactRef, isGSAPReady, isLenisReady, lenis]);
+  }, [featuredRef, heroRef, contactRef, isGSAPReady, isLenisReady, isIntroComplete, lenis]);
 
   return null;
 }
-

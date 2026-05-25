@@ -68,6 +68,9 @@ export function BlobCursor({
   const cursorXSpring = useSpring(cursorX, springConfig);
   const cursorYSpring = useSpring(cursorY, springConfig);
 
+  const hasPosition = useRef(false);
+  const isFirstMove = useRef(true);
+
   useEffect(() => {
     onClickRef.current = onClick;
   }, [onClick]);
@@ -115,13 +118,24 @@ export function BlobCursor({
       // 2. AND we're NOT over a "show-default-cursor" element
       const shouldShow = matchesTagRestriction && !isOverShowDefaultCursor;
 
-      // Synchronously update both React state and CSS class
-      setIsVisible(shouldShow);
-
-      if (shouldShow) {
-        target.classList.add("hide-default-cursor");
+      // Update position first
+      if (isFirstMove.current) {
         cursorX.set(e.clientX);
         cursorY.set(e.clientY);
+        // Jump the spring to the first position to avoid animation from (-100, -100)
+        cursorXSpring.set(e.clientX);
+        cursorYSpring.set(e.clientY);
+        isFirstMove.current = false;
+        hasPosition.current = true;
+      } else {
+        cursorX.set(e.clientX);
+        cursorY.set(e.clientY);
+      }
+
+      // Synchronously update both React state and CSS class
+      setIsVisible(shouldShow && hasPosition.current);
+      if (shouldShow) {
+        target.classList.add("hide-default-cursor");
       } else {
         cancelVisibilityFrame();
         target.classList.remove("hide-default-cursor");
@@ -147,6 +161,20 @@ export function BlobCursor({
     target.addEventListener("mouseleave", handleMouseLeave);
     target.addEventListener("click", handleClick);
 
+    // Capture initial position from window to avoid jump if already hovering
+    const handleInitialWindowMove = (e: MouseEvent) => {
+      if (isFirstMove.current) {
+        cursorX.set(e.clientX);
+        cursorY.set(e.clientY);
+        cursorXSpring.set(e.clientX);
+        cursorYSpring.set(e.clientY);
+        isFirstMove.current = false;
+        hasPosition.current = true;
+      }
+      window.removeEventListener("mousemove", handleInitialWindowMove);
+    };
+    window.addEventListener("mousemove", handleInitialWindowMove);
+
     // Initial check (optional, but good for refresh)
     if (target.matches && target.matches(":hover") && !restrictToTagsRef.current) {
       visibilityFrame = requestAnimationFrame(() => {
@@ -161,9 +189,10 @@ export function BlobCursor({
       target.removeEventListener("mousemove", handleMouseMove);
       target.removeEventListener("mouseleave", handleMouseLeave);
       target.removeEventListener("click", handleClick);
+      window.removeEventListener("mousemove", handleInitialWindowMove);
       releaseBlobCursorStyle(styleOwner);
     };
-  }, [targetRef, cursorX, cursorY]);
+  }, [targetRef, cursorX, cursorY, cursorXSpring, cursorYSpring]);
 
   return (
     <motion.div

@@ -11,6 +11,10 @@ if (typeof window !== "undefined") {
       ease: "power2.out",
       duration: 1,
    });
+   
+   // Disable automatic scroll restoration by both the browser and ScrollTrigger
+   window.history.scrollRestoration = "manual";
+   ScrollTrigger.clearScrollMemory("manual");
 }
 
 interface GSAPContextType {

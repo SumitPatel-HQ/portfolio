@@ -1,30 +1,98 @@
 "use client";
 
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+
 import StripesBackground from "@/components/ui/visuals/StripesBackground";
 import { useContactModal } from "@/context/ContactModalContext";
 import { BlobCursor } from "@/components/ui/BlobCursor";
+import { useGSAP } from "@/providers/GSAPProvider";
+import { useIntro } from "@/context/IntroContext";
+import { useLenis } from "@/providers/LenisProvider";
+
+import { useHeroAnimation, introBars } from './introAnime';
+
 
 export const HeroSection = () => {
   const { openModal } = useContactModal();
+  const { isReady: isGSAPReady } = useGSAP();
+  const { lenis } = useLenis();
+  const { setIntroComplete } = useIntro();
+  const heroRootRef = useRef<HTMLElement>(null);
+  const introOverlayRef = useRef<HTMLDivElement>(null);
+  const introBarsRef = useRef<HTMLDivElement>(null);
+  const stripesRef = useRef<HTMLDivElement>(null);
+  const topChromeRef = useRef<HTMLDivElement>(null);
   const nameRef = useRef<HTMLDivElement>(null);
   const sumitRef = useRef<HTMLHeadingElement>(null);
   const patelRef = useRef<HTMLHeadingElement>(null);
+  const nameDividerRef = useRef<HTMLDivElement>(null);
+  const bottomChromeRef = useRef<HTMLDivElement>(null);
+  const [isIntroComplete, setIsIntroComplete] = useState(false);
   const router = useRouter();
 
-  const handleNameClick = () => {
+  const handleNameClick = (e: React.MouseEvent | React.KeyboardEvent) => {
+    const target = e.target as HTMLElement;
+    if (!target.closest('h1')) return;
+
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!isIntroComplete && !reduceMotion) return;
     router.push('/about');
   };
 
-  return (
-    <section className="min-h-screen bg-background text-foreground relative overflow-hidden flex flex-col">
+  // Trigger Cinematic Intro Sequence
+  useHeroAnimation({
+    isGSAPReady,
+    setIntroComplete,
+    setIsIntroComplete,
+    heroRootRef,
+    introOverlayRef,
+    introBarsRef,
+    stripesRef,
+    topChromeRef,
+    sumitRef,
+    patelRef,
+    nameDividerRef,
+    bottomChromeRef,
+    smoothScroll: lenis,
+  });
 
-      <StripesBackground position="full" opacity="opacity-10" />
+
+  return (
+    <section ref={heroRootRef} className="hero-root min-h-screen bg-background text-foreground relative overflow-hidden flex flex-col">
+
+      {/* Parallax Background Layers */}
+      <div ref={stripesRef} className="hero-stripes absolute inset-0 motion-reduce:opacity-100 motion-reduce:transform-none">
+        <StripesBackground position="full" opacity="opacity-10" />
+      </div>
+
+      {/* Cinematic Transition Overlay */}
+      <div
+        ref={introOverlayRef}
+        data-hero-intro
+        aria-hidden="true"
+        className="pointer-events-none fixed inset-0 z-[1000]  motion-reduce:hidden flex flex-col items-center justify-center"
+      >
+        {/* Subtle Depth Gradient */}
+        {/* <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.04)_0%,transparent_70%)]" /> */}
+
+        <div
+          ref={introBarsRef}
+          className="relative z-10 flex items-center gap-[clamp(0.6rem,1.5vw,2rem)] mix-blend-screen"
+        >
+          {introBars.map((heightClass, index) => (
+            <span
+              key={`${heightClass}-${index}`}
+              className={`${heightClass} hero-intro-bar block w-[clamp(1px,0.15vw,2px)] rounded-full bg-white opacity-0 will-change-transform`}
+              style={{ backfaceVisibility: "hidden", WebkitFontSmoothing: "antialiased" }}
+            />
+          ))}
+        </div>
+      </div>
 
       <div className="relative z-10 flex-1 flex flex-col px-layout">
-        <div className="h-hero-top flex items-center justify-between border-b border-border-custom">
+        <div ref={topChromeRef} className="hero-chrome-top h-hero-top flex items-center justify-between border-b border-border-custom">
           <div>
             <div className="inline-flex items-center gap-2.5">
               <span className="w-2 h-2 rounded-full bg-status-dot animate-pulse-custom"></span>
@@ -33,36 +101,44 @@ export const HeroSection = () => {
           </div>
         </div>
 
-        <div className="flex-1 flex flex-col justify-center ">
-      
+        <div className="flex-1 flex flex-col justify-center">
            <div 
             ref={nameRef} 
-            className="flex flex-col relative"
-            role="button"
+            className="flex flex-col relative cursor-default focus-visible:outline-none"
+            role="group"
             tabIndex={0}
+            aria-disabled={!isIntroComplete}
             aria-label="Navigate to about page"
             onClick={handleNameClick}
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
-                handleNameClick();
+                handleNameClick(e);
               }
             }}
           >
-            <BlobCursor
-              targetRef={nameRef}
-              iconColor="text-black"
-              restrictToTags={['h1']}
-            />
+            {isIntroComplete ? (
+              <BlobCursor
+                targetRef={nameRef}
+                iconColor="text-black"
+                restrictToTags={['h1']}
+              />
+            ) : null}
 
-            <h1 ref={sumitRef} className="text-hero font-extrabold leading-[0.9] tracking-hero max-md:text-hero-mobile scale-y-[1.2] relative z-20 w-fit uppercase">Sumit</h1>
+            {/* Premium Masked Typography System */}
+            <h1 ref={sumitRef} data-hero-title="sumit" className="hero-intro-title text-hero font-extrabold leading-[0.9] tracking-hero max-md:text-hero-mobile relative z-20 w-fit uppercase cursor-pointer">
+              <span className="hero-title-scale">Sumit</span>
+            </h1>
 
-            <div className="w-full border-b border-white/10 relative z-10 mt-4" />
-            <h1 ref={patelRef} className="text-hero font-extrabold leading-[0.9] tracking-hero text-right max-md:text-hero-mobile scale-y-[1.2] mt-4 pr-[0.05em] relative z-20 ml-auto w-fit uppercase">Patel</h1>
+            <div ref={nameDividerRef} className="hero-divider w-full border-b border-white/10 relative z-10 mt-4" />
+            
+            <h1 ref={patelRef} data-hero-title="patel" className="hero-intro-title text-hero  font-extrabold leading-[0.9] tracking-hero text-right  max-md:text-hero-mobile mt-4 pr-[0.05em] relative z-20 ml-auto w-fit uppercase cursor-pointer">
+              <span className="hero-title-scale">Patel</span>
+            </h1>
           </div>
         </div>
 
-        <div className="h-hero-bottom flex items-center justify-between border-t border-white/10 max-md:flex-col max-md:h-auto max-md:gap-10 max-md:pb-10">
+        <div ref={bottomChromeRef} className="hero-chrome-bottom h-hero-bottom flex items-center justify-between border-t border-white/10 max-md:flex-col max-md:h-auto max-md:gap-10 max-md:pb-10">
           <div>
             <p className="text-role-tag uppercase text-white/48 mb-2.5">AI ENGINEER × FULL-STACK DEV</p>
             <p className="text-18px leading-[1.6] text-muted-custom">
@@ -86,6 +162,6 @@ export const HeroSection = () => {
         </div>
       </div>
     </section>
-
   );
 };
+

@@ -1,11 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
+import { motion } from "framer-motion";
 import { useContactModal } from "@/context/ContactModalContext";
 import { socials } from "@/data/socialLinks";
-import { MoveUpRight } from "lucide-react";
 import { ResumeModal } from "@/components/ResumeModal";
+import { AnimatedArrow } from "./AnimatedArrow";
 
 interface MenuContentProps {
   onNavigate?: () => void;
@@ -21,6 +22,13 @@ const menuItems: { label: string; href?: string }[] = [
   { label: "Contact", href: "#" },
 ];
 
+/**
+ * Ultra-refined motion easing curve
+ * cubic-bezier(0.45, 0, 0.15, 1) - nuanced ease-in-out where momentum evolves organically
+ * This creates a frictionless, effortless glide that feels naturally responsive
+ */
+const PREMIUM_EASE = [0.45, 0, 0.15, 1] as const;
+
 const titleLetters = ["S", "U", "M", "I", "T"];
 
 export const MenuContent: React.FC<MenuContentProps> = ({ 
@@ -30,6 +38,7 @@ export const MenuContent: React.FC<MenuContentProps> = ({
   setIsResumeOpen
 }) => {
   const { openModal } = useContactModal();
+  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
   // Reset resume modal when menu closes
   React.useEffect(() => {
@@ -46,24 +55,85 @@ export const MenuContent: React.FC<MenuContentProps> = ({
             {menuItems.map((item) => (
               <div key={item.label} className="overflow-hidden py-1 -my-1">
                 {item.label === "Contact" ? (
-                  <button
+                  <motion.button
                     onClick={() => {
                       openModal();
                     }}
-                    className="group menu-content-pages inline-flex items-center gap-3 text-[44px] font-[350] leading-[1] tracking-[-0.015em] text-foreground transition-transform duration-300 ease-out hover:translate-x-1 hover:opacity-85 sm:text-[56px] lg:text-[64px] bg-transparent border-none p-0 cursor-pointer"
+                    onMouseEnter={() => setHoveredItem(item.label)}
+                    onMouseLeave={() => setHoveredItem(null)}
+                    className="group/menu-item menu-content-pages inline-flex items-center gap-3 text-[44px] font-[350] leading-[1] tracking-[-0.015em] text-foreground bg-transparent border-none p-0 cursor-pointer sm:text-[56px] lg:text-[64px]"
+                    whileHover="hover"
+                    initial="idle"
                   >
-                    <MoveUpRight className="size-[0.43em] translate-y-[0.1em] opacity-0 scale-50 group-hover:translate-y-[-0.05em] group-hover:opacity-100 group-hover:scale-110 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]" />
-                    <span>{item.label}</span>
-                  </button>
+                    <motion.span
+                      className="inline-flex items-center"
+                      variants={{
+                        idle: { x: 0 },
+                        hover: { x: 1.5 },
+                      }}
+                      transition={{
+                        duration: 0.65,
+                        ease: PREMIUM_EASE,
+                      }}
+                    >
+                      <AnimatedArrow isHovered={hoveredItem === item.label} />
+                    </motion.span>
+                    <motion.span
+                      variants={{
+                        idle: { x: 0, opacity: 0.92 },
+                        hover: { x: 2.5, opacity: 1 },
+                      }}
+                      transition={{
+                        duration: 0.55,
+                        ease: PREMIUM_EASE,
+                        // Invisible staggered choreography
+                        delay: 0.03,
+                      }}
+                    >
+                      {item.label}
+                    </motion.span>
+                  </motion.button>
                 ) : (
-                  <Link
-                    href={item.href || "#"}
-                    onClick={onNavigate}
-                    className="group menu-content-pages inline-flex items-center gap-3 text-[44px] font-[350] leading-[1] tracking-[-0.015em] text-foreground transition-transform duration-300 ease-out hover:translate-x-1 hover:opacity-85 sm:text-[56px] lg:text-[64px]"
+                  <motion.div
+                    onMouseEnter={() => setHoveredItem(item.label)}
+                    onMouseLeave={() => setHoveredItem(null)}
+                    whileHover="hover"
+                    initial="idle"
                   >
-                    <MoveUpRight className="size-[0.43em] translate-y-[0.1em] opacity-0 scale-50 group-hover:translate-y-[-0.05em] group-hover:opacity-100 group-hover:scale-110 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]" />
-                    <span>{item.label}</span>
-                  </Link>
+                    <Link
+                      href={item.href || "#"}
+                      onClick={onNavigate}
+                      className="group/menu-item menu-content-pages inline-flex items-center gap-3 text-[44px] font-[350] leading-[1] tracking-[-0.015em] text-foreground sm:text-[56px] lg:text-[64px]"
+                    >
+                      <motion.span
+                        className="inline-flex items-center"
+                        variants={{
+                          idle: { x: 0 },
+                          hover: { x: 1.5 },
+                        }}
+                        transition={{
+                          duration: 0.65,
+                          ease: PREMIUM_EASE,
+                        }}
+                      >
+                        <AnimatedArrow isHovered={hoveredItem === item.label} />
+                      </motion.span>
+                      <motion.span
+                        variants={{
+                          idle: { x: 0, opacity: 0.92 },
+                          hover: { x: 2.5, opacity: 1 },
+                        }}
+                        transition={{
+                          duration: 0.55,
+                          ease: PREMIUM_EASE,
+                          // Invisible staggered choreography
+                          delay: 0.03,
+                        }}
+                      >
+                        {item.label}
+                      </motion.span>
+                    </Link>
+                  </motion.div>
                 )}
               </div>
             ))}

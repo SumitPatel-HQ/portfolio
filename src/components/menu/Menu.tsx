@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback, useMemo, useEffect } from 'react';
+import React, { useState, useCallback, useMemo, useEffect, useRef, useLayoutEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import { MenuButton } from './MenuButton';
 import { MenuContent } from './MenuContent';
@@ -8,6 +8,7 @@ import { HomeLink } from './HomeLink';
 import { useMenuAnimation } from './useMenuAnimation';
 import { useContactModal } from '@/context/ContactModalContext';
 import { useLenis } from '@/providers/LenisProvider';
+import { useIntro } from '@/context/IntroContext';
 
 const menuItemsLinks = [
   { label: 'Projects', href: '/projects' },
@@ -18,30 +19,82 @@ const menuItemsLinks = [
 export const Menu = () => {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
-  const [animatedHomeLabel, setAnimatedHomeLabel] = useState<string | null>(null);
   const { isOpen: isContactModalOpen } = useContactModal();
   const [isResumeOpen, setIsResumeOpen] = useState(false);
   const { lenis } = useLenis();
+  const { isIntroComplete } = useIntro();
 
-  const currentPageLabel = useMemo(() => {
-    if (pathname === '/') return 'Home';
+  const targetClosedLabel = useMemo(() => {
+    if (pathname === '/') return null;
     const currentItem = menuItemsLinks.find(item => item.href === pathname);
-    return currentItem ? currentItem.label : 'Home';
+    return currentItem ? currentItem.label : null;
   }, [pathname]);
 
-  const closedLabel = pathname === '/' ? null : currentPageLabel;
-  const homeLabel = isOpen ? (animatedHomeLabel ?? currentPageLabel) : closedLabel;
+  const [displayedLabel, setDisplayedLabel] = useState<string | null>(targetClosedLabel);
+  const [isClosing, setIsClosing] = useState(false);
+  const targetLabelRef = useRef(targetClosedLabel);
+  
+  // Track previous values to detect changes during render
+  const [prevTargetClosedLabel, setPrevTargetClosedLabel] = useState(targetClosedLabel);
+  const [prevIsOpen, setPrevIsOpen] = useState(isOpen);
+  const [prevIsClosing, setPrevIsClosing] = useState(isClosing);
 
-  const { containerRef, homeLinkRef } = useMenuAnimation({
+  // Synchronize displayedLabel during render when dependencies change.
+  // This avoids the "double render" and satisfies linting for synchronous state updates.
+  if (targetClosedLabel !== prevTargetClosedLabel || isOpen !== prevIsOpen || isClosing !== prevIsClosing) {
+    setPrevTargetClosedLabel(targetClosedLabel);
+    setPrevIsOpen(isOpen);
+    setPrevIsClosing(isClosing);
+    
+    if (isOpen) {
+      if (targetClosedLabel !== null) {
+        setDisplayedLabel(targetClosedLabel);
+      } else {
+        // If we're on Home page and menu opens, start with null (Home will fade in via effect)
+        setDisplayedLabel(null);
+      }
+    } else {
+      if (isClosing) {
+        // We are currently playing the close animation.
+        // If the current label is NOT what we want when closed, or we are on Home, hide it.
+        if (targetClosedLabel === null || targetClosedLabel !== displayedLabel) {
+          setDisplayedLabel(null);
+        }
+      } else {
+        // If we're not closing (e.g. back button), sync immediately
+        setDisplayedLabel(targetClosedLabel);
+      }
+    }
+  }
+  
+  useLayoutEffect(() => {
+    targetLabelRef.current = targetClosedLabel;
+  }, [targetClosedLabel]);
+
+  const { containerRef } = useMenuAnimation({
     isOpen,
-    isHome: pathname === '/',
-    onOpenStart: () => {
-      setAnimatedHomeLabel(currentPageLabel);
+    onCloseStart: () => {
+      setIsClosing(true);
     },
     onCloseComplete: () => {
-      setAnimatedHomeLabel(null);
+      setIsClosing(false);
+      setDisplayedLabel(targetLabelRef.current);
     },
   });
+
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+
+    if (isOpen && targetClosedLabel === null) {
+      // We are on the Home page. Delay the "Home" label appearance by 800ms
+      // so it starts fading in right as the black overlay reaches the top of the screen.
+      timeoutId = setTimeout(() => {
+        setDisplayedLabel('Home');
+      }, 800);
+    }
+
+    return () => clearTimeout(timeoutId);
+  }, [isOpen, targetClosedLabel]);
 
   const toggleMenu = useCallback(() => {
     setIsOpen(prev => !prev);
@@ -80,30 +133,42 @@ export const Menu = () => {
       html.style.overflow = prevHtmlOverflow;
       body.style.overflow = prevBodyOverflow;
       body.style.touchAction = prevBodyTouchAction;
-      if (lenis) lenis.start();
+      
+      // Only restart Lenis if we are not on the home page or if the intro is complete.
+      if (lenis && (pathname !== "/" || isIntroComplete)) {
+        lenis.start();
+      }
     }
 
     return () => {
       html.style.overflow = prevHtmlOverflow;
       body.style.overflow = prevBodyOverflow;
       body.style.touchAction = prevBodyTouchAction;
-      if (lenis) lenis.start();
+      
+      // Safety restart on unmount, respecting intro state.
+      if (lenis && (pathname !== "/" || isIntroComplete)) {
+        lenis.start();
+      }
     };
-  }, [isOpen, lenis]);
+  }, [isOpen, lenis, pathname, isIntroComplete]);
 
   return (
     <>
-      <HomeLink 
-        label={homeLabel} 
-        onNavigate={closeMenu} 
-        animatedRef={homeLinkRef} 
+      <HomeLink
+        label={displayedLabel}
+        onNavigate={closeMenu}
         isContactModalOpen={isContactModalOpen || isResumeOpen}
       />
-      <MenuButton
-        isOpen={isOpen}
-        toggleMenu={toggleMenu}
-        isContactModalOpen={isContactModalOpen || isResumeOpen}
-      />
+      <div
+        className="hero-menu-btn-wrap fixed top-8 right-8 z-[100] max-md:top-6 max-md:right-6"
+        style={pathname === '/' ? { opacity: 0, visibility: 'hidden' } : undefined}
+      >
+        <MenuButton
+          isOpen={isOpen}
+          toggleMenu={toggleMenu}
+          isContactModalOpen={isContactModalOpen || isResumeOpen}
+        />
+      </div>
 
       {/* Menu Overlay */}
       <div
