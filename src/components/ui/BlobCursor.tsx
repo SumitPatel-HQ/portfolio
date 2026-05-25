@@ -50,9 +50,9 @@ interface BlobCursorProps {
   restrictToTags?: string[];
 }
 
-export function BlobCursor({ 
-  targetRef, 
-  onClick, 
+export function BlobCursor({
+  targetRef,
+  onClick,
   icon: Icon = ArrowUpRight,
   iconColor = "text-white",
   restrictToTags
@@ -102,20 +102,21 @@ export function BlobCursor({
 
     const handleMouseMove = (e: MouseEvent) => {
       const targetElement = e.target as HTMLElement;
-      
-      if (targetElement.closest(".show-default-cursor")) {
-        cancelVisibilityFrame();
-        setIsVisible(false);
-        target.classList.remove("hide-default-cursor");
-        return;
-      }
 
-      // If restrictToTags is provided, only show when hovering over those tags
-      // Otherwise, show it for the whole target container
+      // Check if we're hovering over a "show-default-cursor" element
+      // This takes priority - we always hide the custom cursor here
+      const isOverShowDefaultCursor = !!targetElement.closest(".show-default-cursor");
+
+      // Check if we should show based on restrictToTags
       const tagRestrictions = restrictToTagsRef.current;
-      const shouldShow = tagRestrictions 
+      const matchesTagRestriction = tagRestrictions
         ? tagRestrictions.some(tag => !!targetElement.closest(tag))
         : true;
+
+      // Only show custom cursor if:
+      // 1. We match the tag restriction (or no restriction)
+      // 2. AND we're NOT over a "show-default-cursor" element
+      const shouldShow = matchesTagRestriction && !isOverShowDefaultCursor;
 
       // Update position first
       if (isFirstMove.current) {
@@ -131,8 +132,8 @@ export function BlobCursor({
         cursorY.set(e.clientY);
       }
 
+      // Synchronously update both React state and CSS class
       setIsVisible(shouldShow && hasPosition.current);
-      
       if (shouldShow) {
         target.classList.add("hide-default-cursor");
       } else {
@@ -144,13 +145,13 @@ export function BlobCursor({
     const handleClick = (e: MouseEvent) => {
       const currentOnClick = onClickRef.current;
       if (!currentOnClick) return;
-      
+
       const targetElement = e.target as HTMLElement;
       const tagRestrictions = restrictToTagsRef.current;
-      const shouldTrigger = tagRestrictions 
+      const shouldTrigger = tagRestrictions
         ? tagRestrictions.some(tag => !!targetElement.closest(tag))
         : true;
-        
+
       if (shouldTrigger) {
         currentOnClick(e);
       }

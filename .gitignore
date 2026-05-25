@@ -41,6 +41,7 @@ yarn-error.log*
 next-env.d.ts
 
 # Folders
+.worktrees/
 .skills/
 .guidelines/
 .prompts/
@@ -50,7 +51,8 @@ next-env.d.ts
 changes.diff
 future _font_.md
 Readme.md
-CODE_REVIEW_FIXES.md
 
 favicon-package/.worktrees/
 /public/SVG
+/public/images/
+image.jpg

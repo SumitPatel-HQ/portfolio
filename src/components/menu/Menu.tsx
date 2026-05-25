@@ -20,6 +20,7 @@ export const Menu = () => {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const { isOpen: isContactModalOpen } = useContactModal();
+  const [isResumeOpen, setIsResumeOpen] = useState(false);
   const { lenis } = useLenis();
   const { isIntroComplete } = useIntro();
 
@@ -106,13 +107,13 @@ export const Menu = () => {
   // Handle Escape key
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isOpen) {
+      if (e.key === 'Escape' && isOpen && !e.defaultPrevented && !isContactModalOpen && !isResumeOpen) {
         setIsOpen(false);
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen]);
+  }, [isOpen, isContactModalOpen, isResumeOpen]);
 
   // Lock background scrolling while menu overlay is open.
   useEffect(() => {
@@ -156,7 +157,7 @@ export const Menu = () => {
       <HomeLink
         label={displayedLabel}
         onNavigate={closeMenu}
-        isContactModalOpen={isContactModalOpen}
+        isContactModalOpen={isContactModalOpen || isResumeOpen}
       />
       <div
         className="hero-menu-btn-wrap fixed top-8 right-8 z-[100] max-md:top-6 max-md:right-6"
@@ -165,7 +166,7 @@ export const Menu = () => {
         <MenuButton
           isOpen={isOpen}
           toggleMenu={toggleMenu}
-          isContactModalOpen={isContactModalOpen}
+          isContactModalOpen={isContactModalOpen || isResumeOpen}
         />
       </div>
 
@@ -178,7 +179,12 @@ export const Menu = () => {
       >
         {/* Stop propagation so clicking inside content doesn't blindly close unless clicked directly on background */}
         <div className="w-full h-full" onClick={(e) => e.stopPropagation()}>
-          <MenuContent onNavigate={closeMenu} />
+          <MenuContent 
+            onNavigate={closeMenu} 
+            isMenuOpen={isOpen} 
+            isResumeOpen={isResumeOpen}
+            setIsResumeOpen={setIsResumeOpen}
+          />
         </div>
       </div>
     </>
