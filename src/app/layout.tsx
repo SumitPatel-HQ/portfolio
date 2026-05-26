@@ -6,6 +6,7 @@ import { ContactModalProvider } from "@/context/ContactModalContext";
 import { ToastProvider } from "@/components/Contacts/toast";
 import { Menu } from "@/components/menu/Menu";
 import { IntroProvider } from "@/context/IntroContext";
+import { PageShowHandler } from "@/components/PageShowHandler";
 import LenisProvider from "@/providers/LenisProvider";
 import GSAPProvider from "@/providers/GSAPProvider";
 import { Analytics } from "@vercel/analytics/next";
@@ -35,6 +36,7 @@ export default function RootLayout({
           <GSAPProvider>
             <ToastProvider>
               <IntroProvider>
+                  <PageShowHandler />
                 <ContactModalProvider>
                   <Menu />
                   <main className="flex-1 flex flex-col">

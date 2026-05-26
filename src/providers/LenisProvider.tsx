@@ -28,6 +28,7 @@ export default function LenisProvider({ children }: { children: ReactNode }) {
       const mobile = window.matchMedia("(max-width: 768px)").matches;
 
       const lenis = new Lenis({
+         autoRaf: false, // Prevent Lenis from running its own RAF since we sync it with GSAP's ticker
          duration: mobile ? 1.2 : 1.5,
          easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
          orientation: "vertical",
@@ -58,7 +59,53 @@ export default function LenisProvider({ children }: { children: ReactNode }) {
       // Connect Lenis scroll to ScrollTrigger
       lenis.on("scroll", ScrollTrigger.update);
 
+      // ─── Tab Duplication / BFCache Restore Handler (Fix 2 + Fix 3) ──────────
+      // Tab duplication and BFCache restore fire `pageshow` with `persisted: true`.
+      // On this event:
+      //   - GSAP's RAF ticker is suspended in the new tab context → wake it.
+      //   - Lenis's RAF loop is also dead → restart it.
+      //   - ScrollTrigger pin positions are stale → refresh after one frame.
+      //   - If the intro overlay is still visible, the intro was mid-play when
+      //     the tab was cloned → snap all hero elements to final visible state
+      //     so the page is not permanently blank/invisible.
+      const handlePageShow = (event: PageTransitionEvent) => {
+         if (!event.persisted) return;
+
+         // Restart the GSAP ticker (its RAF was suspended in the duplicated tab).
+         // gsap.ticker.wake() is the documented method; guard with optional chain
+         // for forwards compatibility.
+         // eslint-disable-next-line @typescript-eslint/no-explicit-any
+         (gsap.ticker as any).wake?.();
+
+         // Restart Lenis — it was stopped when the RAF loop died.
+         lenis.start();
+
+         // Re-derive scroll position so Lenis and ScrollTrigger agree.
+         // Defer to next frame so the DOM layout pass is complete first.
+         requestAnimationFrame(() => {
+            ScrollTrigger.refresh();
+         });
+
+         // Fix 3: Snap hero to final state if intro was interrupted mid-play.
+         // Detect by checking whether the intro overlay is still visible.
+         const heroOverlay = document.querySelector<HTMLElement>("[data-hero-intro]");
+         if (heroOverlay && parseFloat(getComputedStyle(heroOverlay).opacity) > 0.05) {
+            // Overlay still opaque → intro was cloned mid-animation.
+            // Snap every hero element to its post-animation final state.
+            gsap.set("[data-hero-intro]", { autoAlpha: 0, pointerEvents: "none" });
+            gsap.set(".hero-intro-title", { clearProps: "all", opacity: 1 });
+            gsap.set(".hero-chrome-top, .hero-chrome-bottom", { clearProps: "all", opacity: 1 });
+            gsap.set(".hero-stripes", { clearProps: "all", opacity: 1 });
+            gsap.set(".hero-divider", { clearProps: "all", opacity: 1 });
+            gsap.set(".hero-menu-btn-wrap", { clearProps: "all", opacity: 1 });
+         }
+      };
+
+      window.addEventListener("pageshow", handlePageShow);
+      // ─────────────────────────────────────────────────────────────────────────
+
       return () => {
+         window.removeEventListener("pageshow", handlePageShow);
          cancelAnimationFrame(readyHandle);
          gsap.ticker.remove(update);
          lenis.destroy();

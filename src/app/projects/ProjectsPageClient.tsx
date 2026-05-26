@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+
 import { AnimatePresence, motion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -141,12 +142,72 @@ export function ProjectsPageClient({ projects }: ProjectsPageClientProps) {
     activeIndexRef.current = activeIndex;
   }, [activeIndex]);
 
+  // ── Tab Duplication / BFCache Restore — Projects Page ─────────────────────
+  // When the browser clones a tab it serializes:
+  //   1. The GSAP <div data-pin-spacer> wrapper around mainRef.
+  //   2. Framer Motion inline transforms on whichever slide overlay was active.
+  //
+  // On restore React re-mounts with activeIndex=0, but the DOM carries frozen
+  // transforms for the previously-visible slide.  The pageshow handler:
+  //   a) Reads the actual restored scroll position → derives the correct index.
+  //   b) Wipes stale Framer inline styles so Framer can own the overlay cleanly.
+  //   c) Syncs React state so the re-initialized ScrollTrigger starts correctly.
+  useLayoutEffect(() => {
+    const handlePageShow = (event: PageTransitionEvent) => {
+      if (!event.persisted) return;
+
+      // Derive activeIndex from the current scroll position.
+      // We must do this before GSAP's ScrollTrigger is recreated so the state
+      // is correct when onUpdate fires for the first time.
+      const trigger = triggerRef.current;
+      if (trigger && totalSteps > 0) {
+        const scrollY = window.scrollY;
+        const rawProgress = (scrollY - trigger.start) / (trigger.end - trigger.start);
+        const clampedProgress = Math.max(0, Math.min(1, rawProgress));
+        const restoredIndex = Math.round(clampedProgress * totalSteps);
+        if (restoredIndex !== activeIndexRef.current) {
+          activeIndexRef.current = restoredIndex;
+          setActiveIndex(restoredIndex);
+        }
+      }
+
+      // Wipe any Framer Motion inline transforms that were serialized by the
+      // browser clone so Framer can animate from a clean baseline.
+      const overlayGrid = document.querySelector<HTMLElement>(".relative.grid.grid-cols-1.grid-rows-1");
+      if (overlayGrid) {
+        overlayGrid.querySelectorAll<HTMLElement>(".col-start-1.row-start-1").forEach((el) => {
+          el.style.removeProperty("transform");
+          el.style.removeProperty("opacity");
+        });
+      }
+    };
+
+    window.addEventListener("pageshow", handlePageShow);
+    return () => window.removeEventListener("pageshow", handlePageShow);
+  }, [totalSteps]);
+  // ──────────────────────────────────────────────────────────────────────────
+
   useEffect(() => {
     if (!isGSAPReady || !mainRef.current) {
       return;
     }
 
+    // Unwrap any orphaned GSAP pin-spacer serialized during tab duplication.
+    // Without this, GSAP nests a new spacer inside the dead one → doubled page
+    // height → sections overlap.
+    if (mainRef.current) {
+      const parent = mainRef.current.parentElement;
+      if (parent && parent.hasAttribute("data-pin-spacer")) {
+        const grandparent = parent.parentElement;
+        if (grandparent) {
+          grandparent.insertBefore(mainRef.current, parent);
+          parent.remove();
+        }
+      }
+    }
+
     const ctx = gsap.context(() => {
+
       const trigger = ScrollTrigger.create({
         trigger: mainRef.current,
         start: "top top",

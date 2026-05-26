@@ -139,12 +139,6 @@ export const lockHeroIntroScroll = (smoothScroll?: SmoothScrollController | null
   body.style.overscrollBehavior = 'none';
   body.style.touchAction = 'none';
 
-  // Prevent scroll on html element as well (for Safari/iOS)
-  html.style.position = 'fixed';
-  html.style.width = '100%';
-  html.style.height = '100%';
-  html.style.top = '0';
-  html.style.left = '0';
 
   // Add event listeners with capture phase to intercept all scroll events
   window.addEventListener('wheel', preventScroll, { passive: false, capture: true });
@@ -169,11 +163,6 @@ export const lockHeroIntroScroll = (smoothScroll?: SmoothScrollController | null
       // Restore styles
       html.style.overflow = previousHtmlOverflow;
       html.style.overscrollBehavior = previousHtmlOverscrollBehavior;
-      html.style.position = '';
-      html.style.width = '';
-      html.style.height = '';
-      html.style.top = '';
-      html.style.left = '';
       body.style.overflow = previousBodyOverflow;
       body.style.overscrollBehavior = previousBodyOverscrollBehavior;
       body.style.touchAction = previousBodyTouchAction;
@@ -377,6 +366,7 @@ export const useHeroAnimation = ({
         snapToHeroTop();
         unlockScroll();
         setIsIntroComplete(true);
+        setIntroComplete(true);
       };
 
       const timeline = gsap.timeline({
@@ -451,10 +441,6 @@ export const useHeroAnimation = ({
           duration: 3.05,
           ease: EASE_PATEL
         }, 2.64)
-
-        .call(() => {
-          setIntroComplete(true);
-        }, [], 3.04)
 
         .to(topChromeRef.current, {
           autoAlpha: 1,
