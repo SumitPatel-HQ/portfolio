@@ -2,43 +2,19 @@
 
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { AnimatePresence, motion, useMotionValue, useSpring } from "framer-motion";
 import { MoveUpRight as ArrowIcon } from "lucide-react";
 import { createPortal } from "react-dom";
 import { cn } from "@/lib/utils";
 import { useIsClient } from "@/hooks/useIsClient";
+import { PROJECTS, ProjectItem } from "@/data/projects.data";
+import { getProjectImageUrl } from "@/lib/imagekit";
 
-interface VisualItem {
-  key: number;
-  url: string;
-  label: string;
-}
 
-const visualData: VisualItem[] = [
-  {
-    key: 1,
-    url: "https://images.pexels.com/photos/9002742/pexels-photo-9002742.jpeg",
-    label: "Pinky Island",
-  },
-  {
-    key: 2,
-    url: "https://images.pexels.com/photos/31622979/pexels-photo-31622979.jpeg",
-    label: "Greedy Model",
-  },
-  {
-    key: 3,
-    url: "https://images.pexels.com/photos/12187128/pexels-photo-12187128.jpeg",
-    label: "Sigma Connect",
-  },
-  {
-    key: 4,
-    url: "https://images.pexels.com/photos/28168248/pexels-photo-28168248.jpeg",
-    label: "Futuristic Gamma",
-  },
-];
 
 export const FeaturedWork = () => {
-  const [focusedItem, setFocusedItem] = useState<VisualItem | null>(null);
+  const [focusedItem, setFocusedItem] = useState<ProjectItem | null>(null);
   const [isLargeScreen, setIsLargeScreen] = useState(false);
   const isClient = useIsClient();
 
@@ -49,8 +25,8 @@ export const FeaturedWork = () => {
 
   // Configuration constants
   const CONFIG = {
-    PREVIEW_WIDTH: 300,
-    PREVIEW_HEIGHT: 400,
+    PREVIEW_WIDTH: 480,
+    PREVIEW_HEIGHT: 270,
     PREVIEW_GAP: 24,
     VIEWPORT_PADDING: 16,
     MOBILE_BREAKPOINT: 768,
@@ -93,7 +69,7 @@ export const FeaturedWork = () => {
     cursorY.set(clampedY);
   };
 
-  const handleActivate = (item: VisualItem) => {
+  const handleActivate = (item: ProjectItem) => {
     setFocusedItem(item);
   };
 
@@ -105,7 +81,7 @@ export const FeaturedWork = () => {
     <section className="w-full px-8 md:px-24 py-20 flex flex-col" aria-labelledby="featured-work-title">
       <h2
         id="featured-work-title"
-        className="text-3xl md:text-5xl font-extrabold mb-12 flex items-center gap-4"
+        className="text-3xl md:text-5xl font-extrabold mb-12 flex items-center gap-4 scale-y-[1.1]"
       >
         {/* <span className="w-3 h-3 rounded-full bg-primary"></span> */}
         Featured Work
@@ -119,11 +95,13 @@ export const FeaturedWork = () => {
         aria-label="Featured projects image reveal"
       >
         <ul className="w-full">
-          {visualData.map((item) => (
-            <li key={item.key} className="relative">
-              <button
-                type="button"
-                className="w-full text-left p-4 md:p-6 cursor-pointer flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+          {PROJECTS.slice(0, 4).map((item) => (
+            <li key={item.id} className="relative">
+              <Link
+                href={item.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full text-left p-4 md:p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
                 onMouseEnter={() => handleActivate(item)}
                 onFocus={() => handleActivate(item)}
                 onBlur={handleDeactivate}
@@ -132,16 +110,15 @@ export const FeaturedWork = () => {
                     handleDeactivate();
                   }
                 }}
-                aria-label={`Preview ${item.label}`}
-                aria-pressed={focusedItem?.key === item.key}
+                aria-label={`Visit ${item.name}`}
               >
                 {!isLargeScreen && (
                   <Image
-                    src={item.url}
+                    src={getProjectImageUrl(`${item.imageFolder}/${item.previewImage}`)}
                     width={1200}
                     height={700}
                     className="w-full h-52 object-cover rounded-md"
-                    alt={item.label}
+                    alt={item.imageAlt}
                     sizes="(max-width: 767px) 100vw, 0px"
                   />
                 )}
@@ -149,18 +126,18 @@ export const FeaturedWork = () => {
                 <h3
                   className={cn(
                     "uppercase md:text-5xl sm:text-3xl text-2xl font-bold sm:py-6 py-2 leading-[0.95] relative transition-colors duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
-                    focusedItem?.key === item.key
+                    focusedItem?.id === item.id
                       ? "text-foreground sm:mix-blend-difference sm:z-20"
                       : "text-foreground/85"
                   )}
                 >
-                  {item.label}
+                  {item.name}
                 </h3>
 
                 <span
                   className={cn(
                     "hidden sm:flex p-4 rounded-full transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
-                    focusedItem?.key === item.key
+                    focusedItem?.id === item.id
                       ? "bg-accent text-background z-20"
                       : "text-foreground"
                   )}
@@ -172,11 +149,11 @@ export const FeaturedWork = () => {
                 <span
                   className={cn(
                     "h-[2px] bg-black dark:bg-white absolute bottom-0 left-0 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
-                    focusedItem?.key === item.key ? "w-full" : "w-0"
+                    focusedItem?.id === item.id ? "w-full" : "w-0"
                   )}
                   aria-hidden="true"
                 />
-              </button>
+              </Link>
             </li>
           ))}
         </ul>
@@ -186,7 +163,7 @@ export const FeaturedWork = () => {
             <AnimatePresence>
               {isLargeScreen && focusedItem && (
                 <motion.div
-                  key={focusedItem.key}
+                  key={focusedItem.id}
                   className="fixed z-[999] pointer-events-none"
                   style={{
                     left: smoothX,
@@ -199,12 +176,13 @@ export const FeaturedWork = () => {
                   aria-hidden="true"
                 >
                   <Image
-                    src={focusedItem.url}
-                    width={600}
-                    height={800}
+                    src={getProjectImageUrl(`${focusedItem.imageFolder}/${focusedItem.previewImage}`)}
+                    width={1920}
+                    height={1080}
                     alt=""
-                    className="object-cover w-[280px] lg:w-[300px] h-[360px] lg:h-[400px] rounded-lg shadow-2xl bg-white dark:bg-zinc-950"
-                    sizes="300px"
+                    className="object-cover w-[440px] lg:w-[480px] h-[248px] lg:h-[270px] rounded-lg shadow-2xl bg-white dark:bg-zinc-950"
+                    sizes="480px"
+                    quality={100}
                     priority
                   />
                 </motion.div>

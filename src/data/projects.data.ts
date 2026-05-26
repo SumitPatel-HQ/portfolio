@@ -10,6 +10,7 @@ export type ProjectItem = {
   logoAlt: string;
   imageAlt: string;
   imageFolder: string;
+  previewImage: string;
   repoUrl: string;
 };
 
@@ -22,6 +23,7 @@ export const PROJECTS: ProjectItem[] = [
       "SQL workspace for developers and analysts who want accurate, schema-aware queries against their real databases ",
     href: "https://querycraft-ai.vercel.app/",
     imageFolder: "QueryCraft1",
+    previewImage: "IMG1.png",
     imageAlt: "QueryCraft images",
     logo: getLogoUrl("logo1.png"),
     logoAlt: "QueryCraft logo",
@@ -35,6 +37,7 @@ export const PROJECTS: ProjectItem[] = [
       "Sentira decodes video, audio, and text to reveal subtext, emotions, and truth, turning passive viewing into active insight.",
     href: "https://sentira-io.vercel.app/",
     imageFolder: "Sentira1",
+    previewImage: "IMG1.png",
     imageAlt: "Sentira images",
     logo: "Sentira",
     logoAlt: "Sentira logo",
@@ -48,6 +51,7 @@ export const PROJECTS: ProjectItem[] = [
       "A comprehensive sales outreach platform that automates lead generation, multi-channel communication, AI-powered enrichment, and workflow management with an integrated CRM dashboard for tracking and optimizing campaigns.",
     href: "https://rosey-workflow.vercel.app/",
     imageFolder: "Rosey1",
+    previewImage: "IMG1.png",
     imageAlt: "Rosey images",
     logo: getLogoUrl("Logo3.png"),
     logoAlt: "Rosey logo",
@@ -61,6 +65,7 @@ export const PROJECTS: ProjectItem[] = [
       "A modern private image vault for organizing and displaying photos with optimized loading.",
     href: "https://imaginalab.vercel.app/",
     imageFolder: "ImaginaLab",
+    previewImage: "IMG1.png",
     imageAlt: "ImaginaLab images",
     logo: getLogoUrl("Logo4.png"),
     logoAlt: "ImaginaLab logo",
@@ -74,6 +79,7 @@ export const PROJECTS: ProjectItem[] = [
       "AI-powered visual troubleshooting platform that lets users snap a photo of a broken device and receive step‑by‑step repair guidance, AR component overlays, safety checks, and voice‑enabled instructions.",
     href: "https://fixit-lens.vercel.app/",
     imageFolder: "Fixit",
+    previewImage: "IMG1.png",
     imageAlt: "FixIt images",
     logo: getLogoUrl("logo5.png"),
     logoAlt: "FixIt logo",
