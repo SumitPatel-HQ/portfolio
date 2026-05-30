@@ -58,13 +58,13 @@ export function ProjectsPageClient({ projects }: ProjectsPageClientProps) {
     const isMobile = window.matchMedia("(max-width: 768px)").matches;
     return Math.max(280, window.innerHeight * (isMobile ? 0.65 : 0.48));
   }, []);
-  
+
   const mainRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<ScrollTrigger | null>(null);
   const activeIndexRef = useRef(0);
   const isProgrammaticScrollRef = useRef(false);
   const scrollLockTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  
+
   const { isReady: isGSAPReady } = useGSAP();
   const { lenis } = useLenis();
 
@@ -192,6 +192,11 @@ export function ProjectsPageClient({ projects }: ProjectsPageClientProps) {
       return;
     }
 
+    const transitionContent = mainRef.current.closest(".transition-content") as HTMLElement | null;
+    if (!transitionContent) {
+      return;
+    }
+
     // Unwrap any orphaned GSAP pin-spacer serialized during tab duplication.
     // Without this, GSAP nests a new spacer inside the dead one → doubled page
     // height → sections overlap.
@@ -210,9 +215,11 @@ export function ProjectsPageClient({ projects }: ProjectsPageClientProps) {
 
       const trigger = ScrollTrigger.create({
         trigger: mainRef.current,
-        start: "top top",
+        start: 0,
+        pinnedContainer: transitionContent,
         end: () => `+=${perCardScrollDistance * totalSteps}`,
         pin: true,
+        pinType: "transform", // CRITICAL FIX: Do not use position: fixed. Use transforms to pin!
         pinSpacing: true,
         scrub: 1,
         anticipatePin: 1,
@@ -256,7 +263,7 @@ export function ProjectsPageClient({ projects }: ProjectsPageClientProps) {
   useEffect(() => {
     const nextIndex = (activeIndex + 1) % projects.length;
     const prevIndex = (activeIndex - 1 + projects.length) % projects.length;
-    
+
     [nextIndex, prevIndex].forEach(idx => {
       projects[idx].imageUrls.forEach(url => {
         const img = new Image();
@@ -291,7 +298,7 @@ export function ProjectsPageClient({ projects }: ProjectsPageClientProps) {
     <div className="w-full">
       <div ref={mainRef} className="relative flex min-h-screen w-full flex-col overflow-hidden bg-background text-foreground">
         <BlobCursor targetRef={mainRef} onClick={handleContainerClick} />
-        
+
         {/* Background Stage - Replaces ProjectsStageServer for Client usage */}
         <div className="absolute inset-0 overflow-hidden bg-background">
           <div
@@ -307,14 +314,14 @@ export function ProjectsPageClient({ projects }: ProjectsPageClientProps) {
           <TextureOverlay url={PROJECTS_TEXTURE_IMAGE} opacity={0.15} />
 
           <div className="absolute right-0 top-[0%] bottom-[0%] w-full md:w-[60%] lg:w-[57%] z-10 flex items-center justify-center p-6 md:p-12 lg:pr-24 lg:pl-0">
-            <ImageGallery 
-              images={activeProject.imageUrls} 
-              imageAlt={activeProject.imageAlt} 
+            <ImageGallery
+              images={activeProject.imageUrls}
+              imageAlt={activeProject.imageAlt}
               projectId={activeProject.id}
             />
           </div>
         </div>
-  
+
         <section className="pointer-events-none absolute bottom-0 left-0 right-0 z-30 px-6 pb-6 md:px-[68px] md:pb-8 isolate">
           <div className="flex max-w-[1080px] flex-col gap-8 md:gap-5">
             <div className="relative grid grid-cols-1 grid-rows-1 w-full items-end">
@@ -338,7 +345,7 @@ export function ProjectsPageClient({ projects }: ProjectsPageClientProps) {
                 </motion.div>
               </AnimatePresence>
             </div>
-  
+
             <div className="pointer-events-auto w-fit">
               <ProjectsLogoRail
                 projects={projects}
@@ -348,7 +355,7 @@ export function ProjectsPageClient({ projects }: ProjectsPageClientProps) {
             </div>
           </div>
         </section>
-  
+
         <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-56 bg-gradient-to-t from-[#0f0f0f] via-transparent to-transparent" />
         <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-40 bg-gradient-to-b from-black/35 via-transparent to-transparent" />
         <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-52 bg-gradient-to-r from-black/40 via-transparent to-transparent" />

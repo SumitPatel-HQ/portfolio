@@ -2,7 +2,7 @@
 
 import React, { useRef, useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useTransitionRouter } from 'next-transition-router';
 
 import StripesBackground from "@/components/ui/visuals/StripesBackground";
 import { useContactModal } from "@/context/ContactModalContext";
@@ -30,7 +30,7 @@ export const HeroSection = () => {
   const nameDividerRef = useRef<HTMLDivElement>(null);
   const bottomChromeRef = useRef<HTMLDivElement>(null);
   const [isIntroComplete, setIsIntroComplete] = useState(false);
-  const router = useRouter();
+  const router = useTransitionRouter();
 
   const handleNameClick = (e: React.MouseEvent | React.KeyboardEvent) => {
     const target = e.target as HTMLElement;
@@ -61,6 +61,18 @@ export const HeroSection = () => {
 
   return (
     <section ref={heroRootRef} className="hero-root min-h-screen bg-background text-foreground relative overflow-hidden flex flex-col">
+      {/* 
+        This style block is injected directly into the SSR HTML for the home page.
+        It overrides the default CSS fallback that forces the brand layer visible
+        before JS hydrates, preventing any "flash" of the brand layer on refresh.
+        Since it targets html:not(.transition-ready), it safely becomes inert 
+        once the TransitionProvider adds .transition-ready.
+      */}
+      <style dangerouslySetInnerHTML={{ __html: `
+        html:not(.transition-ready) .transition-brand-layer {
+          display: none !important;
+        }
+      `}} />
 
       {/* Parallax Background Layers */}
       <div ref={stripesRef} className="hero-stripes absolute inset-0 motion-reduce:opacity-100 motion-reduce:transform-none">
@@ -149,13 +161,13 @@ export const HeroSection = () => {
             <button
               onClick={openModal}
               aria-label="Open contact form to send a message"
-              className="py-3.5 px-18px text-status font-semibold uppercase border border-accent min-w-btn text-center bg-accent text-black cursor-pointer transition-all duration-300 hover:bg-white hover:text-black hover:border-white hover:-translate-y-0.5 max-md:min-w-btn-mobile">
+              className="py-3.5 px-18px text-status font-semibold uppercase border border-accent min-w-btn text-center bg-accent text-black cursor-pointer transition-all duration-300 hover:bg-white hover:text-black hover:border-white hover:-translate-y-0.5 max-md:min-w-btn-mobile rounded-xl">
               Get in touch
             </button>
             <Link 
               href="/projects" 
               aria-label="View all projects portfolio"
-              className="py-3.5 px-18px text-status font-semibold uppercase border border-white/30 min-w-btn text-center bg-white/8 cta-secondary-text cursor-pointer transition-all duration-300 hover:bg-white hover:border-white hover:-translate-y-0.5 max-md:min-w-btn-mobile">
+              className="py-3.5 px-18px text-status font-semibold uppercase border border-white/30 min-w-btn text-center bg-white/8 cta-secondary-text cursor-pointer transition-all duration-300 hover:bg-white hover:border-white hover:-translate-y-0.5 max-md:min-w-btn-mobile rounded-xl">
               View Projects
             </Link>
           </div>

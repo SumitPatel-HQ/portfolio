@@ -23,6 +23,7 @@ export const Menu = () => {
   const [isResumeOpen, setIsResumeOpen] = useState(false);
   const { lenis } = useLenis();
   const { isIntroComplete } = useIntro();
+  const shouldShowHomeLink = pathname !== "/" || isIntroComplete;
 
   const targetClosedLabel = useMemo(() => {
     if (pathname === '/') return null;
@@ -41,11 +42,15 @@ export const Menu = () => {
 
   // Synchronize displayedLabel during render when dependencies change.
   // This avoids the "double render" and satisfies linting for synchronous state updates.
+  // NOTE: We deliberately do NOT hide the label when the menu starts closing — that caused
+  // the HomeLink to vanish for the full close animation duration and only re-appear at the end
+  // (the "late arrival" bug). onCloseComplete is the sole authority for updating displayedLabel
+  // after the animation finishes.
   if (targetClosedLabel !== prevTargetClosedLabel || isOpen !== prevIsOpen || isClosing !== prevIsClosing) {
     setPrevTargetClosedLabel(targetClosedLabel);
     setPrevIsOpen(isOpen);
     setPrevIsClosing(isClosing);
-    
+
     if (isOpen) {
       if (targetClosedLabel !== null) {
         setDisplayedLabel(targetClosedLabel);
@@ -54,19 +59,17 @@ export const Menu = () => {
         setDisplayedLabel(null);
       }
     } else {
-      if (isClosing) {
-        // We are currently playing the close animation.
-        // If the current label is NOT what we want when closed, or we are on Home, hide it.
-        if (targetClosedLabel === null || targetClosedLabel !== displayedLabel) {
-          setDisplayedLabel(null);
-        }
-      } else {
-        // If we're not closing (e.g. back button), sync immediately
+      // If prevIsOpen was true, the menu is starting its close animation.
+      // If isClosing is true, the menu is actively animating out.
+      // In both cases, we must NOT update the label here; onCloseComplete will do it when the animation finishes.
+      // If BOTH are false, this is an instant change while the menu is already closed (e.g. browser back-button)
+      // so we update the label immediately.
+      if (!prevIsOpen && !isClosing) {
         setDisplayedLabel(targetClosedLabel);
       }
     }
   }
-  
+
   useLayoutEffect(() => {
     targetLabelRef.current = targetClosedLabel;
   }, [targetClosedLabel]);
@@ -75,9 +78,17 @@ export const Menu = () => {
     isOpen,
     onCloseStart: () => {
       setIsClosing(true);
+      // The menu close animation takes 1.54s total.
+      // The HomeLink exit (0.4s) + enter (0.8s) takes 1.2s total.
+      // By triggering the label update at 340ms, the text animation finishes
+      // exactly at 1.54s, perfectly synchronized with the menu sliding away.
+      setTimeout(() => {
+        setDisplayedLabel(targetLabelRef.current);
+      }, 840);
     },
     onCloseComplete: () => {
       setIsClosing(false);
+      // Failsafe in case network routing took longer than 340ms
       setDisplayedLabel(targetLabelRef.current);
     },
   });
@@ -85,7 +96,7 @@ export const Menu = () => {
   useEffect(() => {
     let timeoutId: NodeJS.Timeout;
 
-    if (isOpen && targetClosedLabel === null) {
+    if (isOpen && targetClosedLabel === null && isIntroComplete) {
       // We are on the Home page. Delay the "Home" label appearance by 800ms
       // so it starts fading in right as the black overlay reaches the top of the screen.
       timeoutId = setTimeout(() => {
@@ -94,7 +105,7 @@ export const Menu = () => {
     }
 
     return () => clearTimeout(timeoutId);
-  }, [isOpen, targetClosedLabel]);
+  }, [isOpen, targetClosedLabel, isIntroComplete]);
 
   const toggleMenu = useCallback(() => {
     setIsOpen(prev => !prev);
@@ -154,14 +165,17 @@ export const Menu = () => {
 
   return (
     <>
-      <HomeLink
-        label={displayedLabel}
-        onNavigate={closeMenu}
-        isContactModalOpen={isContactModalOpen || isResumeOpen}
-      />
+      {shouldShowHomeLink ? (
+        <HomeLink
+          label={displayedLabel}
+          onNavigate={closeMenu}
+          isContactModalOpen={isContactModalOpen || isResumeOpen}
+        />
+      ) : null}
       <div
-        className="hero-menu-btn-wrap fixed top-8 right-8 z-[100] max-md:top-6 max-md:right-6"
-        style={pathname === '/' ? { opacity: 0, visibility: 'hidden' } : undefined}
+        data-transition-chrome="true"
+        className="hero-menu-btn-wrap fixed top-8 right-8 z-100 max-md:top-6 max-md:right-6"
+        style={pathname === '/' && !isIntroComplete ? { opacity: 0, visibility: 'hidden' } : undefined}
       >
         <MenuButton
           isOpen={isOpen}

@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useTransitionRouter } from "next-transition-router";
 import { motion } from "framer-motion";
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
@@ -54,7 +54,7 @@ export default function AboutPage() {
   const section2Ref = useRef<HTMLDivElement>(null);
   const contactRef = useRef<HTMLDivElement>(null);
   const [isResumeOpen, setIsResumeOpen] = useState(false);
-  const router = useRouter();
+  const router = useTransitionRouter();
   const { lenis } = useLenis();
 
   // Synchronously reset scroll to top before the first paint so that

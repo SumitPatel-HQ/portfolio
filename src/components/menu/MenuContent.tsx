@@ -103,6 +103,7 @@ export const MenuContent: React.FC<MenuContentProps> = ({
                     <Link
                       href={item.href || "#"}
                       onClick={onNavigate}
+                      data-transition-ignore
                       className="group/menu-item menu-content-pages inline-flex items-center gap-3 text-[44px] font-[350] leading-[1] tracking-[-0.015em] text-foreground sm:text-[56px] lg:text-[64px]"
                     >
                       <motion.span

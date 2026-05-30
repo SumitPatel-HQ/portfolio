@@ -11,7 +11,7 @@ if (typeof window !== "undefined") {
       ease: "power2.out",
       duration: 1,
    });
-   
+
    // Disable automatic scroll restoration by both the browser and ScrollTrigger
    window.history.scrollRestoration = "manual";
    ScrollTrigger.clearScrollMemory("manual");
@@ -31,8 +31,8 @@ export default function GSAPProvider({ children }: { children: ReactNode }) {
    const [isReady, setIsReady] = useState(false);
 
    useEffect(() => {
-      // Use requestAnimationFrame to defer the state update until after the initial render cycle,
-      // avoiding cascading renders and satisfying the react-hooks/set-state-in-effect lint rule.
+      // Initialize GSAP immediately so page geometry (pin-spacers) is correct
+      // from the very first frame of the transition.
       const handle = requestAnimationFrame(() => {
          setIsReady(true);
       });

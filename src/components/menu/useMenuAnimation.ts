@@ -62,26 +62,26 @@ export const useMenuAnimation = ({ isOpen, onOpenStart, onOpenComplete, onCloseS
 
         tl.addLabel(openStartLabel)
           .to(containerRef.current, {
-            duration: 1.2,
+            duration: 1.42,
             pointerEvents: 'auto',
             clipPath: 'inset(0% 0% 0% 0%)',
-            ease: 'expo.inOut',
+            ease: 'power2.inOut',
           }, openStartLabel)
-          .to('.menu-content-pages', { yPercent: 0, autoAlpha: 1, duration: 1.6, ease: 'expo.inOut', stagger: 0.032 }, `${openStartLabel}+=0.24`)
-          .to('.menu-content-info', { yPercent: 0, autoAlpha: 1, duration: 1.6, ease: 'expo.inOut', stagger: 0.032 }, `${openStartLabel}+=0.24`)
-          .to('.menu-content-title-letter', { yPercent: 0, rotateY: 0, scale: 1, autoAlpha: 1, duration: 1.6, ease: 'expo.inOut', stagger: 0.032 }, openStartLabel)
-          .to('.menu-content-title-mobile', { yPercent: 0, rotateY: 0, scaleX: 1, scaleY: 1, autoAlpha: 1, duration: 1.6, ease: 'expo.inOut' }, openStartLabel)
+          .to('.menu-content-pages', { yPercent: 0, autoAlpha: 1, duration: 1.85, ease: 'power2.out', stagger: 0.045 }, `${openStartLabel}+=0.28`)
+          .to('.menu-content-info', { yPercent: 0, autoAlpha: 1, duration: 1.78, ease: 'power2.out', stagger: 0.045 }, `${openStartLabel}+=0.34`)
+          .to('.menu-content-title-letter', { yPercent: 0, rotateY: 0, scale: 1, autoAlpha: 1, duration: 1.8, ease: 'power2.out', stagger: 0.038 }, `${openStartLabel}+=0.12`)
+          .to('.menu-content-title-mobile', { yPercent: 0, rotateY: 0, scaleX: 1, scaleY: 1, autoAlpha: 1, duration: 1.8, ease: 'power2.out' }, `${openStartLabel}+=0.12`)
           .addLabel(openEndLabel)
           .addLabel(closeStartLabel)
-          .to('.menu-content-pages', { yPercent: -110, autoAlpha: 0, duration: 0.5, ease: 'expo.in', stagger: 0.02 }, closeStartLabel)
-          .to('.menu-content-info', { yPercent: -110, autoAlpha: 0, duration: 0.45, ease: 'expo.in' }, closeStartLabel)
-          .to('.menu-content-title-letter', { yPercent: -120, rotateY: -12, scale: 0.85, autoAlpha: 0, duration: 0.52, ease: 'expo.in', stagger: 0.016 }, closeStartLabel)
-          .to('.menu-content-title-mobile', { yPercent: -110, rotateY: -10, scaleX: 0.85, scaleY: 0.85, autoAlpha: 0, duration: 0.45, ease: 'expo.in' }, closeStartLabel)
+          .to('.menu-content-pages', { yPercent: -110, autoAlpha: 0, duration: 0.98, ease: 'power2.inOut', stagger: 0.035 }, closeStartLabel)
+          .to('.menu-content-info', { yPercent: -110, autoAlpha: 0, duration: 0.94, ease: 'power2.inOut' }, `${closeStartLabel}+=0.08`)
+          .to('.menu-content-title-letter', { yPercent: -120, rotateY: -12, scale: 0.85, autoAlpha: 0, duration: 1.02, ease: 'power2.inOut', stagger: 0.022 }, `${closeStartLabel}+=0.12`)
+          .to('.menu-content-title-mobile', { yPercent: -110, rotateY: -10, scaleX: 0.85, scaleY: 0.85, autoAlpha: 0, duration: 0.94, ease: 'power2.inOut' }, `${closeStartLabel}+=0.12`)
           .to(containerRef.current, {
-            duration: 0.8,
+            duration: 1.34,
             clipPath: 'inset(0% 0% 100% 0%)',
-            ease: 'expo.inOut'
-          }, `${closeStartLabel}+=0.04`)
+            ease: 'power2.inOut'
+          }, `${closeStartLabel}+=0.2`)
           .addLabel(closeEndLabel);
 
         masterTimelineRef.current = tl;

@@ -1,0 +1,81 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Cinematic Vertical-Stacked Page Transition System
+   
+   Layers (during transition):
+   ┌────────────────┐  z-index: 40  — Snapshot of outgoing page
+   │ Snapshot        │               (position: fixed, moves upward)
+   ├────────────────┤  z-index: 25  — Brand layer
+   │ Brand Layer     │               (position: fixed, follows upward)
+   ├────────────────┤  z-index: 10  — Incoming page
+   │ Next Page       │               (normal flow, revealed from below)
+   └────────────────┘
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Snapshot overlay — captures the visual state of the outgoing page */
+.transition-snapshot {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  overflow: hidden;
+  pointer-events: none;
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translate3d(0, 0, 0);
+  contain: strict;
+}
+
+/* Brand layer — the atmospheric middle scene */
+.transition-brand-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 25;
+  pointer-events: none;
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translate3d(0, 100vh, 0);
+  contain: layout paint;
+}
+
+html:not(.transition-ready) .transition-brand-layer {
+  visibility: visible;
+  transform: translate3d(0, 0, 0);
+}
+
+html:not(.transition-ready) .transition-content {
+  visibility: hidden;
+}
+
+/* Brand layer inner content — centered branding */
+.transition-brand-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: var(--background);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Brand layer — small centered premium text */
+.transition-brand-text {
+  font-family: var(--font-inter), sans-serif;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.04em;
+  color: var(--foreground);
+  opacity: 0.3;
+  font-size: clamp(3rem, 8vw, 5.5rem);
+  line-height: 0.85;
+  user-select: none;
+  transform: scaleY(1.2) translate3d(0, 0, 0);
+  transform-origin: center center;
+  backface-visibility: hidden;
+  white-space: nowrap;
+}
+
+/* During transition, prevent the main content from causing layout shifts */
+.transition-active main {
+  position: relative;
+  z-index: 10;
+}

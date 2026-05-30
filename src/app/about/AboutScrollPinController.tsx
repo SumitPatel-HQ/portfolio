@@ -55,6 +55,11 @@ export function AboutScrollPinController({
       return;
     }
 
+    const transitionContent = section1Ref.current.closest(".transition-content") as HTMLElement | null;
+    if (!transitionContent) {
+      return;
+    }
+
     // Force scroll position to 0 synchronously before creating ScrollTriggers.
     window.scrollTo(0, 0);
     lenis.scrollTo(0, { immediate: true });
@@ -118,9 +123,11 @@ export function AboutScrollPinController({
         const section1Trigger = ScrollTrigger.create({
           id: "about-section1-pin",
           trigger: section1Ref.current,
-          start: "top top",
+          start: 0,
+          pinnedContainer: transitionContent,
           end: () => `+=${window.innerHeight * SECTION1_PIN_DISTANCE_VIEWPORTS}`,
           pin: true,
+          pinType: "transform",
           pinSpacing: true,
           scrub: 1,
           onUpdate: (self) => {
@@ -140,8 +147,10 @@ export function AboutScrollPinController({
           id: "about-section2-pin",
           trigger: section2Ref.current,
           start: "top top",
+          pinnedContainer: transitionContent,
           end: () => `+=${window.innerHeight * SECTION2_PIN_DISTANCE_VIEWPORTS}`,
           pin: true,
+          pinType: "transform",
           pinSpacing: true,
           scrub: 1,
           onUpdate: (self) => {
@@ -260,6 +269,9 @@ export function AboutScrollPinController({
 
         const timer = setTimeout(() => {
             ScrollTrigger.refresh();
+            if (lenis) {
+              lenis.resize();
+            }
         }, 100);
 
         return () => {

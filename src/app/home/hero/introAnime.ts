@@ -244,16 +244,22 @@ export const useHeroAnimation = ({
     setIntroComplete(false);
     setIsIntroComplete(false);
 
-    // Resolve outside any scoped context — the wrapper lives outside heroRootRef.
-    const menuBtnWrap = document.querySelector<HTMLElement>(".hero-menu-btn-wrap");
+    // Resolve from the live transition content so snapshot clones do not get
+    // targeted after a route transition.
+    const transitionContent = heroRootRef.current?.closest<HTMLElement>(".transition-content");
+    const menuBtnWrap = transitionContent?.querySelector<HTMLElement>(".hero-menu-btn-wrap");
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     if (reduceMotion) {
       // For reduced motion: immediately show all elements and complete
       gsap.set([
-        stripesRef.current, topChromeRef.current, bottomChromeRef.current,
-        sumitRef.current, patelRef.current, nameDividerRef.current
+        stripesRef.current,
+        topChromeRef.current,
+        bottomChromeRef.current,
+        sumitRef.current,
+        patelRef.current,
+        nameDividerRef.current,
       ], { clearProps: "all", opacity: 1, y: 0, clipPath: "inset(0% 0% 0% 0%)" });
       if (menuBtnWrap) gsap.set(menuBtnWrap, { clearProps: "all", opacity: 1, y: 0 });
       gsap.set(introOverlayRef.current, { autoAlpha: 0, pointerEvents: "none" });
@@ -492,7 +498,7 @@ export const useHeroAnimation = ({
 
       // Ensure global elements are cleared of intro animation styles when leaving the home page.
       // This prevents the menu button from remaining hidden due to GSAP's revert to initial hidden state.
-      gsap.set(".hero-menu-btn-wrap", { clearProps: "opacity,visibility,filter,transform" });
+      gsap.set(".transition-content .hero-menu-btn-wrap", { clearProps: "opacity,visibility,filter,transform" });
 
       if (animationStatus.current !== 'complete') {
         animationStatus.current = 'idle';

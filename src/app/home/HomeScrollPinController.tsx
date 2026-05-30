@@ -33,6 +33,11 @@ export function HomeScrollPinController({
       return;
     }
 
+    const transitionContent = heroRef.current.closest(".transition-content") as HTMLElement | null;
+    if (!transitionContent) {
+      return;
+    }
+
     // Force scroll position to 0 synchronously before creating ScrollTriggers.
     // This prevents a race condition where Next.js or Lenis retains the previous
     // page's scroll position, causing ScrollTrigger to calculate pins incorrectly.
@@ -102,8 +107,10 @@ export function HomeScrollPinController({
           id: "home-featured-pin",
           trigger: featuredRef.current,
           start: "top top",
+          pinnedContainer: transitionContent,
           end: () => `+=${window.innerHeight * FEATURED_PIN_DISTANCE_VIEWPORTS}`,
           pin: true,
+          pinType: "transform",
           pinSpacing: true,
           scrub: 1,
           onUpdate: (self) => {
@@ -184,6 +191,9 @@ export function HomeScrollPinController({
 
         const timer = setTimeout(() => {
           ScrollTrigger.refresh();
+          if (lenis) {
+            lenis.resize();
+          }
         }, 100);
 
         return () => {

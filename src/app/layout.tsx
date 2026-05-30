@@ -9,6 +9,7 @@ import { IntroProvider } from "@/context/IntroContext";
 import { PageShowHandler } from "@/components/PageShowHandler";
 import LenisProvider from "@/providers/LenisProvider";
 import GSAPProvider from "@/providers/GSAPProvider";
+import { TransitionProvider } from "@/components/transition/TransitionProvider";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
@@ -36,13 +37,15 @@ export default function RootLayout({
           <GSAPProvider>
             <ToastProvider>
               <IntroProvider>
-                  <PageShowHandler />
+                <PageShowHandler />
                 <ContactModalProvider>
-                  <Menu />
-                  <main className="flex-1 flex flex-col">
-                    {children}
-                  </main>
-                  <Footer />
+                  <TransitionProvider>
+                    <main className="relative flex-1 flex flex-col">
+                      <Menu />
+                      {children}
+                    </main>
+                    <Footer />
+                  </TransitionProvider>
                   <Analytics />
                   <SpeedInsights />
                 </ContactModalProvider>
