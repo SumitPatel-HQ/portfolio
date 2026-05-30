@@ -3,6 +3,7 @@
 import React, { RefObject, useEffect, useRef, useState } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import { ArrowUpRight, LucideIcon } from "lucide-react";
+import { TextureOverlay } from "./TextureOverlay";
 
 const BLOB_CURSOR_STYLE_ID = "blob-cursor-style";
 const blobCursorStyleOwners = new Set<symbol>();
@@ -211,7 +212,9 @@ export function BlobCursor({
       transition={{ type: "spring", stiffness: 300, damping: 25 }}
     >
       {/* Background Blob - Glassmorphism */}
-      <div className="absolute inset-0 rounded-full  bg-foreground-secondary/12 shadow-[0_8px_32px_0_rgba(0,0,0,0.36)] backdrop-blur-[1.9px]" />
+      <div className="absolute inset-0 overflow-hidden rounded-full bg-foreground-secondary/12 shadow-[0_8px_32px_0_rgba(0,0,0,0.36)] backdrop-blur-[1.9px]">
+        <TextureOverlay opacity={0.15} />
+      </div>
 
       {/* Sharp Icon */}
       <Icon className={`relative z-10 h-8 w-8 stroke-[1px] ${iconColor}`} />

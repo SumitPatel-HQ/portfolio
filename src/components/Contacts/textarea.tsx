@@ -10,8 +10,9 @@ export type TextareaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement>
 const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
   ({ className, value, onChange, ...props }, ref) => {
     const [isExpanded, setIsExpanded] = React.useState(false)
-    const [hasOverflow, setHasOverflow] = React.useState(false)
+    const [, setHasOverflow] = React.useState(false)
     const [modalValue, setModalValue] = React.useState("")
+    const [charCount, setCharCount] = React.useState(0)
     const internalRef = React.useRef<HTMLTextAreaElement>(null)
 
     // Merge refs to allow both internal and external access
@@ -33,15 +34,24 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
     // Check on value change (for controlled components)
     React.useEffect(() => {
       checkOverflow()
+      if (internalRef.current) {
+        setCharCount(internalRef.current.value.length)
+      }
     }, [value, checkOverflow])
 
     // Check on initial render and potential defaultValue change
     React.useEffect(() => {
-      const timeout = setTimeout(checkOverflow, 50)
+      const timeout = setTimeout(() => {
+        checkOverflow()
+        if (internalRef.current) {
+          setCharCount(internalRef.current.value.length)
+        }
+      }, 50)
       return () => clearTimeout(timeout)
     }, [props.defaultValue, checkOverflow])
 
     const handleInput = (e: React.FormEvent<HTMLTextAreaElement>) => {
+      setCharCount(e.currentTarget.value.length)
       checkOverflow()
       const onInput = props.onInput as React.FormEventHandler<HTMLTextAreaElement> | undefined
       onInput?.(e)
@@ -79,12 +89,14 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
     return (
       <>
         {/* Main Textarea Container Box */}
-        <div className="relative group w-full">
+        <div 
+          className={cn(
+            "relative group flex flex-col w-full min-h-[100px] rounded-xl border border-border-custom bg-background-dark transition-all duration-300 hover:border-white/20 focus-within:ring-1 focus-within:ring-white/20 overflow-hidden",
+            className
+          )}
+        >
           <textarea
-            className={cn(
-              "no-arrows flex min-h-[80px] w-full rounded-xl border border-border-custom bg-background-dark px-3 py-2 text-sm leading-[1.6] text-foreground placeholder:text-muted-custom focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/20 disabled:cursor-not-allowed disabled:opacity-50 scrollbar-custom overflow-y-auto transition-all duration-300 hover:border-white/20",
-              className
-            )}
+            className="no-arrows flex-1 w-full bg-transparent  pl-4 pr-2 pt-1  text-sm leading-[1.6] text-foreground placeholder:text-muted-custom focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 scrollbar-custom overflow-y-auto resize-none"
             ref={internalRef}
             data-lenis-prevent
             value={value}
@@ -94,21 +106,26 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
             {...props}
           />
 
-          {hasOverflow && (
+          <div className="flex items-center justify-between px-3 pb-1 ">
+            <div className="text-xs text-muted-custom pointer-events-none select-none ml-1">
+              {charCount.toLocaleString()} / {props.maxLength || 1000}
+            </div>
+
             <button
               type="button"
               onClick={() => {
                 setModalValue(internalRef.current?.value || "")
                 setIsExpanded(true)
               }}
-              className="absolute bottom-3 right-4 z-10 rounded-lg border border-border-custom bg-background-dark/90 p-1.5 text-muted-custom shadow-sm backdrop-blur-sm transition-all duration-200 hover:border-white/20 hover:text-foreground focus:opacity-100 group-hover:opacity-100"
+              className="rounded-full border border-transparent hover:border-border-custom bg-transparent hover:bg-background-dark/90 p-1 text-muted-custom transition-all duration-200 hover:text-foreground focus:opacity-100"
               aria-label="Expand message view"
               title="Expand message view"
             >
-              <Maximize2 size={14} />
+              <Maximize2 size={13} />
             </button>
-          )}
+          </div>
         </div>
+
 
         <AnimatePresence>
           {/* Full-screen Modal Overlay */}
@@ -137,7 +154,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
                       Message
                     </p>
                     <p className="mt-1 text-sm text-foreground/80">
-                      {modalValue.length.toLocaleString()} / 1,000 characters
+                      {modalValue.length.toLocaleString()} / {props.maxLength || 1000} characters
                     </p>
                   </div>
                   <button
@@ -171,7 +188,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
                     placeholder={props.placeholder}
                     autoFocus
                     wrap="soft"
-                    maxLength={1000}
+                    maxLength={props.maxLength || 1000}
                   />
                 </div>
               </motion.div>

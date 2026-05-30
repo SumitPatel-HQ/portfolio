@@ -6,7 +6,7 @@ import { useTransitionRouter } from 'next-transition-router';
 
 import StripesBackground from "@/components/ui/visuals/StripesBackground";
 import { useContactModal } from "@/context/ContactModalContext";
-import { BlobCursor } from "@/components/ui/BlobCursor";
+import { BlobCursor } from "@/components/ui/visuals/BlobCursor";
 import { useGSAP } from "@/providers/GSAPProvider";
 import { useIntro } from "@/context/IntroContext";
 import { useLenis } from "@/providers/LenisProvider";

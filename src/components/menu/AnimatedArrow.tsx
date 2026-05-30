@@ -9,16 +9,6 @@ interface AnimatedArrowProps {
   className?: string;
 }
 
-/**
- * High-End Product Motion Component
- * 
- * Motion Philosophy & Refinements:
- * - Invisible Sophistication: Travel distance reduced to a perceptual minimum (1.5px delta). The motion feels like an inevitable state shift, not a forced animation.
- * - Organic Asymmetry: Entry uses a decisive, physical deceleration [0.22, 1, 0.36, 1]. Exit uses a quiet, slightly faster ease-in. This non-uniformity feels human.
- * - Pre-Motion Tension: The idle state holds an imperceptible scale compression (0.95). Hovering releases this tension for subconscious responsiveness.
- * - Temporal Layering: Translation resolves first (0.5s), while volumetric expansion (scale) settles fractionally later (0.65s).
- * - Perceptual Softness: Subpixel optical alignment combined with staggered opacity timings ensures fluid, grounded transitions.
- */
 export const AnimatedArrow: React.FC<AnimatedArrowProps> = ({
   isHovered,
   className = "",

@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { useContactModal } from "@/context/ContactModalContext";
 import { socials } from "@/data/socialLinks";
-import { ResumeModal } from "@/components/ResumeModal";
+import { ResumeModal } from "@/components/ui/ResumeModal";
 import { AnimatedArrow } from "./AnimatedArrow";
 
 interface MenuContentProps {

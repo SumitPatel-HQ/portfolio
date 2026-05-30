@@ -9,28 +9,7 @@ import { BrandLayer } from "./BrandLayer";
 import { useLenis } from "@/providers/LenisProvider";
 import "./transition.css";
 
-/**
- * TransitionProvider — Cinematic vertical-stacked page transition orchestrator.
- *
- * Architecture:
- *
- *   ┌────────────────┐  z:40 — Snapshot (outgoing page clone)
- *   │ Current Page ↑  │        Moves upward with heavy momentum
- *   ├────────────────┤  z:25 — Brand Layer
- *   │ "SUMIT" ↑       │        Follows with atmospheric carry
- *   ├────────────────┤  z:10 — Next Page (normal flow)
- *   │ New Page ↑      │        Revealed naturally from below
- *   └────────────────┘
- *
- * The viewport feels like it is traveling upward through a continuous
- * vertical strip of connected scenes. No overlays, no masking, no dead frames.
- *
- * Uses `next-transition-router` for lifecycle control (leave/enter hooks)
- * and GSAP for transform-only, GPU-composited animation.
- */
-/**
- * Helper to map a pathname to a clean page name for the transition.
- */
+
 function getPageName(path: string): string {
   if (!path) return "SUMIT";
 
@@ -96,6 +75,7 @@ export function TransitionProvider({ children }: { children: React.ReactNode }) 
     }
 
     document.body.classList.remove("transition-active");
+    document.body.classList.remove("transition-entering");
     isTransitioningRef.current = false;
     isPopstateTransitionRef.current = false;
 
@@ -190,6 +170,7 @@ export function TransitionProvider({ children }: { children: React.ReactNode }) 
     });
 
     document.body.classList.add("transition-active");
+    document.body.classList.add("transition-entering");
 
     const tl = gsap.timeline({
       onComplete: () => {
@@ -202,6 +183,7 @@ export function TransitionProvider({ children }: { children: React.ReactNode }) 
         gsap.set(contentEl, { clearProps: "y" });
 
         document.body.classList.remove("transition-active");
+        document.body.classList.remove("transition-entering");
         document.documentElement.classList.add("transition-ready");
 
         isTransitioningRef.current = false;
@@ -283,6 +265,7 @@ export function TransitionProvider({ children }: { children: React.ReactNode }) 
       if (lenisRef.current) lenisRef.current.scrollTo(0, { immediate: true });
       window.scrollTo(0, 0);
       contentEl.style.visibility = "visible";
+      document.body.classList.add("transition-entering");
       if (skipBrandLayer) gsap.set(brandEl, { y: "100vh", visibility: "hidden" });
     };
 
@@ -304,6 +287,7 @@ export function TransitionProvider({ children }: { children: React.ReactNode }) 
         gsap.set(brandEl, { y: "100vh", visibility: "hidden" });
         gsap.set(contentEl, { clearProps: "y" });
         document.body.classList.remove("transition-active");
+        document.body.classList.remove("transition-entering");
         isTransitioningRef.current = false;
         skipBrandLayerRef.current = false;
         if (typeof window !== "undefined") {
@@ -329,7 +313,7 @@ export function TransitionProvider({ children }: { children: React.ReactNode }) 
     if (snapshotEl) {
       tl.set(snapshotEl, { visibility: "hidden", innerHTML: "" }, 0);
     }
-  }, [pathname, resetTransitionState]);
+  }, [pathname, resetTransitionState, clearSafetyTimer]);
 
   /**
    * Captures a visual "snapshot" of the current page content into the
@@ -582,6 +566,8 @@ export function TransitionProvider({ children }: { children: React.ReactNode }) 
         lenis.scrollTo(0, { immediate: true });
       }
 
+      document.body.classList.add("transition-entering");
+
       // Ensure new page content is visible again
       contentEl.style.visibility = "visible";
 
@@ -607,6 +593,7 @@ export function TransitionProvider({ children }: { children: React.ReactNode }) 
 
           // Remove transition class
           document.body.classList.remove("transition-active");
+          document.body.classList.remove("transition-entering");
 
           isTransitioningRef.current = false;
           next();
@@ -663,7 +650,7 @@ export function TransitionProvider({ children }: { children: React.ReactNode }) 
         0
       );
     },
-    [lenis]
+    [lenis, clearSafetyTimer]
   );
 
   return (

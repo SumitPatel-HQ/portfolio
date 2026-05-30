@@ -3,7 +3,7 @@
 import React from "react";
 
 import { socials } from "@/data/socialLinks";
-import { ContactOrb } from "@/components/ui/ContactOrb";
+import { ContactOrb } from "@/components/ui/visuals/ContactOrb";
 
 export const ContactMiniSection = () => {
 

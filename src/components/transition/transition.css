@@ -1,15 +1,4 @@
-/* ═══════════════════════════════════════════════════════════════════════════
-   Cinematic Vertical-Stacked Page Transition System
-   
-   Layers (during transition):
-   ┌────────────────┐  z-index: 40  — Snapshot of outgoing page
-   │ Snapshot        │               (position: fixed, moves upward)
-   ├────────────────┤  z-index: 25  — Brand layer
-   │ Brand Layer     │               (position: fixed, follows upward)
-   ├────────────────┤  z-index: 10  — Incoming page
-   │ Next Page       │               (normal flow, revealed from below)
-   └────────────────┘
-   ═══════════════════════════════════════════════════════════════════════════ */
+
 
 /* Snapshot overlay — captures the visual state of the outgoing page */
 .transition-snapshot {
@@ -74,8 +63,16 @@ html:not(.transition-ready) .transition-content {
   white-space: nowrap;
 }
 
-/* During transition, prevent the main content from causing layout shifts */
+
 .transition-active main {
   position: relative;
   z-index: 10;
+}
+
+
+.transition-entering .transition-content {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  width: 100%;
 }

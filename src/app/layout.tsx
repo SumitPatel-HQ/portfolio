@@ -6,7 +6,7 @@ import { ContactModalProvider } from "@/context/ContactModalContext";
 import { ToastProvider } from "@/components/Contacts/toast";
 import { Menu } from "@/components/menu/Menu";
 import { IntroProvider } from "@/context/IntroContext";
-import { PageShowHandler } from "@/components/PageShowHandler";
+import { PageShowHandler } from "@/providers/PageShowHandler";
 import LenisProvider from "@/providers/LenisProvider";
 import GSAPProvider from "@/providers/GSAPProvider";
 import { TransitionProvider } from "@/components/transition/TransitionProvider";

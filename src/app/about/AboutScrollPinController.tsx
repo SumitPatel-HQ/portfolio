@@ -27,16 +27,7 @@ export function AboutScrollPinController({
   const { isReady: isGSAPReady } = useGSAP();
   const { isReady: isLenisReady, lenis } = useLenis();
 
-  // ── BFCache / tab-duplication restore gate ───────────────────────────────
-  // On a BFCache restore (tab duplication), the browser does NOT remount React
-  // components — it resumes the serialized JS context.  All existing deps
-  // (refs, isGSAPReady, isLenisReady, lenis) are stable objects React sees as
-  // unchanged, so the useEffect below would silently no-op, leaving dead
-  // pin-spacers and dead ScrollTriggers in the DOM forever.
-  //
-  // Fix: maintain a counter that increments on every persisted `pageshow`.
-  // Adding it to the dep array forces a full re-run of the effect, which runs
-  // unwrapPinSpacer() and rebuilds clean ScrollTriggers from scratch.
+ 
   const [restoreCount, setRestoreCount] = useState(0);
 
   useEffect(() => {
@@ -64,12 +55,7 @@ export function AboutScrollPinController({
     window.scrollTo(0, 0);
     lenis.scrollTo(0, { immediate: true });
 
-    // ── Orphaned pin-spacer cleanup (tab-duplication / BFCache restore) ────────
-    // The browser serializes the <div data-pin-spacer> wrappers GSAP injects
-    // around pinned elements.  Those cloned spacers have stale inline heights but
-    // NO live ScrollTrigger.  If we let GSAP pin again without removing them, it
-    // nests a new spacer inside the dead one → doubled scroll height → sections
-    // overlap.  This unwrap is a no-op on a clean first load.
+ 
     const unwrapPinSpacer = (el: HTMLElement | null) => {
       if (!el) return;
       const parent = el.parentElement;

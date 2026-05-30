@@ -1,13 +1,9 @@
+// BrandLayer — The atmospheric middle scene of the vertical transition stack.
+
 "use client";
 
 import React, { forwardRef } from "react";
 
-/**
- * BrandLayer — The atmospheric middle scene of the vertical transition stack.
- *
- * Renders a full-viewport panel with the portfolio owner's name in large,
- * semi-transparent typography and a subtle accent glow.
- */
 interface BrandLayerProps {
   pageName?: string;
 }

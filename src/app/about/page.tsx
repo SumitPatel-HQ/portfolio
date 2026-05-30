@@ -12,7 +12,7 @@ import { AboutScrollPinController } from "./AboutScrollPinController";
 import { useLenis } from "@/providers/LenisProvider";
 import { SiReact, SiNextdotjs, SiTypescript, SiTailwindcss, SiDocker, SiPython, SiFastapi, SiVercel, SiGit, SiGithub, SiSupabase, SiGooglecloud, SiN8N } from 'react-icons/si';
 import { FileText, FolderKanban } from "lucide-react";
-import { ResumeModal } from "@/components/ResumeModal";
+import { ResumeModal } from "@/components/ui/ResumeModal";
 import { getProfileImageUrl } from "@/lib/imagekit";
 
 const techLogos = [

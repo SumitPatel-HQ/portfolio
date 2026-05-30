@@ -11,7 +11,7 @@ import { ProjectsLogoRail } from "@/components/projects/ProjectsLogoRail";
 import { ProjectsOverlay } from "@/components/projects/ProjectsOverlay";
 import { ImageGallery } from "@/components/projects/ImageGallery";
 import { TextureOverlay } from "@/components/ui/visuals/TextureOverlay";
-import { BlobCursor } from "@/components/ui/BlobCursor";
+import { BlobCursor } from "@/components/ui/visuals/BlobCursor";
 import { useGSAP } from "@/providers/GSAPProvider";
 import { useLenis } from "@/providers/LenisProvider";
 
