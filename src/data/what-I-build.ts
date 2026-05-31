@@ -3,6 +3,7 @@ export type BuildCard = {
   title: string;
   tags: string[];
   bullets: string[];
+  case: string;
 };
 
 export const CARDS: BuildCard[] = [
@@ -15,7 +16,8 @@ export const CARDS: BuildCard[] = [
       "Add AI-powered search to any existing product",
       "Connect any LLM API with fallback and retry logic",
       "Embed generative features without rebuilding your stack"
-    ]
+    ],
+    case: "01"
   },
   {
     id: "02",
@@ -26,7 +28,8 @@ export const CARDS: BuildCard[] = [
       "Trigger multi-step pipelines from webhooks or schedules",
       "Replace manual ops with visual, maintainable workflows",
       "Connect 300+ apps without writing custom integration code"
-    ]
+    ],
+    case: "02"
   },
   {
     id: "03",
@@ -37,7 +40,8 @@ export const CARDS: BuildCard[] = [
       "Performant frontends with server-side rendering",
       "Auth, database, API routes — all in one codebase",
       "Deploy-ready on Vercel with CI/CD out of the box"
-    ]
+    ],
+    case: "03"
   },
   {
     id: "04",
@@ -48,7 +52,8 @@ export const CARDS: BuildCard[] = [
       "Semantic search over internal knowledge bases",
       "Chunk, embed, and retrieve context at scale",
       "Works on PDFs, databases, wikis, support tickets"
-    ]
+    ],
+    case: "04"
   },
   {
     id: "05",
@@ -59,7 +64,8 @@ export const CARDS: BuildCard[] = [
       "Real-time dashboards with live data updates",
       "Role-based access, authentication, audit logs",
       "Replaces spreadsheets and manual status emails"
-    ]
+    ],
+    case: "05"
   },
   {
     id: "06",
@@ -70,7 +76,8 @@ export const CARDS: BuildCard[] = [
       "Multi-step reasoning pipelines with tool-calling",
       "Human-in-the-loop checkpoints for critical decisions",
       "Chain LLM calls with memory and state across steps"
-    ]
+    ],
+    case: "06"
   },
   {
     id: "07",
@@ -81,6 +88,7 @@ export const CARDS: BuildCard[] = [
       "OAuth flows, webhook handlers, and sync pipelines",
       "Abstract third-party APIs behind clean internal interfaces",
       "Handles retries, rate limits, and error recovery"
-    ]
+    ],
+    case: "07"
   }
 ];

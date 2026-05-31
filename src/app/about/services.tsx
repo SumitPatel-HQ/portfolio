@@ -6,6 +6,7 @@ import { ChevronLeft, ChevronRight, Check } from "lucide-react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { CARDS } from "@/data/what-I-build";
 import { SlideDotIndicators } from "@/components/ui/SlideDotIndicators";
+import { ServiceGraphic } from "@/components/ui/ServiceGraphic";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -198,7 +199,7 @@ const Services = () => {
   return (
     <section
       ref={containerRef}
-      className="relative bg-[#0a0a0a] min-h-screen z-10"
+      className="relative bg-background min-h-screen z-10"
     >
       {/* Navigation Arrows */}
       <div className="hidden md:flex absolute top-1/2 -translate-y-1/2 w-full justify-between px-4 md:px-6 z-40 pointer-events-none">
@@ -271,7 +272,7 @@ const Services = () => {
                 {card.tags.map((tag, idx) => (
                   <span
                     key={idx}
-                   className="inline-flex items-center rounded-full border border-white/10 hover:border-accent transition-colors duration-300 bg-foreground-secondary/10 px-3.5 py-1.5 text-[clamp(0.8rem,1.1vw,0.95rem)] font-extralight text-foreground-secondary shadow-[0_4px_12px_0_rgba(0,0,0,0.2)] backdrop-blur-[2px] cursor-default"
+                    className="inline-flex items-center rounded-full border border-white/10 hover:border-accent transition-colors duration-300 bg-foreground-secondary/10 px-3.5 py-1.5 text-[clamp(0.8rem,1.1vw,0.95rem)] font-extralight text-foreground-secondary shadow-[0_4px_12px_0_rgba(0,0,0,0.2)] backdrop-blur-[2px] cursor-default"
                   >
                     {tag}
                   </span>
@@ -279,12 +280,10 @@ const Services = () => {
               </div>
             </div>
 
-            {/* RIGHT: Screenshot placeholder */}
+            {/* RIGHT: Service Graphic */}
             <div className="flex items-center justify-center px-8 md:px-0 md:pr-[clamp(3rem,6vw,7rem)] order-2 pb-16 md:pb-0 h-auto md:h-full">
-              <div className="w-full slide-screenshot bg-white/[0.04] border border-white/[0.08] rounded-[12px] flex items-center justify-center overflow-hidden aspect-[16/9] md:aspect-[16/10]">
-                <span className="text-white/20 text-[13px] font-medium tracking-wide">
-                  Screenshot coming soon
-                </span>
+              <div className="w-full slide-screenshot rounded-[12px] flex items-center justify-center aspect-[16/9] md:aspect-[16/10]">
+                <ServiceGraphic id={card.case} />
               </div>
             </div>
           </div>

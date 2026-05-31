@@ -231,6 +231,9 @@ export function AboutScrollPinController({
             if (section1Trigger.isActive) {
               e.preventDefault();
               snapTo(section2Ref.current!);
+            } else if (section2Trigger.isActive) {
+              e.preventDefault();
+              snapTo(contactRef.current!);
             }
           } else if (e.key === "ArrowUp" || e.key === "PageUp") {
             if (contactTrigger.isActive && !section2Trigger.isActive) {
