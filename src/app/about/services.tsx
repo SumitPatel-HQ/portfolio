@@ -7,6 +7,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { CARDS } from "@/data/what-I-build";
 import { SlideDotIndicators } from "@/components/ui/SlideDotIndicators";
 import { ServiceGraphic } from "@/components/ui/ServiceGraphic";
+import { motion } from "framer-motion";
+import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -30,26 +32,36 @@ const Services = () => {
   /** Whether a transition animation is in flight */
   const animatingRef = useRef(false);
 
+  const prevSlideRef = useRef<number | null>(null);
+  const [renderedPrev, setRenderedPrev] = useState<number | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  useEffect(() => {
+    setRenderedPrev(prevSlideRef.current);
+    prevSlideRef.current = activeSlide;
+    const timer = setTimeout(() => setRenderedPrev(null), DURATION * 1000);
+    return () => clearTimeout(timer);
+  }, [activeSlide]);
+
   // ─── Slide transition ────────────────────────────────────────────────────────
   const transitionSlide = useCallback((outIndex: number, inIndex: number) => {
-    const isNext = inIndex > outIndex;
     const outSlide = slidesRef.current[outIndex];
     const inSlide = slidesRef.current[inIndex];
     if (!outSlide || !inSlide) return;
 
-    // Collect stagger targets — filter nulls so GSAP doesn't warn
-    const headline = inSlide.querySelector(".slide-headline");
-    const bullets = Array.from(inSlide.querySelectorAll(".slide-bullet")).filter(Boolean);
-    const pills = Array.from(inSlide.querySelectorAll(".slide-pill")).filter(Boolean);
-    const staggerTargets = [headline, ...bullets, ...pills].filter(Boolean);
-
-    gsap.killTweensOf([outSlide, inSlide, ...staggerTargets]);
+    gsap.killTweensOf([outSlide, inSlide]);
 
     animatingRef.current = true;
 
     // Out
     gsap.to(outSlide, {
-      xPercent: isNext ? -4 : 4,
       opacity: 0,
       duration: DURATION,
       ease: EASE,
@@ -62,24 +74,14 @@ const Services = () => {
     gsap.set(inSlide, { zIndex: 10, pointerEvents: "auto" });
     gsap.fromTo(
       inSlide,
-      { xPercent: isNext ? 4 : -4, opacity: 0 },
+      { opacity: 0 },
       {
-        xPercent: 0,
         opacity: 1,
         duration: DURATION,
         ease: EASE,
         onComplete: () => { animatingRef.current = false; },
       }
     );
-
-    // Staggered content entrance
-    if (staggerTargets.length > 0) {
-      gsap.fromTo(
-        staggerTargets,
-        { y: 16, opacity: 0 },
-        { y: 0, opacity: 1, duration: DURATION, ease: EASE, stagger: 0.08 }
-      );
-    }
 
   }, []);
 
@@ -110,7 +112,6 @@ const Services = () => {
           if (!slide) return;
           gsap.set(slide, {
             opacity: i === 0 ? 1 : 0,
-            xPercent: i === 0 ? 0 : 4,
             pointerEvents: i === 0 ? "auto" : "none",
             zIndex: i === 0 ? 10 : 1,
           });
@@ -226,7 +227,9 @@ const Services = () => {
         ref={wrapperRef}
         className="relative w-full md:h-screen md:overflow-hidden flex flex-col md:block"
       >
-        {CARDS.map((card, i) => (
+        {CARDS.map((card, i) => {
+          const isSlideActive = isMobile ? undefined : (activeSlide === i || renderedPrev === i);
+          return (
           <div
             key={card.id}
             ref={(el) => { slidesRef.current[i] = el; }}
@@ -243,51 +246,104 @@ const Services = () => {
           >
             {/* LEFT: Content */}
             <div className="flex flex-col justify-center px-8 md:px-0 md:pl-[clamp(3rem,6vw,7rem)] py-16 md:py-0 w-full h-auto md:h-full text-left order-1">
-              <div className="text-accent tracking-[0.15em] text-[11px] font-bold mb-4 md:mb-6 uppercase ml-[2px]">
-                {card.id} / 0{CARDS.length}
-              </div>
+              <ScrollReveal
+                as={motion.div}
+                trigger={isSlideActive}
+                containerClassName="my-0 mb-4 md:mb-6 ml-[2px]"
+                textClassName="text-accent tracking-[0.15em] text-[11px] font-bold uppercase"
+                size="none"
+                align="none"
+                variant="none"
+                baseOpacity={0}
+                blurStrength={2}
+                delay={0}
+              >
+                {`${card.id} / 0${CARDS.length}`}
+              </ScrollReveal>
 
-              <h2
-                style={{ fontSize: "clamp(2rem, 3vw, 3.2rem)" }}
-                className="font-bold text-white leading-[1.1] tracking-tight mb-6 slide-headline"
+              <ScrollReveal
+                as={motion.h2}
+                trigger={isSlideActive}
+                containerClassName="my-0 mb-6"
+                textClassName="font-bold text-white leading-[1.1] tracking-tight text-[clamp(2rem,3vw,3.2rem)]"
+                size="none"
+                align="none"
+                variant="none"
+                baseOpacity={0}
+                blurStrength={4}
+                staggerDelay={0.04}
               >
                 {card.title}
-              </h2>
+              </ScrollReveal>
 
               <div className="flex flex-col gap-4 md:gap-6 mb-7 md:mb-[1.75rem]">
                 {card.bullets.map((bullet, idx) => (
-                  <div key={idx} className="flex items-start slide-bullet">
-                    <Check className="text-accent mr-3 mt-[6px] w-[14px] h-[14px] flex-shrink-0" strokeWidth={2} />
-                    <span
-                      className="text-white/60 font-normal"
-                      style={{ fontSize: "clamp(0.9rem, 1.2vw, 1.05rem)", lineHeight: "1.8" }}
+                  <div key={idx} className="flex items-start">
+                    <motion.div
+                      initial={{ opacity: 0, filter: "blur(2px)", y: 20 }}
+                      animate={isSlideActive ? { opacity: 1, filter: "blur(0px)", y: 0 } : { opacity: 0, filter: "blur(2px)", y: 20 }}
+                      transition={{ type: "spring", damping: 25, stiffness: 100, mass: 1, duration: 0.8, delay: 0.1 + idx * 0.05 }}
+                      className="text-accent mr-3 mt-[6px] w-[14px] h-[14px] flex-shrink-0"
+                    >
+                      <Check className="w-full h-full" strokeWidth={2} />
+                    </motion.div>
+                    <ScrollReveal
+                      as={motion.span}
+                      trigger={isSlideActive}
+                      containerClassName="my-0 flex-1"
+                      textClassName="text-white/60 font-normal text-[clamp(0.9rem,1.2vw,1.05rem)] leading-[1.8]"
+                      size="none"
+                      align="none"
+                      variant="none"
+                      baseOpacity={0}
+                      blurStrength={2}
+                      staggerDelay={0.02}
+                      delay={0.1 + idx * 0.05}
                     >
                       {bullet}
-                    </span>
+                    </ScrollReveal>
                   </div>
                 ))}
               </div>
 
-              <div className="flex flex-wrap gap-[8px]">
+              <ScrollReveal
+                as={motion.div}
+                trigger={isSlideActive}
+                containerClassName="my-0 w-full"
+                textClassName="flex flex-wrap gap-[8px]"
+                size="none"
+                align="none"
+                variant="none"
+                baseOpacity={0}
+                blurStrength={4}
+                staggerDelay={0.06}
+                delay={0.2}
+              >
                 {card.tags.map((tag, idx) => (
                   <span
                     key={idx}
-                    className="inline-flex items-center rounded-full border border-white/10 hover:border-accent transition-colors duration-300 bg-foreground-secondary/10 px-3.5 py-1.5 text-[clamp(0.8rem,1.1vw,0.95rem)] font-extralight text-foreground-secondary shadow-[0_4px_12px_0_rgba(0,0,0,0.2)] backdrop-blur-[2px] cursor-default"
+                    className="inline-flex items-center rounded-full border border-white/10 hover:border-accent/20 transition-colors duration-300 bg-foreground-secondary/10 px-3 py-1.5 text-[clamp(0.75rem,1vw,0.85rem)] font-extralight text-foreground-secondary shadow-[0_4px_12px_0_rgba(0,0,0,0.2)] backdrop-blur-[2px] cursor-default"
                   >
                     {tag}
                   </span>
                 ))}
-              </div>
+              </ScrollReveal>
             </div>
 
             {/* RIGHT: Service Graphic */}
             <div className="flex items-center justify-center px-8 md:px-0 md:pr-[clamp(3rem,6vw,7rem)] order-2 pb-16 md:pb-0 h-auto md:h-full">
-              <div className="w-full slide-screenshot rounded-[12px] flex items-center justify-center aspect-[16/9] md:aspect-[16/10]">
+              <motion.div
+                initial={{ opacity: 0, filter: "blur(4px)", y: 20 }}
+                animate={isSlideActive ? { opacity: 1, filter: "blur(0px)", y: 0 } : { opacity: 0, filter: "blur(4px)", y: 20 }}
+                transition={{ type: "spring", damping: 25, stiffness: 100, mass: 1, duration: 0.8, delay: 0.2 }}
+                className="w-full slide-screenshot rounded-[12px] flex items-center justify-center aspect-[16/9] md:aspect-[16/10]"
+              >
                 <ServiceGraphic id={card.case} />
-              </div>
+              </motion.div>
             </div>
           </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Dot indicators */}

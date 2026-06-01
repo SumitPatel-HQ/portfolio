@@ -5,6 +5,7 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } fr
 import { AnimatePresence, motion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Github, ArrowUpRight } from "lucide-react";
 
 import { ProjectItem, PROJECTS_TEXTURE_IMAGE } from "@/data/projects.data";
 import { ProjectsLogoRail } from "@/components/projects/ProjectsLogoRail";
@@ -345,6 +346,28 @@ export function ProjectsPageClient({ projects }: ProjectsPageClientProps) {
                 </motion.div>
               </AnimatePresence>
             </div>
+
+            {/* github repo link  */}
+            {(activeProject.repoUrl || activeProject.href.includes("github.com")) && (
+              <div className="px-6 relative z-20">
+                <div className="pointer-events-auto w-fit">
+                  <a
+                    href={activeProject.repoUrl || activeProject.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group show-default-cursor cursor-pointer inline-flex items-center gap-3 text-foreground  hover:opacity-70 transition-all duration-300 font-medium text-[1.05rem]"
+                  >
+                    <Github className="w-5 h-5 group-hover:opacity-100 transition-opacity" />
+                    <span className="uppercase tracking-wider">
+                      GitHub Repository
+                    </span>
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/5 hover:opacity-70 transition-all duration-300">
+                      <ArrowUpRight className="w-[18px] h-[18px]" strokeWidth={2} />
+                    </div>
+                  </a>
+                </div>
+              </div>
+            )}
 
             <div className="pointer-events-auto w-fit">
               <ProjectsLogoRail

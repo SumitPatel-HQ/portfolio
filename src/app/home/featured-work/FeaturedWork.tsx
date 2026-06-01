@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion, useMotionValue, useSpring } from "framer-motion";
@@ -10,6 +10,8 @@ import { cn } from "@/lib/utils";
 import { useIsClient } from "@/hooks/useIsClient";
 import { PROJECTS, ProjectItem } from "@/data/projects.data";
 import { getProjectImageUrl } from "@/lib/imagekit";
+import gsap from "gsap";
+import { useGSAP } from "@/providers/GSAPProvider";
 
 
 
@@ -22,6 +24,9 @@ export const FeaturedWork = () => {
   const cursorY = useMotionValue(0);
   const smoothX = useSpring(cursorX, { stiffness: 300, damping: 40 });
   const smoothY = useSpring(cursorY, { stiffness: 300, damping: 40 });
+
+  const sectionRef = useRef<HTMLElement>(null);
+  const { isReady: isGSAPReady } = useGSAP();
 
   // Configuration constants
   const CONFIG = {
@@ -52,6 +57,59 @@ export const FeaturedWork = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // CONFIG.MOBILE_BREAKPOINT is a constant
 
+  useEffect(() => {
+    if (!isGSAPReady || !sectionRef.current) return;
+
+    const titleWords = sectionRef.current.querySelectorAll(".title-word");
+    const projectChars = sectionRef.current.querySelectorAll(".project-char");
+    const projectArrows = sectionRef.current.querySelectorAll(".project-arrow");
+
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({
+        delay: 0.3,
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 85%",
+          toggleActions: "play none none reverse",
+        },
+      });
+
+      tl.fromTo(
+        titleWords,
+        { y: 50, opacity: 0, filter: "blur(10px)" },
+        { y: 0, opacity: 1, filter: "blur(0px)", stagger: 0.05, duration: 1, ease: "power3.out" }
+      )
+      .fromTo(
+        projectChars,
+        { y: 50, opacity: 0, filter: "blur(10px)" },
+        { 
+          y: 0, 
+          opacity: 1, 
+          filter: "blur(0px)", 
+          stagger: { amount: 0.6 }, // Distributes the stagger evenly across all characters within 0.6 seconds
+          duration: 1, 
+          ease: "power3.out" 
+        },
+        "<0.1"
+      )
+      .fromTo(
+        projectArrows,
+        { y: 50, opacity: 0, filter: "blur(10px)" },
+        { 
+          y: 0, 
+          opacity: 1, 
+          filter: "blur(0px)", 
+          stagger: { amount: 0.6 }, 
+          duration: 1, 
+          ease: "power3.out" 
+        },
+        "<" // Syncs exactly with the project letters staggering
+      );
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, [isGSAPReady]);
+
   const handlePointerMove = (event: React.MouseEvent<HTMLElement>) => {
     if (!isLargeScreen) {
       return;
@@ -78,13 +136,20 @@ export const FeaturedWork = () => {
   };
 
   return (
-    <section className="w-full px-8 md:px-24 py-20 flex flex-col" aria-labelledby="featured-work-title">
+    <section ref={sectionRef} className="w-full px-8 md:px-24 py-20 flex flex-col" aria-labelledby="featured-work-title">
       <h2
         id="featured-work-title"
         className="text-3xl md:text-5xl font-extrabold mb-12 flex items-center gap-4 scale-y-[1.1]"
       >
-        {/* <span className="w-3 h-3 rounded-full bg-primary"></span> */}
-        Featured Work
+        <span className="sr-only">Featured Work</span>
+        <span aria-hidden="true" className="inline-flex overflow-hidden pb-4 -mb-4">
+          {"Featured Work".split(" ").map((word, index, array) => (
+            <span key={index} className="inline-flex">
+              <span className="title-word inline-block">{word}</span>
+              {index < array.length - 1 && <span className="inline-block">&nbsp;</span>}
+            </span>
+          ))}
+        </span>
       </h2>
 
       <div
@@ -131,12 +196,23 @@ export const FeaturedWork = () => {
                       : "text-foreground/85"
                   )}
                 >
-                  {item.name}
+                  <span className="sr-only">{item.name}</span>
+                  <span aria-hidden="true" className="inline-flex overflow-hidden pb-1 -mb-1">
+                    {item.name.split("").map((char, index) => (
+                      <span
+                        key={index}
+                        className="project-char inline-block"
+                        style={{ whiteSpace: "pre" }}
+                      >
+                        {char}
+                      </span>
+                    ))}
+                  </span>
                 </h3>
 
                 <span
                   className={cn(
-                    "hidden sm:flex p-4 rounded-full transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
+                    "project-arrow hidden sm:flex p-4 rounded-full transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
                     focusedItem?.id === item.id
                       ? "bg-accent text-background z-20"
                       : "text-foreground"

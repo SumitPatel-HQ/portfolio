@@ -3,15 +3,14 @@
 import React, { useRef, useState } from 'react';
 import Link from 'next/link';
 import { useTransitionRouter } from 'next-transition-router';
-
 import StripesBackground from "@/components/ui/visuals/StripesBackground";
 import { useContactModal } from "@/context/ContactModalContext";
 import { BlobCursor } from "@/components/ui/visuals/BlobCursor";
 import { useGSAP } from "@/providers/GSAPProvider";
 import { useIntro } from "@/context/IntroContext";
 import { useLenis } from "@/providers/LenisProvider";
-
 import { useHeroAnimation, introBars } from './introAnime';
+import { AboutMe } from '@/data/aboutmyself.data';
 
 
 export const HeroSection = () => {
@@ -108,7 +107,7 @@ export const HeroSection = () => {
           <div>
             <div className="inline-flex items-center gap-2.5">
               <span className="w-2 h-2 rounded-full bg-status-dot animate-pulse-custom"></span>
-              <span className="text-status uppercase text-white/55">Available for work</span>
+              <span className="text-status uppercase text-white/55">{AboutMe.Available}</span>
             </div>
           </div>
         </div>
@@ -152,7 +151,7 @@ export const HeroSection = () => {
 
         <div ref={bottomChromeRef} className="hero-chrome-bottom h-hero-bottom flex items-center justify-between border-t border-white/10 max-md:flex-col max-md:h-auto max-md:gap-10 max-md:pb-10">
           <div>
-            <p className="text-role-tag uppercase text-white/48 mb-2.5">AI ENGINEER × FULL-STACK DEV</p>
+            <p className="text-role-tag uppercase text-white/48 mb-2.5">{AboutMe.tag}</p>
             <p className="text-18px leading-[1.6] text-muted-custom">
               AI engineer by major. Full-stack developer by necessity. <br />Builder by choice.
             </p>
