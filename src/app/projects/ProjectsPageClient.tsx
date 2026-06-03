@@ -69,6 +69,39 @@ export function ProjectsPageClient({ projects }: ProjectsPageClientProps) {
   const { isReady: isGSAPReady } = useGSAP();
   const { lenis } = useLenis();
 
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const touchEndRef = useRef<{ x: number; y: number } | null>(null);
+
+  const onTouchStart = useCallback((e: React.TouchEvent) => {
+    touchEndRef.current = null;
+    touchStartRef.current = {
+      x: e.targetTouches[0].clientX,
+      y: e.targetTouches[0].clientY,
+    };
+  }, []);
+
+  const onTouchMove = useCallback((e: React.TouchEvent) => {
+    if (!touchStartRef.current) return;
+    
+    const currentX = e.targetTouches[0].clientX;
+    const currentY = e.targetTouches[0].clientY;
+    
+    const dx = touchStartRef.current.x - currentX;
+    const dy = touchStartRef.current.y - currentY;
+    
+    // If the gesture is primarily horizontal, prevent native vertical scrolling
+    if (Math.abs(dx) > Math.abs(dy)) {
+      if (e.cancelable) {
+        e.preventDefault();
+      }
+    }
+
+    touchEndRef.current = {
+      x: currentX,
+      y: currentY,
+    };
+  }, []);
+
   const lockScroll = useCallback(() => {
     isProgrammaticScrollRef.current = true;
     if (scrollLockTimeoutRef.current) {
@@ -80,8 +113,14 @@ export function ProjectsPageClient({ projects }: ProjectsPageClientProps) {
   }, []);
 
   const handleContainerClick = useCallback((e: MouseEvent) => {
+    if (window.innerWidth < 1280) return;
+
     const target = e.target as HTMLElement;
-    if (target?.closest?.("button") || target?.closest?.("a")) {
+    if (
+      target?.closest?.("button") || 
+      target?.closest?.("a") ||
+      target?.closest?.("[data-prevent-project-click]")
+    ) {
       return;
     }
     window.open(activeProject.href, "_blank", "noopener,noreferrer");
@@ -125,6 +164,25 @@ export function ProjectsPageClient({ projects }: ProjectsPageClientProps) {
     lockScroll();
     scrollToIndex(nextIndex);
   }, [scrollToIndex, projects.length, lockScroll]);
+
+  const onTouchEnd = useCallback(() => {
+    if (!touchStartRef.current || !touchEndRef.current) return;
+
+    const dx = touchStartRef.current.x - touchEndRef.current.x;
+    const dy = touchStartRef.current.y - touchEndRef.current.y;
+    
+    // Balanced sensitivity: min swipe distance 50px, and horizontal distance > vertical distance * 1.5
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+      if (dx > 0) {
+        onNext(); // swipe left -> next
+      } else {
+        onPrev(); // swipe right -> prev
+      }
+    }
+
+    touchStartRef.current = null;
+    touchEndRef.current = null;
+  }, [onNext, onPrev]);
 
   const handleSelect = useCallback((index: number) => {
     const current = activeIndexRef.current;
@@ -213,45 +271,52 @@ export function ProjectsPageClient({ projects }: ProjectsPageClientProps) {
     }
 
     const ctx = gsap.context(() => {
+      const mm = gsap.matchMedia();
 
-      const trigger = ScrollTrigger.create({
-        trigger: mainRef.current,
-        start: 0,
-        pinnedContainer: transitionContent,
-        end: () => `+=${perCardScrollDistance * totalSteps}`,
-        pin: true,
-        pinType: "transform", // CRITICAL FIX: Do not use position: fixed. Use transforms to pin!
-        pinSpacing: true,
-        scrub: 1,
-        anticipatePin: 1,
-        fastScrollEnd: false,
-        invalidateOnRefresh: true,
-        snap: {
-          snapTo: 1 / totalSteps,
-          delay: 0.02,
-          duration: { min: 0.18, max: 0.4 },
-          directional: true,
-          inertia: true,
-          ease: "power2.inOut",
-        },
-        onUpdate: (self) => {
-          if (isProgrammaticScrollRef.current) {
-            return;
-          }
+      mm.add("(min-width: 1024px)", () => {
+        const trigger = ScrollTrigger.create({
+          trigger: mainRef.current,
+          start: 0,
+          pinnedContainer: transitionContent,
+          end: () => `+=${perCardScrollDistance * totalSteps}`,
+          pin: true,
+          pinType: "transform", // CRITICAL FIX: Do not use position: fixed. Use transforms to pin!
+          pinSpacing: true,
+          scrub: 1,
+          anticipatePin: 1,
+          fastScrollEnd: false,
+          invalidateOnRefresh: true,
+          snap: {
+            snapTo: 1 / totalSteps,
+            delay: 0.02,
+            duration: { min: 0.18, max: 0.4 },
+            directional: true,
+            inertia: true,
+            ease: "power2.inOut",
+          },
+          onUpdate: (self) => {
+            if (isProgrammaticScrollRef.current) {
+              return;
+            }
 
-          const nextIndex = Math.round(self.progress * totalSteps);
-          if (nextIndex === activeIndexRef.current) {
-            return;
-          }
+            const nextIndex = Math.round(self.progress * totalSteps);
+            if (nextIndex === activeIndexRef.current) {
+              return;
+            }
 
-          setDirection(nextIndex > activeIndexRef.current ? 1 : -1);
-          activeIndexRef.current = nextIndex;
-          setActiveIndex(nextIndex);
-        },
+            setDirection(nextIndex > activeIndexRef.current ? 1 : -1);
+            activeIndexRef.current = nextIndex;
+            setActiveIndex(nextIndex);
+          },
+        });
+
+        triggerRef.current = trigger;
+        ScrollTrigger.refresh();
+
+        return () => {
+          triggerRef.current = null;
+        };
       });
-
-      triggerRef.current = trigger;
-      ScrollTrigger.refresh();
     }, mainRef);
 
     return () => {
@@ -297,11 +362,17 @@ export function ProjectsPageClient({ projects }: ProjectsPageClientProps) {
 
   return (
     <div className="w-full">
-      <div ref={mainRef} className="relative flex min-h-screen w-full flex-col overflow-hidden bg-background text-foreground">
+      <div 
+        ref={mainRef} 
+        className="relative flex min-h-screen w-full flex-col xl:overflow-hidden bg-background text-foreground"
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
+      >
         <BlobCursor targetRef={mainRef} onClick={handleContainerClick} />
 
-        {/* Background Stage - Replaces ProjectsStageServer for Client usage */}
-        <div className="absolute inset-0 overflow-hidden bg-background">
+        {/* Background Stage */}
+        <div className="absolute inset-0 overflow-hidden bg-background pointer-events-none z-0">
           <div
             className="absolute inset-0 z-0 opacity-60"
             style={{
@@ -314,77 +385,99 @@ export function ProjectsPageClient({ projects }: ProjectsPageClientProps) {
           />
           <TextureOverlay url={PROJECTS_TEXTURE_IMAGE} opacity={0.15} />
 
-          <div className="absolute right-0 top-[0%] bottom-[0%] w-full md:w-[60%] lg:w-[57%] z-10 flex items-center justify-center p-6 md:p-12 lg:pr-24 lg:pl-0">
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-56 bg-gradient-to-t from-[#0f0f0f] via-transparent to-transparent xl:block hidden" />
+          <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-40 bg-gradient-to-b from-black/35 via-transparent to-transparent xl:block hidden" />
+          <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-52 bg-gradient-to-r from-black/40 via-transparent to-transparent xl:block hidden" />
+          <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-52 bg-gradient-to-l from-black/35 via-transparent to-transparent xl:block hidden" />
+          <div className="pointer-events-none absolute bottom-0 left-0 right-0 z-10 h-[1px] bg-white/12 xl:block hidden" />
+          <div className="pointer-events-none absolute left-0 right-0 top-0 z-10 h-[1px] bg-white/10 xl:block hidden" />
+        </div>
+
+        {/* Vertical Flow Container */}
+        <div className="relative z-10 flex-1 flex flex-col xl:block w-full min-h-screen pt-28 xl:pt-0">
+          
+          <div className="relative xl:absolute xl:right-0 xl:top-[0%] xl:bottom-[0%] w-full xl:w-[57%] z-10 flex items-center justify-center p-6 md:p-12 xl:pr-24 xl:pl-0 min-h-[40vh] md:min-h-[50vh] xl:min-h-0 ">
             <ImageGallery
               images={activeProject.imageUrls}
               imageAlt={activeProject.imageAlt}
               projectId={activeProject.id}
             />
           </div>
-        </div>
 
-        <section className="pointer-events-none absolute bottom-0 left-0 right-0 z-30 px-6 pb-6 md:px-[68px] md:pb-8 isolate">
-          <div className="flex max-w-[1080px] flex-col gap-8 md:gap-5">
-            <div className="relative grid grid-cols-1 grid-rows-1 w-full items-end">
-              <AnimatePresence>
-                <motion.div
-                  key={activeProject.id}
-                  custom={direction}
-                  variants={overlayVariants}
-                  initial="enter"
-                  animate="center"
-                  exit="exit"
-                  transition={{ duration: 0.52, ease: [0.32, 0.72, 0, 1] }}
-                  className="col-start-1 row-start-1 flex w-full flex-col gap-[clamp(2.2rem,4.4vw,72px)] self-end"
-                  style={{
-                    willChange: "transform, opacity",
-                    backfaceVisibility: "hidden",
-                    WebkitBackfaceVisibility: "hidden",
-                  }}
-                >
-                  <ProjectsOverlay project={activeProject} />
-                </motion.div>
-              </AnimatePresence>
-            </div>
-
-            {/* github repo link  */}
-            {(activeProject.repoUrl || activeProject.href.includes("github.com")) && (
-              <div className="px-6 relative z-20">
-                <div className="pointer-events-auto w-fit">
-                  <a
-                    href={activeProject.repoUrl || activeProject.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group show-default-cursor cursor-pointer inline-flex items-center gap-3 text-foreground  hover:opacity-70 transition-all duration-300 font-medium text-[1.05rem]"
+          <section className="relative xl:absolute xl:bottom-0 xl:left-0 xl:w-[45%] z-30 px-6 pb-12 xl:pb-6 md:px-[68px] xl:pointer-events-none isolate flex-1 flex flex-col justify-end mt-4 xl:mt-0">
+            <div className="flex w-full flex-col gap-8 md:gap-8">
+              <div className="relative grid grid-cols-1 grid-rows-1 w-full items-end">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={activeProject.id}
+                    custom={direction}
+                    variants={overlayVariants}
+                    initial="enter"
+                    animate="center"
+                    exit="exit"
+                    transition={{ duration: 0.52, ease: [0.32, 0.72, 0, 1] }}
+                    className="col-start-1 row-start-1 flex w-full flex-col gap-[clamp(2.2rem,4.4vw,72px)] self-end"
+                    style={{
+                      willChange: "transform, opacity",
+                      backfaceVisibility: "hidden",
+                      WebkitBackfaceVisibility: "hidden",
+                    }}
                   >
-                    <Github className="w-5 h-5 group-hover:opacity-100 transition-opacity" />
-                    <span className="uppercase tracking-wider">
-                      GitHub Repository
-                    </span>
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/5 hover:opacity-70 transition-all duration-300">
-                      <ArrowUpRight className="w-[18px] h-[18px]" strokeWidth={2} />
-                    </div>
-                  </a>
+                    <ProjectsOverlay project={activeProject} />
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+
+              {/* Action Buttons Row */}
+              <div className="flex flex-wrap items-center gap-6 xl:px-6 relative z-20">
+                {/* github repo link  */}
+                {(activeProject.repoUrl || activeProject.href.includes("github.com")) && (
+                  <div className="pointer-events-auto w-fit">
+                    <a
+                      href={activeProject.repoUrl || activeProject.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group show-default-cursor cursor-pointer inline-flex items-center gap-3 text-foreground hover:opacity-70 transition-all duration-300 font-medium text-[1.05rem]"
+                    >
+                      <Github className="w-5 h-5 group-hover:opacity-100 transition-opacity" />
+                      <span className="uppercase tracking-wider">
+                        GitHub Repository
+                      </span>
+                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/5 hover:opacity-70 transition-all duration-300">
+                        <ArrowUpRight className="w-[18px] h-[18px]" strokeWidth={2} />
+                      </div>
+                    </a>
+                  </div>
+                )}
+                
+                {/* Mobile/Tablet Visit Site Button */}
+                <div className="pointer-events-auto w-fit xl:hidden">
+                   <a
+                      href={activeProject.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group show-default-cursor cursor-pointer inline-flex items-center gap-3 text-foreground hover:opacity-70 transition-all duration-300 font-medium text-[1.05rem]"
+                   >
+                     <span className="uppercase tracking-wider">
+                       Visit Live Site
+                     </span>
+                     <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/5 hover:opacity-70 transition-all duration-300">
+                        <ArrowUpRight className="w-[18px] h-[18px]" strokeWidth={2} />
+                     </div>
+                   </a>
                 </div>
               </div>
-            )}
 
-            <div className="pointer-events-auto w-fit">
-              <ProjectsLogoRail
-                projects={projects}
-                activeIndex={activeIndex}
-                onSelect={handleSelect}
-              />
+              <div className="pointer-events-auto w-fit mt-2 xl:mt-0">
+                <ProjectsLogoRail
+                  projects={projects}
+                  activeIndex={activeIndex}
+                  onSelect={handleSelect}
+                />
+              </div>
             </div>
-          </div>
-        </section>
-
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-56 bg-gradient-to-t from-[#0f0f0f] via-transparent to-transparent" />
-        <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-40 bg-gradient-to-b from-black/35 via-transparent to-transparent" />
-        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-52 bg-gradient-to-r from-black/40 via-transparent to-transparent" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-52 bg-gradient-to-l from-black/35 via-transparent to-transparent" />
-        <div className="pointer-events-none absolute bottom-0 left-0 right-0 z-10 h-[1px] bg-white/12" />
-        <div className="pointer-events-none absolute left-0 right-0 top-0 z-10 h-[1px] bg-white/10" />
+          </section>
+        </div>
       </div>
     </div>
   );

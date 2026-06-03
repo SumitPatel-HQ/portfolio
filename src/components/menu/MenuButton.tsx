@@ -79,7 +79,7 @@ export const MenuButton: React.FC<MenuButtonProps> = ({
         pointerEvents: { duration: 0 },
         default: isMounted ? { duration: 0.35, ease: smoothEase } : { duration: 0 }
       }}
-      className={`flex items-center justify-center overflow-hidden py-5 rounded-full text-foreground cursor-pointer shadow-lg max-md:py-4 ${
+      className={`flex items-center justify-center overflow-hidden py-5 rounded-full text-foreground cursor-pointer shadow-lg max-md:py-4 focus:outline-none ${
         isOpen ? "px-5 max-md:px-4 !shadow-none" : "px-8 max-md:px-6"
       }`}
     >

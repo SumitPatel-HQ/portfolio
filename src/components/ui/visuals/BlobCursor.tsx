@@ -197,7 +197,7 @@ export function BlobCursor({
 
   return (
     <motion.div
-      className="pointer-events-none fixed left-0 top-0 z-[9999] flex h-[76px] w-[76px] items-center justify-center"
+      className="pointer-events-none fixed left-0 top-0 z-[9999] hidden lg:flex h-[76px] w-[76px] items-center justify-center"
       style={{
         x: cursorXSpring,
         y: cursorYSpring,

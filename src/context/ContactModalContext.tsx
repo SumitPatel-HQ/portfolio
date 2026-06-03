@@ -250,11 +250,11 @@ export function ContactModalProvider({
         }}
       >
         <DialogContent
-          ref={contentRef}
+          wrapperRef={contentRef}
           overlayRef={overlayRef}
           overlayStyle={shouldUseInitialHiddenState ? { opacity: 0, backdropFilter: "blur(0px)" } : undefined}
-          className="max-w-5xl p-0 border-none bg-transparent shadow-none outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-0"
-          style={shouldUseInitialHiddenState ? { opacity: 0, "--contact-modal-y": "100px" } as React.CSSProperties : undefined}
+          className="max-w-5xl p-0 border-none bg-transparent shadow-none outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-0 md:w-[95vw] md:h-auto md:max-h-[95vh] md:max-w-none md:rounded-2xl lg:w-full lg:h-auto lg:max-w-5xl lg:rounded-xl"
+          wrapperStyle={shouldUseInitialHiddenState ? { opacity: 0, "--contact-modal-y": "100px" } as React.CSSProperties : undefined}
           onEscapeKeyDown={(e) => {
             e.stopPropagation();
             e.preventDefault();
@@ -269,7 +269,7 @@ export function ContactModalProvider({
               Fill out the form to get in touch. I&apos;ll get back to you as soon as possible.
             </DialogDescription>
           </DialogHeader>
-          <div className="w-full">
+          <div className="w-full min-h-0 md:max-h-[95vh] md:overflow-y-auto md:rounded-2xl lg:rounded-xl">
             <ContactCard>
               <form
                 action=""
@@ -334,7 +334,7 @@ export function ContactModalProvider({
                 </div>
                 <div className="flex flex-col gap-2 pt-2">
                   <Label>Message <span className="text-red-500">*</span></Label>
-                  <Textarea required className="h-32 resize-none" placeholder="Tell me about your project..." ref={messageRef} />
+                  <Textarea required className="h-32 md:h-56 lg:h-32 resize-none" placeholder="Tell me about your project..." ref={messageRef} />
                 </div>
                 <Button
                   className="w-full bg-accent text-background font-bold text-base py-6 mt-2 "

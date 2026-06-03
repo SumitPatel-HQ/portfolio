@@ -47,7 +47,7 @@ export default function Home() {
       </div>
 
       <div className="w-full">
-        <section ref={featuredSectionRef} className="min-h-screen w-full">
+        <section ref={featuredSectionRef} className="min-h-screen w-full md:min-h-fit">
           <FeaturedWork />
         </section>
       </div>

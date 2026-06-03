@@ -67,7 +67,8 @@ export const HeroSection = () => {
         Since it targets html:not(.transition-ready), it safely becomes inert 
         once the TransitionProvider adds .transition-ready.
       */}
-      <style dangerouslySetInnerHTML={{ __html: `
+      <style dangerouslySetInnerHTML={{
+        __html: `
         html:not(.transition-ready) .transition-brand-layer {
           display: none !important;
         }
@@ -112,9 +113,9 @@ export const HeroSection = () => {
           </div>
         </div>
 
-        <div className="flex-1 flex flex-col justify-center">
-           <div 
-            ref={nameRef} 
+        <div className="flex-1 flex flex-col justify-center md:-translate-y-8 lg:translate-y-0">
+          <div
+            ref={nameRef}
             className="flex flex-col relative cursor-default focus-visible:outline-none"
             role="group"
             tabIndex={0}
@@ -137,34 +138,34 @@ export const HeroSection = () => {
             ) : null}
 
             {/* Premium Masked Typography System */}
-            <h1 ref={sumitRef} data-hero-title="sumit" className="hero-intro-title text-hero font-extrabold leading-[0.9] tracking-hero max-md:text-hero-mobile relative z-20 w-fit uppercase cursor-pointer">
+            <h1 ref={sumitRef} data-hero-title="sumit" className="hero-intro-title text-hero font-extrabold leading-[0.9] tracking-hero max-md:text-hero-mobile md:text-[13vw] lg:text-hero relative z-20 w-fit uppercase cursor-pointer md:pl-[0.4em] lg:pl-[0]">
               <span className="hero-title-scale">Sumit</span>
             </h1>
 
-            <div ref={nameDividerRef} className="hero-divider w-full border-b border-white/10 relative z-10 mt-4" />
-            
-            <h1 ref={patelRef} data-hero-title="patel" className="hero-intro-title text-hero  font-extrabold leading-[0.9] tracking-hero text-right  max-md:text-hero-mobile mt-4 pr-[0.05em] relative z-20 ml-auto w-fit uppercase cursor-pointer">
+            <div ref={nameDividerRef} className="hero-divider w-full border-b border-white/10 relative z-10 mt-4 md:mt-8 lg:mt-4" />
+
+            <h1 ref={patelRef} data-hero-title="patel" className="hero-intro-title text-hero font-extrabold leading-[0.9] tracking-hero text-right max-md:text-hero-mobile md:text-[13vw] lg:text-hero mt-4 md:mt-8 lg:mt-4 lg:pr-[0.05em] md:pr-[0.4em] relative z-20 ml-auto w-fit uppercase cursor-pointer">
               <span className="hero-title-scale">Patel</span>
             </h1>
           </div>
         </div>
 
-        <div ref={bottomChromeRef} className="hero-chrome-bottom h-hero-bottom flex items-center justify-between border-t border-white/10 max-md:flex-col max-md:h-auto max-md:gap-10 max-md:pb-10">
+        <div ref={bottomChromeRef} className="hero-chrome-bottom h-hero-bottom flex items-center md:items-start lg:items-center justify-between md:justify-start lg:justify-between border-t border-white/10 max-md:flex-col max-md:h-auto max-md:gap-10 md:gap-16 lg:gap-10 max-md:pb-10 md:pt-6 lg:pt-0">
           <div>
-            <p className="text-role-tag uppercase text-white/48 mb-2.5">{AboutMe.tag}</p>
-            <p className="text-18px leading-[1.6] text-muted-custom">
-              AI engineer by major. Full-stack developer by necessity. <br />Builder by choice.
+            <p className="text-role-tag uppercase text-white/48 md:text-white/60 lg:text-white/48 md:text-[14px] lg:text-[10px] mb-2.5">{AboutMe.tag}</p>
+            <p className="text-18px md:text-[21px] lg:text-[18px] leading-[1.6] text-muted-custom md:text-white/80 lg:text-muted-custom">
+              AI engineer by major. Full-stack developer by necessity. <br className="hidden lg:block" />Builder by choice.
             </p>
           </div>
-          <div className="flex justify-end items-center gap-3 max-md:w-full max-md:justify-start max-md:flex-wrap">
+          <div className="flex justify-end items-center gap-3 max-md:w-full max-md:justify-start max-md:flex-wrap md:mt-1 lg:mt-0">
             <button
               onClick={openModal}
               aria-label="Open contact form to send a message"
               className="py-3.5 px-18px text-status font-semibold uppercase border border-accent min-w-btn text-center bg-accent text-black cursor-pointer transition-all duration-300 hover:bg-white hover:text-black hover:border-white hover:-translate-y-0.5 max-md:min-w-btn-mobile rounded-xl">
               Get in touch
             </button>
-            <Link 
-              href="/projects" 
+            <Link
+              href="/projects"
               aria-label="View all projects portfolio"
               className="py-3.5 px-18px text-status font-semibold uppercase border border-white/30 min-w-btn text-center bg-white/8 cta-secondary-text cursor-pointer transition-all duration-300 hover:bg-white hover:border-white hover:-translate-y-0.5 max-md:min-w-btn-mobile rounded-xl">
               View Projects

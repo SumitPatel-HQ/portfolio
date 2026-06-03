@@ -58,20 +58,28 @@ export const ContactOrb = () => {
     }
 
     const ctx = gsap.context(() => {
-      // ── MEMBRANE BREATHING ──────────────────────────────────────────
-      // Very subtle organic silhouette deformation
-      const membraneTl = gsap.timeline({ repeat: -1 });
+      const mm = gsap.matchMedia();
 
-      MEMBRANE_SHAPES.forEach((shape, i) => {
-        membraneTl.to(
-          [coreRef.current, surfaceRef.current],
-          {
-            borderRadius: shape,
-            duration: PHYSICS.membrane * 0.35,
-            ease: "sine.inOut",
-          },
-          i * PHYSICS.membrane * 0.25
-        );
+      mm.add("(max-width: 767px), (min-width: 1280px)", () => {
+        // ── MEMBRANE BREATHING ──────────────────────────────────────────
+        // Very subtle organic silhouette deformation
+        const membraneTl = gsap.timeline({ repeat: -1 });
+
+        MEMBRANE_SHAPES.forEach((shape, i) => {
+          membraneTl.to(
+            [coreRef.current, surfaceRef.current],
+            {
+              borderRadius: shape,
+              duration: PHYSICS.membrane * 0.35,
+              ease: "sine.inOut",
+            },
+            i * PHYSICS.membrane * 0.25
+          );
+        });
+      });
+
+      mm.add("(min-width: 768px) and (max-width: 1279px)", () => {
+        gsap.set([coreRef.current, surfaceRef.current, atmosphereRef.current], { borderRadius: "24px" });
       });
 
       // ── INTERNAL FLUID CURRENTS ────────────────────────────────────
@@ -265,7 +273,7 @@ export const ContactOrb = () => {
   return (
     <div
       ref={containerRef}
-      className="relative flex h-56 w-56 cursor-pointer items-center justify-center outline-none md:h-72 md:w-72"
+      className="relative flex h-56 w-56 cursor-pointer items-center justify-center outline-none md:w-full md:h-64 lg:h-72 lg:w-72"
       style={
         {
           "--c1": "#00d9d9", // Primary Site Accent Cyan
@@ -375,7 +383,7 @@ export const ContactOrb = () => {
                 Placed inside the core so surface details and grain render over it */}
             <div
               ref={textRef}
-              className="pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center text-center text-[13px] font-bold uppercase tracking-[0.12em] md:text-sm"
+              className="pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center text-center text-[13px] font-bold uppercase tracking-[0.12em] md:text-2xl lg:text-sm"
               style={{ willChange: "transform" }}
             >
               {/* 1. Subsurface Light Diffusion (Soft scattering) */}

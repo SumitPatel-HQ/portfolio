@@ -134,17 +134,17 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
       <div
         ref={contentRef}
         onClick={(e) => e.stopPropagation()}
-        className="relative flex flex-col h-[93vh] w-[92vw] md:w-[65vw] max-w-[1200px] overflow-hidden rounded-xl bg-background border border-border-custom shadow-[0_0_80px_rgba(0,0,0,0.6)]"
+        className="relative flex flex-col h-[95vh] w-[95vw] sm:w-[90vw] md:w-[85vw] lg:w-[75vw] xl:w-[65vw] max-w-[1200px] overflow-hidden rounded-xl bg-background border border-border-custom shadow-[0_0_80px_rgba(0,0,0,0.6)]"
       >
         {/* Custom Header Bar */}
-        <div className="flex items-center justify-between px-4 py-3 bg-background-secondary/80 backdrop-blur-md border-b border-border-custom z-20">
+        <div className="relative z-30 flex items-center justify-between border-b border-border-custom bg-background-secondary/80 px-4 py-3 backdrop-blur-md">
           <div className="flex items-center gap-3">
-            <div className="h-8 w-8 rounded-full bg-foreground/10 flex items-center justify-center border border-border-custom shadow-sm">
-              <span className="text-foreground text-xs text-center font-bold tracking-wider">SP</span>
+            <div className="h-10 w-10 rounded-full bg-foreground/10 flex items-center justify-center border border-border-custom shadow-sm">
+              <span className="text-foreground text-sm font-bold scale-y-[1.3] block lg:translate-y-[1px]">SP</span>
             </div>
             <div className="flex flex-col">
-              <h3 className="text-sm font-semibold text-foreground leading-tight tracking-wide">Resume.pdf</h3>
-              <p className="text-xs text-muted-foreground">Document</p>
+              <h3 className="text-base sm:text-lg font-semibold text-foreground leading-tight tracking-wide">Resume.pdf</h3>
+              <p className="text-xs sm:text-sm text-muted-foreground">Document</p>
             </div>
           </div>
 
@@ -156,23 +156,25 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
               className="p-2 rounded-xl text-muted-foreground hover:text-foreground hover:bg-foreground/10 transition-all duration-200 group"
               title="Open in new tab"
             >
-              <ExternalLink className="h-4 w-4 sm:h-5 sm:w-5 group-hover:scale-110 transition-transform" />
+              <ExternalLink className="h-4 w-4 sm:h-5 sm:w-5 transition-transform" />
             </a>
 
-             <div className="w-px h-6 bg-border-custom mx-1"></div>
+            <div className="w-px h-6 bg-border-custom mx-1"></div>
 
             <button
               onClick={handleDownload}
+              type="button"
               className="p-2 rounded-xl text-muted-foreground hover:text-foreground hover:bg-foreground/10 transition-all duration-200 group"
               title="Download Resume"
             >
-              <Download className="h-4 w-4 sm:h-5 sm:w-5 group-hover:scale-110 transition-transform" />
+              <Download className="h-4 w-4 sm:h-5 sm:w-5 transition-transform" />
             </button>
 
             <div className="w-px h-6 bg-border-custom mx-1"></div>
 
             <button
               onClick={onClose}
+              type="button"
               className="p-2 rounded-xl text-muted-foreground hover:text-red-400 hover:bg-red-400/10 transition-all duration-200 group"
               title="Close"
             >
@@ -182,7 +184,7 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
         </div>
 
         {/* PDF Viewer Container */}
-        <div className="relative flex-1 w-full bg-[#1e1e1e]">
+        <div className="relative z-0 min-h-0 flex-1 w-full bg-[#1e1e1e]">
           {isLoading && (
             <div className="absolute inset-0 flex flex-col items-center justify-center bg-background z-0">
               <Loader2 className="h-8 w-8 animate-spin text-foreground/50 mb-4" />

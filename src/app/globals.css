@@ -5,6 +5,8 @@
 
 @theme {
   /* --color-primary: #64FFDA; */
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1280px;
   --color-background-dark: #0A0A0A;
   --color-background-secondary: #1A1A1A;
   --color-background-light: #f5f8f8;
