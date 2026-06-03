@@ -3,7 +3,7 @@ import { fetchImagesForProject } from "@/lib/imagekit-server";
 import { ProjectsPageClient, ProjectWithImages } from "./ProjectsPageClient";
 
 export const metadata = {
-  title: "Projects | Sumit Patel",
+  title: "Sumit Patel | Projects ",
   description: "A showcase of my recent work in engineering, design, and AI.",
 };
 

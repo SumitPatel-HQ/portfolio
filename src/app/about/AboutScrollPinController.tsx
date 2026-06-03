@@ -276,9 +276,7 @@ export function AboutScrollPinController({
           lenis.start();
         };
       });
-    // Scope to document.body so ctx.revert() also removes the pin-spacer <div>s
-    // that GSAP injects as siblings of the pinned element (outside parentElement).
-    }, document.body);
+    }, transitionContent);
 
     return () => {
       // Revert all GSAP artefacts (triggers, spacers, inline styles) created

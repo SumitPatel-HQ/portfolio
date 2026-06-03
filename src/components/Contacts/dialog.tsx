@@ -35,25 +35,33 @@ const DialogContent = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & {
     overlayRef?: React.Ref<React.ElementRef<typeof DialogPrimitive.Overlay>>;
     overlayStyle?: React.CSSProperties;
+    wrapperRef?: React.Ref<HTMLDivElement>;
+    wrapperStyle?: React.CSSProperties;
   }
->(({ className, children, overlayRef, overlayStyle, ...props }, ref) => (
+>(({ className, children, overlayRef, overlayStyle, wrapperRef, wrapperStyle, ...props }, ref) => (
   <DialogPortal>
     <DialogOverlay ref={overlayRef} style={overlayStyle} />
-    <DialogPrimitive.Content
-      ref={ref}
-      className={cn(
-        "fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg [transform:translate(-50%,calc(-50%+var(--contact-modal-y,0px)))] gap-4 border border-border-custom bg-background p-6 shadow-xl sm:rounded-3xl",
-        className
-      )}
-      {...props}
+    <div 
+      ref={wrapperRef}
+      style={wrapperStyle}
+      className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none [transform:translateY(var(--contact-modal-y,0px))]"
     >
+      <DialogPrimitive.Content
+        ref={ref}
+        className={cn(
+          "pointer-events-auto relative grid w-full max-w-lg gap-4 border border-border-custom bg-background p-6 shadow-xl sm:rounded-3xl",
+          className
+        )}
+        {...props}
+      >
       {children}
-      <DialogPrimitive.Close className="absolute -top-3 -right-3 md:-top-5 md:-right-5 rounded-full p-2 bg-background/80 hover:bg-background text-foreground border border-border-custom transition-all duration-500 hover:scale-110 active:scale-95 focus:outline-none backdrop-blur-xl group z-[60] shadow-2xl">
-        <X className="h-5 w-5 transition-transform duration-500" />
+      <DialogPrimitive.Close className="absolute -top-3 -right-3 md:top-4 md:right-4 lg:-top-5 lg:-right-5 rounded-full p-2 md:p-4 lg:p-2 bg-background/80 hover:bg-background text-foreground border border-border-custom transition-all duration-500 hover:scale-110 active:scale-95 focus:outline-none backdrop-blur-xl group z-[60] shadow-2xl">
+        <X className="h-5 w-5 md:h-6 md:w-6 lg:h-5 lg:w-5 transition-transform duration-500" />
         <span className="sr-only">Close</span>
       </DialogPrimitive.Close>
 
-    </DialogPrimitive.Content>
+      </DialogPrimitive.Content>
+    </div>
   </DialogPortal>
 ))
 DialogContent.displayName = DialogPrimitive.Content.displayName

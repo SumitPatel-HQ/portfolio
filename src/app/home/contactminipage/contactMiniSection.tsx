@@ -45,29 +45,29 @@ export const ContactMiniSection = () => {
         { y: 0, opacity: 1, filter: "blur(0px)", stagger: 0.05, duration: 1, ease: "power3.out" }
       )
         .fromTo(
-        contactItems,
-        { y: 20, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          stagger: { amount: 0.2 },
-          duration: 0.8,
-          ease: "power3.out"
+          contactItems,
+          { y: 20, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            stagger: { amount: 0.2 },
+            duration: 0.8,
+            ease: "power3.out"
           },
           "<" // Starts at the exact same time as the heading
         )
         .fromTo(
-        orbWrapper,
-        { y: 340, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 1.2,
-          ease: "power4.out",
-          force3D: true
-        },
-        "<0.1" // Slight delay to offset the heaviest frame of the text blur
-      );
+          orbWrapper,
+          { y: 340, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 1.2,
+            ease: "power4.out",
+            force3D: true
+          },
+          "<0.1" // Slight delay to offset the heaviest frame of the text blur
+        );
     }, sectionRef);
 
     return () => ctx.revert();
@@ -79,8 +79,8 @@ export const ContactMiniSection = () => {
       aria-labelledby="contact-mini-heading"
       className="relative w-full px-8 py-20 md:px-24 md:py-0"
     >
-      <div className="relative mx-auto grid w-full grid-cols-1 gap-10 rounded-3xl p-8 md:grid-cols-12 md:gap-8">
-        <div className="md:col-span-9">
+      <div className="relative mx-auto grid w-full grid-cols-1 gap-10 rounded-3xl p-8 lg:grid-cols-12 lg:gap-8">
+        <div className="order-1 md:order-2 lg:order-1 lg:col-span-9">
           <h2
             id="contact-mini-heading"
             className="mt-4 animate-none text-4xl font-extrabold uppercase leading-tight tracking-tight text-foreground sm:text-5xl md:text-6xl"
@@ -168,7 +168,7 @@ export const ContactMiniSection = () => {
         </div>
 
         {/* Big circle Bot */}
-        <div className="contact-orb-wrapper md:col-span-3 md:flex md:items-center md:justify-center mt-10 md:mt-0 relative z-20">
+        <div className="contact-orb-wrapper order-2 md:order-1 lg:order-2 lg:col-span-3 flex items-center justify-center mt-10 md:mt-0 lg:mt-0 relative z-20">
           <ContactOrb />
         </div>
       </div>

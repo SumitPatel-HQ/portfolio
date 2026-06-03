@@ -51,8 +51,11 @@ export function HomeScrollPinController({
     const ctx = gsap.context(() => {
       const media = gsap.matchMedia();
 
-      // Set a very low minimum width to ensure it is almost always active during testing
-      media.add("(min-width: 320px)", () => {
+      // Shared scroll logic factory — called once per media condition.
+      // `featuredPinSpacing` controls whether the Featured pin adds extra scroll
+      // space after it (desktop) or not (tablet). Pin itself is always active so
+      // the intentional snapping feel is preserved on every breakpoint.
+      const setupScrollLogic = (featuredPinSpacing: boolean) => {
         let isSnapping = false;
         let snapCooldownUntil = 0;
         let enteredFeaturedFromBottom = false;
@@ -111,7 +114,7 @@ export function HomeScrollPinController({
           end: () => `+=${window.innerHeight * FEATURED_PIN_DISTANCE_VIEWPORTS}`,
           pin: true,
           pinType: "transform",
-          pinSpacing: true,
+          pinSpacing: featuredPinSpacing,
           scrub: 1,
           onUpdate: (self) => {
             if (self.direction !== 0) {
@@ -137,6 +140,19 @@ export function HomeScrollPinController({
             }
           },
         });
+
+        
+        if (!featuredPinSpacing && contactRef.current) {
+          ScrollTrigger.create({
+            id: "home-contact-pin-tablet",
+            trigger: featuredRef.current, // Sync exactly with Featured section's pin timing
+            start: "top top",
+            end: () => `+=${window.innerHeight * FEATURED_PIN_DISTANCE_VIEWPORTS}`,
+            pin: contactRef.current,
+            pinType: "transform",
+            pinSpacing: true, // This pushes the footer down to prevent it from overlapping
+          });
+        }
 
         const onLenisScroll = () => {
           if (scrollEndTimer) {
@@ -207,6 +223,18 @@ export function HomeScrollPinController({
           // leave Lenis in a stopped state on the next page.
           lenis.start();
         };
+      };
+
+      // Tablet 768px–1279px: pin is active but pinSpacing is off so the
+      
+      media.add("(min-width: 768px) and (max-width: 1279px)", () => {
+        return setupScrollLogic(false);
+      });
+
+      // Mobile (<768px) and Desktop (≥1280px): full pinSpacing on, original
+      // experience unchanged.
+      media.add("(max-width: 767px), (min-width: 1280px)", () => {
+        return setupScrollLogic(true);
       });
     // Scope to heroRef.current so ctx.revert() captures triggers/spacers
     // created within the home page scroll controller.

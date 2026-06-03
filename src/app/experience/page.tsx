@@ -54,7 +54,7 @@ const TOOLS = [
 
 export default function Experience() {
   return (
-    <div className="flex flex-col flex-1 px-8 lg:px-24 mb-32 max-w-7xl mx-auto w-full">
+    <div className="flex flex-col flex-1 px-8 lg:px-24 mb-32 max-w-7xl mx-auto w-full mt-28">
       {/* Page Title Area */}
       <section className="mb-20 mt-10">
         <motion.h1 

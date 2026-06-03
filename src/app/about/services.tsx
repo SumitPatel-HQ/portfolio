@@ -203,22 +203,22 @@ const Services = () => {
       className="relative bg-background min-h-screen z-10"
     >
       {/* Navigation Arrows */}
-      <div className="hidden md:flex absolute top-1/2 -translate-y-1/2 w-full justify-between px-4 md:px-6 z-40 pointer-events-none">
+      <div className="hidden md:flex absolute top-1/2 -translate-y-1/2 w-full justify-between px-4 md:px-8 lg:px-6 z-40 pointer-events-none">
         <button
           onClick={(e) => { e.preventDefault(); scrollToSlide(activeSlide - 1); }}
           disabled={activeSlide === 0}
           aria-label="Previous slide"
-          className="pointer-events-auto flex items-center justify-center w-12 h-12 rounded-full bg-white/5 border border-white/10 text-white/60 hover:bg-white/10 hover:text-white transition-all duration-300 disabled:opacity-0 disabled:pointer-events-none backdrop-blur-sm"
+          className="pointer-events-auto flex items-center justify-center w-16 h-16 lg:w-12 lg:h-12 rounded-full bg-white/5 border border-white/10 text-white/60 hover:bg-white/10 hover:text-white transition-all duration-300 disabled:opacity-0 disabled:pointer-events-none backdrop-blur-sm"
         >
-          <ChevronLeft className="w-6 h-6" />
+          <ChevronLeft className="w-8 h-8 lg:w-6 lg:h-6" />
         </button>
         <button
           onClick={(e) => { e.preventDefault(); scrollToSlide(activeSlide + 1); }}
           disabled={activeSlide === CARDS.length - 1}
           aria-label="Next slide"
-          className="pointer-events-auto flex items-center justify-center w-12 h-12 rounded-full bg-white/5 border border-white/10 text-white/60 hover:bg-white/10 hover:text-white transition-all duration-300 disabled:opacity-0 disabled:pointer-events-none backdrop-blur-sm"
+          className="pointer-events-auto flex items-center justify-center w-16 h-16 lg:w-12 lg:h-12 rounded-full bg-white/5 border border-white/10 text-white/60 hover:bg-white/10 hover:text-white transition-all duration-300 disabled:opacity-0 disabled:pointer-events-none backdrop-blur-sm"
         >
-          <ChevronRight className="w-6 h-6" />
+          <ChevronRight className="w-8 h-8 lg:w-6 lg:h-6" />
         </button>
       </div>
 
@@ -230,118 +230,118 @@ const Services = () => {
         {CARDS.map((card, i) => {
           const isSlideActive = isMobile ? undefined : (activeSlide === i || renderedPrev === i);
           return (
-          <div
-            key={card.id}
-            ref={(el) => { slidesRef.current[i] = el; }}
-            data-slide={i + 1}
-            /**
-             * On desktop all slides are absolutely stacked; the initial
-             * opacity/position are set immediately by GSAP in useLayoutEffect.
-             * We purposely do NOT add an `md:opacity-0` Tailwind class here —
-             * doing so causes a FOUC flash before JS runs because the first slide
-             * should start at opacity 1.  GSAP sets the initial state for all
-             * slides (including hiding slides 1-6) synchronously in useLayoutEffect.
-             */
-            className="slide-container md:absolute md:inset-0 w-full flex flex-col md:grid md:grid-cols-2 md:gap-x-[clamp(2rem,4vw,5rem)] border-b border-white/5 md:border-none"
-          >
-            {/* LEFT: Content */}
-            <div className="flex flex-col justify-center px-8 md:px-0 md:pl-[clamp(3rem,6vw,7rem)] py-16 md:py-0 w-full h-auto md:h-full text-left order-1">
-              <ScrollReveal
-                as={motion.div}
-                trigger={isSlideActive}
-                containerClassName="my-0 mb-4 md:mb-6 ml-[2px]"
-                textClassName="text-accent tracking-[0.15em] text-[11px] font-bold uppercase"
-                size="none"
-                align="none"
-                variant="none"
-                baseOpacity={0}
-                blurStrength={2}
-                delay={0}
-              >
-                {`${card.id} / 0${CARDS.length}`}
-              </ScrollReveal>
+            <div
+              key={card.id}
+              ref={(el) => { slidesRef.current[i] = el; }}
+              data-slide={i + 1}
+              /**
+               * On desktop all slides are absolutely stacked; the initial
+               * opacity/position are set immediately by GSAP in useLayoutEffect.
+               * We purposely do NOT add an `md:opacity-0` Tailwind class here —
+               * doing so causes a FOUC flash before JS runs because the first slide
+               * should start at opacity 1.  GSAP sets the initial state for all
+               * slides (including hiding slides 1-6) synchronously in useLayoutEffect.
+               */
+              className="slide-container md:absolute md:inset-0 w-full flex flex-col lg:grid lg:grid-cols-2 lg:gap-x-[clamp(2rem,4vw,5rem)] border-b border-white/5 md:border-none"
+            >
+              {/* Content */}
+              <div className="flex flex-col justify-center px-8 md:px-16 lg:px-0 lg:pl-[clamp(3rem,6vw,7rem)] py-16 md:py-6 lg:py-0 w-full h-auto  lg:h-full text-left order-1 md:order-2 lg:order-1">
+                <ScrollReveal
+                  as={motion.div}
+                  trigger={isSlideActive}
+                  containerClassName="my-0 mb-4 md:mb-3 lg:mb-6 ml-[2px]"
+                  textClassName="text-accent tracking-[0.15em] text-[11px] md:text-[15px] lg:text-[11px] font-bold uppercase"
+                  size="none"
+                  align="none"
+                  variant="none"
+                  baseOpacity={0}
+                  blurStrength={2}
+                  delay={0}
+                >
+                  {`${card.id} / 0${CARDS.length}`}
+                </ScrollReveal>
 
-              <ScrollReveal
-                as={motion.h2}
-                trigger={isSlideActive}
-                containerClassName="my-0 mb-6"
-                textClassName="font-bold text-white leading-[1.1] tracking-tight text-[clamp(2rem,3vw,3.2rem)]"
-                size="none"
-                align="none"
-                variant="none"
-                baseOpacity={0}
-                blurStrength={4}
-                staggerDelay={0.04}
-              >
-                {card.title}
-              </ScrollReveal>
+                <ScrollReveal
+                  as={motion.h2}
+                  trigger={isSlideActive}
+                  containerClassName="my-0 mb-5 md:mb-4 lg:mb-6"
+                  textClassName="font-bold text-white leading-[1.1] tracking-tight text-[clamp(2rem,3vw,3.2rem)] md:text-[4.25rem] lg:text-[clamp(2rem,3vw,3.2rem)]"
+                  size="none"
+                  align="none"
+                  variant="none"
+                  baseOpacity={0}
+                  blurStrength={4}
+                  staggerDelay={0.04}
+                >
+                  {card.title}
+                </ScrollReveal>
 
-              <div className="flex flex-col gap-4 md:gap-6 mb-7 md:mb-[1.75rem]">
-                {card.bullets.map((bullet, idx) => (
-                  <div key={idx} className="flex items-start">
-                    <motion.div
-                      initial={{ opacity: 0, filter: "blur(2px)", y: 20 }}
-                      animate={isSlideActive ? { opacity: 1, filter: "blur(0px)", y: 0 } : { opacity: 0, filter: "blur(2px)", y: 20 }}
-                      transition={{ type: "spring", damping: 25, stiffness: 100, mass: 1, duration: 0.8, delay: 0.1 + idx * 0.05 }}
-                      className="text-accent mr-3 mt-[6px] w-[14px] h-[14px] flex-shrink-0"
+                <div className="flex flex-col gap-4 md:gap-6 lg:gap-6 mb-7 md:mb-4 lg:mb-[1.75rem]">
+                  {card.bullets.map((bullet, idx) => (
+                    <div key={idx} className="flex items-start">
+                      <motion.div
+                        initial={{ opacity: 0, filter: "blur(2px)", y: 20 }}
+                        animate={isSlideActive ? { opacity: 1, filter: "blur(0px)", y: 0 } : { opacity: 0, filter: "blur(2px)", y: 20 }}
+                        transition={{ type: "spring", damping: 25, stiffness: 100, mass: 1, duration: 0.8, delay: 0.1 + idx * 0.05 }}
+                        className="text-accent mr-3 mt-[6px] lg:mt-[6px] md:mt-[8px] w-[14px] h-[14px] md:w-[18px] md:h-[18px] lg:w-[14px] lg:h-[14px] flex-shrink-0"
+                      >
+                        <Check className="w-full h-full" strokeWidth={2} />
+                      </motion.div>
+                      <ScrollReveal
+                        as={motion.span}
+                        trigger={isSlideActive}
+                        containerClassName="my-0 flex-1"
+                        textClassName="text-white/60 font-normal text-[clamp(0.9rem,1.2vw,1.05rem)] md:text-[1.35rem] lg:text-[clamp(0.9rem,1.2vw,1.05rem)] md:leading-[1.8] lg:leading-[1.8]"
+                        size="none"
+                        align="none"
+                        variant="none"
+                        baseOpacity={0}
+                        blurStrength={2}
+                        staggerDelay={0.02}
+                        delay={0.1 + idx * 0.05}
+                      >
+                        {bullet}
+                      </ScrollReveal>
+                    </div>
+                  ))}
+                </div>
+
+                <ScrollReveal
+                  as={motion.div}
+                  trigger={isSlideActive}
+                  containerClassName="my-0 w-full"
+                  textClassName="flex flex-wrap gap-[8px] md:gap-[12px] lg:gap-[8px]"
+                  size="none"
+                  align="none"
+                  variant="none"
+                  baseOpacity={0}
+                  blurStrength={4}
+                  staggerDelay={0.06}
+                  delay={0.2}
+                >
+                  {card.tags.map((tag, idx) => (
+                    <span
+                      key={idx}
+                      className="inline-flex items-center rounded-full border border-white/10 hover:border-accent/20 transition-colors duration-300 bg-foreground-secondary/10 px-3 py-1.5 md:px-5 md:py-2.5 lg:px-3 lg:py-1.5 text-[clamp(0.75rem,1vw,0.85rem)] md:text-[1.05rem] lg:text-[clamp(0.75rem,1vw,0.85rem)] font-extralight text-foreground-secondary shadow-[0_4px_12px_0_rgba(0,0,0,0.2)] backdrop-blur-[2px] cursor-default"
                     >
-                      <Check className="w-full h-full" strokeWidth={2} />
-                    </motion.div>
-                    <ScrollReveal
-                      as={motion.span}
-                      trigger={isSlideActive}
-                      containerClassName="my-0 flex-1"
-                      textClassName="text-white/60 font-normal text-[clamp(0.9rem,1.2vw,1.05rem)] leading-[1.8]"
-                      size="none"
-                      align="none"
-                      variant="none"
-                      baseOpacity={0}
-                      blurStrength={2}
-                      staggerDelay={0.02}
-                      delay={0.1 + idx * 0.05}
-                    >
-                      {bullet}
-                    </ScrollReveal>
-                  </div>
-                ))}
+                      {tag}
+                    </span>
+                  ))}
+                </ScrollReveal>
               </div>
 
-              <ScrollReveal
-                as={motion.div}
-                trigger={isSlideActive}
-                containerClassName="my-0 w-full"
-                textClassName="flex flex-wrap gap-[8px]"
-                size="none"
-                align="none"
-                variant="none"
-                baseOpacity={0}
-                blurStrength={4}
-                staggerDelay={0.06}
-                delay={0.2}
-              >
-                {card.tags.map((tag, idx) => (
-                  <span
-                    key={idx}
-                    className="inline-flex items-center rounded-full border border-white/10 hover:border-accent/20 transition-colors duration-300 bg-foreground-secondary/10 px-3 py-1.5 text-[clamp(0.75rem,1vw,0.85rem)] font-extralight text-foreground-secondary shadow-[0_4px_12px_0_rgba(0,0,0,0.2)] backdrop-blur-[2px] cursor-default"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </ScrollReveal>
+              {/* Service Graphic */}
+              <div className="flex items-center justify-center px-8 md:px-18 lg:px-0 lg:pr-[clamp(3rem,6vw,7rem)] order-2 md:order-1 lg:order-2 pb-16  md:p-12 md:mt-28 lg:mt-0 lg:pb-0 pt-0  lg:pt-0 h-auto md:min-h-[40vh] lg:h-full w-full">
+                <motion.div
+                  initial={{ opacity: 0, filter: "blur(4px)", y: 20 }}
+                  animate={isSlideActive ? { opacity: 1, filter: "blur(0px)", y: 0 } : { opacity: 0, filter: "blur(4px)", y: 20 }}
+                  transition={{ type: "spring", damping: 25, stiffness: 100, mass: 1, duration: 0.8, delay: 0.2 }}
+                  className="w-full max-w-4xl slide-screenshot rounded-[12px] flex items-center justify-center aspect-[16/9] lg:aspect-[16/10]"
+                >
+                  <ServiceGraphic id={card.case} />
+                </motion.div>
+              </div>
             </div>
-
-            {/* RIGHT: Service Graphic */}
-            <div className="flex items-center justify-center px-8 md:px-0 md:pr-[clamp(3rem,6vw,7rem)] order-2 pb-16 md:pb-0 h-auto md:h-full">
-              <motion.div
-                initial={{ opacity: 0, filter: "blur(4px)", y: 20 }}
-                animate={isSlideActive ? { opacity: 1, filter: "blur(0px)", y: 0 } : { opacity: 0, filter: "blur(4px)", y: 20 }}
-                transition={{ type: "spring", damping: 25, stiffness: 100, mass: 1, duration: 0.8, delay: 0.2 }}
-                className="w-full slide-screenshot rounded-[12px] flex items-center justify-center aspect-[16/9] md:aspect-[16/10]"
-              >
-                <ServiceGraphic id={card.case} />
-              </motion.div>
-            </div>
-          </div>
           );
         })}
       </div>
