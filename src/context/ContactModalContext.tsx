@@ -10,15 +10,9 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
-  DialogDescription,
-  DialogHeader,
 } from "@/components/Contacts/dialog";
 
-import { Input } from "@/components/Contacts/input";
-import { Button } from "@/components/Contacts/button";
-import { Label } from "@/components/Contacts/label";
-import { useToast } from "@/components/Contacts/toast";
-import { Textarea } from "@/components/Contacts/textarea";
+import { ContactForm } from "@/components/Contacts/ContactForm";
 
 type ModalPhase = "closed" | "opening" | "open" | "closing";
 
@@ -48,9 +42,7 @@ export function ContactModalProvider({
   children: React.ReactNode;
 }) {
   const [phase, setPhase] = useState<ModalPhase>("closed");
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const { lenis } = useLenis();
-  const { showToast } = useToast();
   const pathname = usePathname();
   const { isIntroComplete } = useIntro();
 
@@ -59,11 +51,8 @@ export function ContactModalProvider({
   const timelineRef = useRef<gsap.core.Timeline | null>(null);
   const phaseRef = useRef<ModalPhase>("closed");
   const openingFromClosedRef = useRef(true);
+  const [isOpeningFromClosed, setIsOpeningFromClosed] = useState(true);
   const animationIdRef = useRef(0);
-  const nameRef = useRef<HTMLInputElement>(null);
-  const emailRef = useRef<HTMLInputElement>(null);
-  const phoneRef = useRef<HTMLInputElement>(null);
-  const messageRef = useRef<HTMLTextAreaElement>(null);
 
   const isOpen = phase !== "closed";
 
@@ -81,7 +70,9 @@ export function ContactModalProvider({
   const openModal = useCallback(() => {
     if (phaseRef.current === "open" || phaseRef.current === "opening") return;
 
-    openingFromClosedRef.current = phaseRef.current === "closed";
+    const fromClosed = phaseRef.current === "closed";
+    openingFromClosedRef.current = fromClosed;
+    setIsOpeningFromClosed(fromClosed);
     stopActiveTimeline();
     setModalPhase("opening");
   }, [setModalPhase, stopActiveTimeline]);
@@ -113,8 +104,12 @@ export function ContactModalProvider({
     timelineRef.current = tl;
 
     if (overlay) {
-      tl.to(
+      tl.fromTo(
         overlay,
+        {
+          opacity: 1,
+          backdropFilter: "blur(4px)",
+        },
         {
           opacity: 0,
           backdropFilter: "blur(0px)",
@@ -125,8 +120,12 @@ export function ContactModalProvider({
       );
     }
 
-    tl.to(
+    tl.fromTo(
       content,
+      {
+        opacity: 1,
+        "--contact-modal-y": "0px",
+      },
       {
         opacity: 0,
         "--contact-modal-y": "100px",
@@ -143,6 +142,7 @@ export function ContactModalProvider({
     let rafId: number;
     stopActiveTimeline();
     const animationId = animationIdRef.current;
+    let localTl: gsap.core.Timeline | null = null;
 
     const animate = () => {
       const overlay = overlayRef.current;
@@ -167,6 +167,7 @@ export function ContactModalProvider({
       });
 
       timelineRef.current = tl;
+      localTl = tl;
 
       if (overlay) {
         if (openingFromClosedRef.current) {
@@ -206,9 +207,11 @@ export function ContactModalProvider({
 
     return () => {
       cancelAnimationFrame(rafId);
-      if (timelineRef.current) {
-        timelineRef.current.kill();
-        timelineRef.current = null;
+      if (localTl) {
+        localTl.kill();
+        if (timelineRef.current === localTl) {
+          timelineRef.current = null;
+        }
       }
     };
   }, [phase, setModalPhase, stopActiveTimeline]);
@@ -233,7 +236,7 @@ export function ContactModalProvider({
     }
   }, [phase, lenis, pathname, isIntroComplete]);
 
-  const shouldUseInitialHiddenState = phase === "opening" && openingFromClosedRef.current;
+  const shouldUseInitialHiddenState = phase === "opening" && isOpeningFromClosed;
 
   return (
     <ContactModalContext.Provider value={{ isOpen, openModal, closeModal }}>
@@ -253,7 +256,7 @@ export function ContactModalProvider({
           wrapperRef={contentRef}
           overlayRef={overlayRef}
           overlayStyle={shouldUseInitialHiddenState ? { opacity: 0, backdropFilter: "blur(0px)" } : undefined}
-          className="max-w-5xl p-0 border-none bg-transparent shadow-none outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-0 md:w-[95vw] md:h-auto md:max-h-[95vh] md:max-w-none md:rounded-2xl lg:w-full lg:h-auto lg:max-w-5xl lg:rounded-xl"
+          className="max-w-5xl p-0 border-none bg-transparent shadow-none outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-0 md:w-[95vw] md:h-auto md:max-h-[95vh] md:max-w-none md:rounded-2xl lg:w-full lg:h-auto lg:max-w-6xl lg:h-[70vh] lg:rounded-xl"
           wrapperStyle={shouldUseInitialHiddenState ? { opacity: 0, "--contact-modal-y": "100px" } as React.CSSProperties : undefined}
           onEscapeKeyDown={(e) => {
             e.stopPropagation();
@@ -262,88 +265,12 @@ export function ContactModalProvider({
               closeModal();
             }
           }}
+          aria-describedby={undefined}
         >
-          <DialogHeader className="sr-only">
-            <DialogTitle>Contact Me</DialogTitle>
-            <DialogDescription>
-              Fill out the form to get in touch. I&apos;ll get back to you as soon as possible.
-            </DialogDescription>
-          </DialogHeader>
+          <DialogTitle className="sr-only">Contact Me</DialogTitle>
           <div className="w-full min-h-0 md:max-h-[95vh] md:overflow-y-auto md:rounded-2xl lg:rounded-xl">
             <ContactCard>
-              <form
-                action=""
-                className="w-full space-y-4"
-                onSubmit={async (e) => {
-                  e.preventDefault();
-                  if (isSubmitting) return;
-
-                  const name = nameRef.current?.value ?? "";
-                  const email = emailRef.current?.value ?? "";
-                  const phone = phoneRef.current?.value ?? "";
-                  const message = messageRef.current?.value ?? "";
-
-                  setIsSubmitting(true);
-                  closeModal(); // Close immediately for optimistic UI
-
-                  try {
-                    const res = await fetch("/api/contact", {
-                      method: "POST",
-                      headers: { "Content-Type": "application/json" },
-                      body: JSON.stringify({ name, email, phone, message }),
-                    });
-
-                    if (res.ok) {
-                      showToast("Message sent successfully!", "success");
-                    } else {
-                      const data = await res.json().catch(() => ({}));
-                      showToast(
-                        data.error || "Failed to send message. Please try again.",
-                        "error",
-                      );
-                    }
-                  } catch {
-                    showToast(
-                      "Failed to send message. Please try again.",
-                      "error",
-                    );
-                  } finally {
-                    setIsSubmitting(false);
-                  }
-                }}
-              >
-                <div className="flex flex-col gap-2 ">
-                  <Label>Name <span className="text-red-500">*</span></Label>
-                  <Input type="text" required placeholder="John Doe" ref={nameRef} />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <Label>Email <span className="text-red-500">*</span></Label>
-                  <Input type="email" required placeholder="john@example.com" ref={emailRef} />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <Label>Phone</Label>
-                  <Input
-                    type="tel"
-                    inputMode="numeric"
-                    placeholder="+91 0123456789"
-                    ref={phoneRef}
-                    onInput={(e) => {
-                      e.currentTarget.value = e.currentTarget.value.replace(/[^0-9]/g, "");
-                    }}
-                  />
-                </div>
-                <div className="flex flex-col gap-2 pt-2">
-                  <Label>Message <span className="text-red-500">*</span></Label>
-                  <Textarea required className="h-32 md:h-56 lg:h-32 resize-none" placeholder="Tell me about your project..." ref={messageRef} />
-                </div>
-                <Button
-                  className="w-full bg-accent text-background font-bold text-base py-6 mt-2 "
-                  type="submit"
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? "Sending..." : "Submit"}
-                </Button>
-              </form>
+              <ContactForm onBeforeSubmit={closeModal} />
             </ContactCard>
           </div>
         </DialogContent>

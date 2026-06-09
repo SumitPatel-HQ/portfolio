@@ -147,7 +147,13 @@ export const MenuContent: React.FC<MenuContentProps> = ({
             <p>401303 Virar</p>
             <p>Maharashtra</p>
             <p
-              onClick={() => setIsResumeOpen(true)}
+              onClick={() => {
+                if (window.innerWidth >= 768 && window.innerWidth < 1280) {
+                  window.open("/Sumit_Resume.pdf", "_blank");
+                } else {
+                  setIsResumeOpen(true);
+                }
+              }}
               className="cursor-pointer transition-all hover:opacity-70">
               View Resume
             </p>

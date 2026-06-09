@@ -91,12 +91,12 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         {/* Main Textarea Container Box */}
         <div
           className={cn(
-            "relative group flex flex-col w-full min-h-[100px] rounded-xl border border-border-custom bg-background-dark transition-all duration-300 hover:border-white/20 focus-within:ring-1 focus-within:ring-white/20 overflow-hidden",
+            "relative group flex flex-col w-full min-h-[100px]  rounded-lg border border-border-custom bg-background-dark transition-all duration-300 hover:border-white/20 focus-within:ring-1 focus-within:ring-white/20 overflow-hidden",
             className
           )}
         >
           <textarea
-            className="no-arrows flex-1 w-full bg-transparent pl-4 md:pl-5 lg:pl-4 pr-2 md:pr-4 lg:pr-2 pt-1 md:pt-3 lg:pt-1 text-sm md:text-lg lg:text-sm leading-[1.6] text-foreground placeholder:text-muted-custom focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 scrollbar-custom overflow-y-auto resize-none"
+            className="no-arrows flex-1 w-full bg-transparent pl-4 md:pl-5 lg:pl-4 pr-2 md:pr-4 lg:pr-2 pt-3 md:pt-3 text-base md:text-lg lg:text-sm leading-[1.6] text-foreground placeholder:text-muted-custom focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 scrollbar-custom overflow-y-auto resize-none"
             ref={internalRef}
             data-lenis-prevent
             value={value}
@@ -106,7 +106,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
             {...props}
           />
 
-          <div className="flex items-center justify-between px-3 pb-1 ">
+          <div className="flex items-center justify-between pl-4 pr-2 pb-2">
             <div className="text-xs text-muted-custom pointer-events-none select-none ml-1">
               {charCount.toLocaleString()} / {props.maxLength || 1000}
             </div>
@@ -117,11 +117,11 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
                 setModalValue(internalRef.current?.value || "")
                 setIsExpanded(true)
               }}
-              className="rounded-full border border-transparent hover:border-border-custom bg-transparent hover:bg-background-dark/90 p-1 md:p-3 lg:p-1 text-muted-custom transition-all duration-200 hover:text-foreground focus:opacity-100"
+              className="rounded-lg border border-transparent hover:border-border-custom bg-transparent  p-2 md:p-3 lg:p-1 text-muted-custom transition-all duration-200 hover:text-foreground focus:opacity-100"
               aria-label="Expand message view"
               title="Expand message view"
             >
-              <Maximize2 className="h-[13px] w-[13px] md:h-6 md:w-6 lg:h-[13px] lg:w-[13px]" />
+              <Maximize2 className="h-4 w-4 md:h-6 md:w-6 lg:h-[13px] lg:w-[13px]" />
             </button>
           </div>
         </div>

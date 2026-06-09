@@ -14,6 +14,7 @@ const menuItemsLinks = [
   { label: 'Projects', href: '/projects' },
   { label: 'Experience', href: '/experience' },
   { label: 'About Me', href: '/about' },
+  { label: 'Contact', href: '/contact' },
 ];
 
 export const Menu = () => {
@@ -174,7 +175,7 @@ export const Menu = () => {
       ) : null}
       <div
         data-transition-chrome="true"
-        className="hero-menu-btn-wrap fixed top-8 right-8 z-100 max-md:top-6 max-md:right-6 md:top-12 xl:top-8"
+        className="hero-menu-btn-wrap fixed top-8 right-8 z-100 max-md:top-6 max-md:right-6 md:top-12 xl:top-8 hidden md:block"
         style={pathname === '/' && !isIntroComplete ? { opacity: 0, visibility: 'hidden' } : undefined}
       >
         <MenuButton

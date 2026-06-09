@@ -51,25 +51,25 @@ const TechColumn: React.FC<TechColumnProps> = ({ title, themeColor, technologies
   const theme = themes[themeColor];
 
   return (
-    <div className="flex-1 flex flex-col gap-2 min-w-0">
+    <div className="flex-1 flex flex-col gap-1 min-w-0">
       <div className="flex items-center gap-1.5 px-1">
         <div className={`w-2 h-2 rounded-full ${theme.bg} ${theme.shadow}`} />
         <span className={`text-[9px] md:text-[11px] ${theme.text} font-bold uppercase tracking-widest`}>{title}</span>
       </div>
-      <div className="flex-1 rounded-xl border border-white/10 bg-background/30 shadow-[0_0_15px_rgba(0,0,0,0.5)] p-3 md:p-4 flex flex-col gap-3 relative group overflow-hidden">
-        <div className="flex justify-center gap-1.5 md:gap-2 w-full">
+      <div className="flex-1 rounded-xl border border-white/10 bg-background/30 shadow-[0_0_15px_rgba(0,0,0,0.5)] p-1.5 md:p-4 flex flex-col gap-1.5 md:gap-3 relative group overflow-hidden">
+        <div className="flex justify-center gap-1 md:gap-2 w-full">
           {technologies.map((tech) => (
-            <div key={tech.label} className="flex items-center justify-center flex-1 aspect-square max-w-[48px] rounded-lg border border-white/5 bg-white/[0.02] hover:bg-white/[0.06] transition-colors group" title={tech.label}>
-              <tech.icon className="w-5 h-5 md:w-7 md:h-7 opacity-90" style={{ color: tech.color }} />
+            <div key={tech.label} className="flex items-center justify-center flex-1 aspect-square max-w-[40px] md:max-w-[48px] rounded-lg border border-white/5 bg-white/[0.02] hover:bg-white/[0.06] transition-colors group" title={tech.label}>
+              <tech.icon className="w-4 h-4 md:w-7 md:h-7 opacity-90" style={{ color: tech.color }} />
             </div>
           ))}
         </div>
-        <div className="h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent my-2 md:my-3" />
-        <div className="flex flex-col gap-1.5">
+        <div className="h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent my-1 md:my-3" />
+        <div className="flex flex-col gap-1 md:gap-1.5">
           {features.map((item) => (
-            <div key={item} className="flex items-center gap-2">
+            <div key={item} className="flex items-center gap-1.5 md:gap-2">
               <div className={`flex-shrink-0 w-1.5 h-1.5 rounded-full border ${theme.featureBorder} ${theme.featureBg}`} />
-              <span className="text-[8px] md:text-[10px] text-white/60 font-medium tracking-wide">{item}</span>
+              <span className="text-[7px] md:text-[10px] text-white/60 font-medium tracking-wide truncate">{item}</span>
             </div>
           ))}
         </div>
@@ -193,11 +193,11 @@ export const ServiceGraphic: React.FC<ServiceGraphicProps> = ({ id }) => {
                 className="absolute -translate-x-1/2 -translate-y-1/2 z-20"
                 style={{ left: `${(n.x / 800) * 100}%`, top: `${(n.y / 500) * 100}%` }}
               >
-                <div className="w-10 h-10 md:w-14 md:h-14 rounded-2xl border border-white/10 bg-background shadow-[0_0_15px_rgba(0,0,0,0.5)] flex items-center justify-center relative">
-                  <n.icon className="w-5 h-5 md:w-7 md:h-7" style={{ color: n.color || 'var(--accent)' }} />
+                <div className="w-12 h-12 md:w-14 md:h-14 rounded-2xl border border-white/10 bg-background shadow-[0_0_15px_rgba(0,0,0,0.5)] flex items-center justify-center relative">
+                  <n.icon className="w-6 h-6 md:w-7 md:h-7" style={{ color: n.color || 'var(--accent)' }} />
 
-                  {/* Label positioned absolutely below so it doesn't affect the centering of the icon box */}
-                  <span className="absolute top-[calc(100%+8px)] left-1/2 -translate-x-1/2 text-[9px] md:text-[11px] text-white/50 font-medium tracking-wide whitespace-nowrap">
+                  {/* Label hidden on mobile — too cramped */}
+                  <span className="absolute top-[calc(100%+4px)] left-1/2 -translate-x-1/2 text-[7px] md:text-[11px] text-white/50 font-medium tracking-wide whitespace-nowrap hidden md:block">
                     {n.label}
                   </span>
                 </div>
@@ -205,15 +205,15 @@ export const ServiceGraphic: React.FC<ServiceGraphicProps> = ({ id }) => {
             ))}
 
             {/* Center AI Hub */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 md:w-32 md:h-32 rounded-full border border-accent/10 bg-background flex flex-col items-center justify-center shadow-[0_0_40px_rgba(0,217,217,0.05)] z-30">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 md:w-32 md:h-32 rounded-full border border-accent/10 bg-background flex flex-col items-center justify-center shadow-[0_0_40px_rgba(0,217,217,0.05)] z-30">
               {/* Ambient glow */}
               <div className="ai-hub-glow absolute inset-[-20px] md:inset-[-28px] rounded-full bg-accent/[0.03] blur-[20px] pointer-events-none" />
 
-              <BrainCircuit className="w-8 h-8 md:w-12 md:h-12 text-accent/80 mb-1" />
-              <span className="text-base md:text-xl font-bold text-white/90 tracking-wider">AI</span>
+              <BrainCircuit className="w-8 h-8 md:w-12 md:h-12 text-accent/80 mb-0.5" />
+              <span className="text-sm md:text-xl font-bold text-white/90 tracking-wider">AI</span>
 
               {/* Gentle ambient pulse */}
-              <div className="ai-pulse-ring absolute inset-[-10px] md:inset-[-12px] rounded-full border border-accent/[0.06]" />
+              <div className="ai-pulse-ring absolute inset-[-8px] md:inset-[-12px] rounded-full border border-accent/[0.06]" />
             </div>
           </div>
         );
@@ -293,8 +293,8 @@ export const ServiceGraphic: React.FC<ServiceGraphicProps> = ({ id }) => {
               }
             `}</style>
 
-            {/* Container mapping */}
-            <div className="relative w-full h-full min-h-[500px]">
+            {/* Container mapping — % positioning keeps all nodes within the aspect-ratio bounds on mobile, fixed height on desktop prevents vertical squishing */}
+            <div className="relative w-full h-full min-h-0 md:min-h-[500px]">
               {/* Fluid SVG Canvas overlaying the container exactly like Case 1 */}
               <svg viewBox="0 0 900 650" className="absolute inset-0 w-full h-full pointer-events-none" preserveAspectRatio="none">
 
@@ -352,7 +352,7 @@ export const ServiceGraphic: React.FC<ServiceGraphicProps> = ({ id }) => {
                     className="absolute -translate-x-1/2 -translate-y-1/2 z-20"
                     style={{ left: `${(n.x / 900) * 100}%`, top: `${(n.y / 650) * 100}%` }}
                   >
-                    <div className="flex items-center w-[120px] md:w-[160px] h-[46px] md:h-[58px] rounded-xl border border-white/10 bg-background shadow-[0_0_15px_rgba(0,0,0,0.5)] relative group">
+                    <div className="flex items-center w-[90px] md:w-[160px] h-[36px] md:h-[58px] rounded-md md:rounded-xl border border-white/10 bg-background shadow-[0_0_15px_rgba(0,0,0,0.5)] relative group">
 
                       {isTrigger && (
                         <div className="absolute -top-2 left-2 px-1.5 py-0.5 bg-accent/20 border border-accent/30 rounded-full text-[7px] font-bold text-accent tracking-wider">
@@ -360,20 +360,20 @@ export const ServiceGraphic: React.FC<ServiceGraphicProps> = ({ id }) => {
                         </div>
                       )}
 
-                      <div className="flex items-center gap-1.5 md:gap-2 w-full px-2 md:px-3 z-10">
-                        <div className="flex-shrink-0 w-7 h-7 md:w-9 md:h-9 rounded-[8px] flex items-center justify-center bg-white/5 border border-white/10" style={{ color: n.color }}>
-                          <n.Icon className="w-3.5 h-3.5 md:w-4 md:h-4" style={{ color: n.color }} />
+                      <div className="flex items-center gap-1 md:gap-2 w-full px-1.5 md:px-3 z-10">
+                        <div className="flex-shrink-0 w-5 h-5 md:w-9 md:h-9 rounded-[6px] md:rounded-[8px] flex items-center justify-center bg-white/5 border border-white/10" style={{ color: n.color }}>
+                          <n.Icon className="w-3 h-3 md:w-4 md:h-4" style={{ color: n.color }} />
                         </div>
 
                         <div className="flex flex-col min-w-0 flex-1">
-                          <span className="text-[11px] md:text-[13px] font-bold text-white/90 truncate tracking-wide">{n.label}</span>
-                          <span className="text-[9px] md:text-[10px] text-white/40 truncate font-medium">{n.sub}</span>
+                          <span className="text-[9px] md:text-[13px] font-bold text-white/90 truncate tracking-wide">{n.label}</span>
+                          <span className="hidden md:block text-[9px] md:text-[10px] text-white/40 truncate font-medium">{n.sub}</span>
                         </div>
 
                         <div className="flex-shrink-0">
-                          {n.status === 'success' && <div className="w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-[#34d399]" />}
-                          {n.status === 'processing' && <div className="w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-[#38bdf8]" />}
-                          {n.status === 'waiting' && <div className="w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-white/10" />}
+                          {n.status === 'success' && <div className="w-1.5 h-1.5 md:w-2.5 md:h-2.5 rounded-full bg-[#34d399]" />}
+                          {n.status === 'processing' && <div className="w-1.5 h-1.5 md:w-2.5 md:h-2.5 rounded-full bg-[#38bdf8]" />}
+                          {n.status === 'waiting' && <div className="w-1.5 h-1.5 md:w-2.5 md:h-2.5 rounded-full bg-white/10" />}
                         </div>
                       </div>
                     </div>
@@ -573,9 +573,9 @@ export const ServiceGraphic: React.FC<ServiceGraphicProps> = ({ id }) => {
               {/* ── COL 1 (LEFT): SOURCES & INGESTION ── */}
               <div className="flex flex-col h-full w-[32%] md:w-[34%] z-10">
                 {/* Box 1: Sources */}
-                <div className="rounded-xl border border-white/10 bg-background/30 shadow-[0_0_15px_rgba(0,0,0,0.5)] p-3 md:p-4 flex flex-col relative overflow-hidden h-fit">
-                  <div className="flex items-center gap-1.5 mb-3">
-                    <span className="text-xs md:text-sm text-blue-400 font-bold uppercase tracking-widest drop-shadow-[0_0_2px_rgba(96,165,250,0.5)]">Sources</span>
+                <div className="rounded-xl border border-white/10 bg-background/30 shadow-[0_0_15px_rgba(0,0,0,0.5)] p-1.5 md:p-4 flex flex-col relative overflow-hidden h-fit">
+                  <div className="flex items-center gap-1.5 mb-1.5 md:mb-3">
+                    <span className="text-[9px] md:text-sm text-blue-400 font-bold uppercase tracking-widest drop-shadow-[0_0_2px_rgba(96,165,250,0.5)]">Sources</span>
                   </div>
                   <div className="grid grid-cols-3 gap-1.5 md:gap-2 content-center mt-1 w-full">
                     {[
@@ -606,11 +606,11 @@ export const ServiceGraphic: React.FC<ServiceGraphicProps> = ({ id }) => {
                 </div>
 
                 {/* Box 2: Ingestion */}
-                <div className="rounded-xl border border-white/10 bg-background/30 shadow-[0_0_15px_rgba(0,0,0,0.5)] p-3 md:p-4 flex flex-col relative overflow-hidden h-fit">
-                  <div className="flex items-center gap-1.5 mb-3">
-                    <span className="text-xs md:text-sm text-emerald-400 font-bold uppercase tracking-widest drop-shadow-[0_0_2px_rgba(52,211,153,0.5)]">Ingestion</span>
+                <div className="rounded-xl border border-white/10 bg-background/30 shadow-[0_0_15px_rgba(0,0,0,0.5)] p-1.5 md:p-4 flex flex-col relative overflow-hidden h-fit">
+                  <div className="flex items-center gap-1.5 mb-1.5 md:mb-3">
+                    <span className="text-[9px] md:text-sm text-emerald-400 font-bold uppercase tracking-widest drop-shadow-[0_0_2px_rgba(52,211,153,0.5)]">Ingestion</span>
                   </div>
-                  <div className="grid grid-cols-2 gap-x-2 gap-y-2 md:gap-y-3 flex-1 content-center px-1">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-2 gap-y-1.5 md:gap-y-3 flex-1 content-center px-1">
                     {[
                       { label: "Connectors" },
                       { label: "Processing" },
@@ -618,10 +618,10 @@ export const ServiceGraphic: React.FC<ServiceGraphicProps> = ({ id }) => {
                       { label: "Embeddings" },
                     ].map((step) => (
                       <div key={step.label} className="flex items-center gap-1.5 md:gap-2">
-                        <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-sm border border-emerald-400/30 bg-emerald-400/10 flex items-center justify-center flex-shrink-0">
+                        <div className="w-2 h-2 md:w-3 md:h-3 rounded-sm border border-emerald-400/30 bg-emerald-400/10 flex items-center justify-center flex-shrink-0">
                           <div className="w-1 h-1 rounded-full bg-emerald-400/80" />
                         </div>
-                        <span className="text-[10px] md:text-xs text-white/90 font-semibold truncate">{step.label}</span>
+                        <span className="text-[9px] md:text-xs text-white/90 font-semibold truncate">{step.label}</span>
                       </div>
                     ))}
                   </div>
@@ -647,7 +647,7 @@ export const ServiceGraphic: React.FC<ServiceGraphicProps> = ({ id }) => {
                 </div>
 
                 {/* Cylinder SVG (Scaled Up) */}
-                <svg viewBox="0 0 60 50" className="w-24 h-20 md:w-36 md:h-32 flex-shrink-0 drop-shadow-[0_0_20px_rgba(167,139,250,0.6)] relative z-10">
+                <svg viewBox="0 0 60 50" className="w-14 h-12 md:w-36 md:h-32 flex-shrink-0 drop-shadow-[0_0_20px_rgba(167,139,250,0.6)] relative z-10">
                   <ellipse cx="30" cy="12" rx="22" ry="8" fill="rgba(167,139,250,0.15)" stroke="#a78bfa" strokeWidth="1.5" strokeOpacity="0.9" />
                   <line x1="8" y1="12" x2="8" y2="38" stroke="#a78bfa" strokeWidth="1.5" strokeOpacity="0.9" />
                   <line x1="52" y1="12" x2="52" y2="38" stroke="#a78bfa" strokeWidth="1.5" strokeOpacity="0.9" />
@@ -678,11 +678,11 @@ export const ServiceGraphic: React.FC<ServiceGraphicProps> = ({ id }) => {
               {/* ── COL 3 (RIGHT): RETRIEVAL & GENERATION ── */}
               <div className="flex flex-col h-full w-[32%] md:w-[34%] z-10">
                 {/* Box 1: Retrieval */}
-                <div className="rounded-xl border border-white/10 bg-background/30 shadow-[0_0_15px_rgba(0,0,0,0.5)] p-3 md:p-4 flex flex-col relative overflow-hidden h-fit">
-                  <div className="flex items-center gap-1.5 mb-3">
-                    <span className="text-xs md:text-sm text-accent font-bold uppercase tracking-widest drop-shadow-[0_0_2px_rgba(0,217,217,0.5)]">Retrieval</span>
+                <div className="rounded-xl border border-white/10 bg-background/30 shadow-[0_0_15px_rgba(0,0,0,0.5)] p-1.5 md:p-4 flex flex-col relative overflow-hidden h-fit">
+                  <div className="flex items-center gap-1.5 mb-1.5 md:mb-3">
+                    <span className="text-[9px] md:text-sm text-accent font-bold uppercase tracking-widest drop-shadow-[0_0_2px_rgba(0,217,217,0.5)]">Retrieval</span>
                   </div>
-                  <div className="grid grid-cols-2 gap-x-2 gap-y-2 md:gap-y-3 flex-1 content-center px-1">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-y-1.5 gap-x-2 md:gap-y-3 flex-1 content-center px-1">
                     {[
                       { label: "User Query" },
                       { label: "Embed Query" },
@@ -690,10 +690,10 @@ export const ServiceGraphic: React.FC<ServiceGraphicProps> = ({ id }) => {
                       { label: "Top-K" },
                     ].map((step) => (
                       <div key={step.label} className="flex items-center gap-1.5 md:gap-2">
-                        <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-sm border border-accent/30 bg-accent/10 flex items-center justify-center flex-shrink-0">
+                        <div className="w-2 h-2 md:w-3 md:h-3 rounded-sm border border-accent/30 bg-accent/10 flex items-center justify-center flex-shrink-0">
                           <div className="w-1 h-1 rounded-full bg-accent/80" />
                         </div>
-                        <span className="text-[10px] md:text-xs text-white/90 font-semibold truncate">{step.label}</span>
+                        <span className="text-[9px] md:text-xs text-white/90 font-semibold truncate">{step.label}</span>
                       </div>
                     ))}
                   </div>
@@ -712,9 +712,9 @@ export const ServiceGraphic: React.FC<ServiceGraphicProps> = ({ id }) => {
                 </div>
 
                 {/* Box 2: Generation */}
-                <div className="rounded-xl border border-white/10 bg-background/30 shadow-[0_0_15px_rgba(0,0,0,0.5)] p-3 md:p-4 flex flex-col relative overflow-hidden h-fit">
-                  <div className="flex items-center gap-1.5 mb-3">
-                    <span className="text-xs md:text-sm text-amber-400 font-bold uppercase tracking-widest drop-shadow-[0_0_2px_rgba(251,191,36,0.5)]">Generation</span>
+                <div className="rounded-xl border border-white/10 bg-background/30 shadow-[0_0_15px_rgba(0,0,0,0.5)] p-1.5 md:p-4 flex flex-col relative overflow-hidden h-fit">
+                  <div className="flex items-center gap-1.5 mb-1.5 md:mb-3">
+                    <span className="text-[9px] md:text-sm text-amber-400 font-bold uppercase tracking-widest drop-shadow-[0_0_2px_rgba(251,191,36,0.5)]">Generation</span>
                   </div>
                   <div className="flex flex-col gap-2 md:gap-2.5 flex-1 justify-center px-1">
                     {[
@@ -878,7 +878,7 @@ export const ServiceGraphic: React.FC<ServiceGraphicProps> = ({ id }) => {
                 <div className="flex-1 flex min-h-0 overflow-hidden relative z-10">
 
                   {/* ── LEFT NAVIGATION ── */}
-                  <div className="w-[15%] min-w-[60px] max-w-[100px] border-r border-white/5 bg-transparent flex flex-col p-1.5 gap-0.5 relative z-20">
+                  <div className="w-[15%] min-w-[60px] max-w-[100px] border-r border-white/5 bg-transparent flex-col p-1.5 gap-0.5 relative z-20 hidden md:flex">
                     <span className="text-[5px] md:text-[7px] text-white/30 font-semibold uppercase tracking-wider px-2 pt-1 pb-2 hidden md:block">Main Menu</span>
                     {[
                       { label: "Overview", icon: LayoutDashboard, active: true },
@@ -898,7 +898,7 @@ export const ServiceGraphic: React.FC<ServiceGraphicProps> = ({ id }) => {
                   </div>
 
                   {/* ── MAIN ANALYTICS DASHBOARD ── */}
-                  <div className="flex-1 flex flex-col min-w-0 p-3 md:p-5 gap-4 overflow-y-auto overflow-x-hidden relative z-10 custom-scrollbar">
+                  <div className="flex-1 flex flex-col min-w-0 p-3 md:p-5 gap-4 overflow-hidden relative z-10">
 
                     {/* Welcome & Controls */}
                     <div className="flex justify-between items-start flex-shrink-0">
@@ -952,7 +952,7 @@ export const ServiceGraphic: React.FC<ServiceGraphicProps> = ({ id }) => {
                       </div>
 
                       {/* Main Charts Area */}
-                      <div className="flex flex-col lg:flex-row gap-2.5 md:gap-3 lg:h-[220px]">
+                      <div className="hidden md:flex flex-col lg:flex-row gap-2.5 md:gap-3 lg:h-[220px]">
                         {/* Primary Chart: Core Metrics - The Focal Point */}
                         <div className="flex-[3.5] rounded-lg border border-white/10 bg-gradient-to-br from-white/[0.05] to-white/[0.01] p-4 md:p-5 flex flex-col relative overflow-hidden min-w-0">
                           {/* Subtle grid background */}
@@ -1136,7 +1136,7 @@ export const ServiceGraphic: React.FC<ServiceGraphicProps> = ({ id }) => {
                       <span className="text-[6px] md:text-[7px] text-white/60 font-semibold uppercase tracking-wider truncate">Modules</span>
                     </div>
 
-                    <div className="flex-1 flex flex-col gap-1 md:gap-1.5 min-h-0 overflow-y-auto custom-scrollbar opacity-70">
+                    <div className="flex-1 flex flex-col gap-1 md:gap-1.5 min-h-0 opacity-70">
                       {[
                         { label: "Auth", icon: Lock },
                         { label: "Sync", icon: Activity },
@@ -1159,10 +1159,8 @@ export const ServiceGraphic: React.FC<ServiceGraphicProps> = ({ id }) => {
 
       case "06": // AI Agents & Workflows
         return (
-          <div className="relative w-full h-full flex flex-col px-2 md:px-4 py-8 md:py-4 overflow-hidden">
+          <div className="relative w-full h-full flex flex-col px-1 md:px-4 py-1 md:py-4 overflow-hidden">
             {bgGrid}
-
-
 
             <style>{`
               @keyframes c6DashFlow {
@@ -1182,8 +1180,8 @@ export const ServiceGraphic: React.FC<ServiceGraphicProps> = ({ id }) => {
             <div className="flex-1 flex items-stretch gap-1.5 md:gap-2 relative z-10 min-w-0 min-h-0">
 
               {/* 1. TRIGGERS */}
-              <div className="w-[15%] min-w-[70px] max-w-[100px] max-h-[400px] flex flex-col rounded-xl border border-purple-500/40 bg-background/30 p-2 md:p-3 relative flex-shrink-0">
-                <span className="text-[7px] md:text-[9px] text-purple-300 font-bold uppercase tracking-widest text-center mb-2 md:mb-3">Triggers</span>
+              <div className="w-[15%] min-w-[55px] max-w-[100px] max-h-[400px] flex flex-col rounded-xl border border-purple-500/40 bg-background/30 p-1.5 md:p-3 relative flex-shrink-0">
+                <span className="text-[6px] md:text-[9px] text-purple-300 font-bold uppercase tracking-widest text-center mb-1.5 md:mb-3">Triggers</span>
                 <div className="flex flex-col gap-1.5 md:gap-2 mt-auto mb-auto overflow-hidden">
                   {[
                     { label: "User Request", icon: <MessageSquare className="w-4 h-4 md:w-5 md:h-5 text-purple-400 flex-shrink-0" /> },
@@ -1221,7 +1219,7 @@ export const ServiceGraphic: React.FC<ServiceGraphicProps> = ({ id }) => {
                   {/* MANAGER COLUMN */}
                   <div className="flex-1 flex flex-col items-center min-w-0">
                     <div className="flex-1 w-full" />
-                    <div className="w-full flex flex-col rounded-xl border border-blue-500/40 bg-background/30 p-2 md:p-3 items-center relative z-10 h-[200px] md:h-[160px] flex-shrink-0">
+                    <div className="w-full flex flex-col rounded-xl border border-blue-500/40 bg-background/30 p-1.5 md:p-3 items-center relative z-10 h-[120px] md:h-[160px] flex-shrink-0">
                       <span className="text-[7px] md:text-[9px] text-blue-300 font-bold uppercase tracking-widest text-center mb-auto">manager</span>
                       <BsDiagram3 className="w-8 h-8 md:w-10 md:h-10 text-blue-400 opacity-90 my-auto flex-shrink-0" />
                       <span className="text-[6px] md:text-[8px] text-white/70 text-center mt-auto leading-tight">Plan & Decompose<br />Tasks</span>
@@ -1248,16 +1246,16 @@ export const ServiceGraphic: React.FC<ServiceGraphicProps> = ({ id }) => {
                   {/* AI AGENT COLUMN */}
                   <div className="flex-[1.5] flex flex-col items-center min-w-0">
                     <div className="flex-1 w-full" />
-                    <div className="w-full flex flex-col rounded-xl border border-accent/40 bg-background/30 p-2 md:p-3 items-center relative z-10 h-[200px] md:h-[250px] flex-shrink-0">
-                      <Bot className="w-10 h-10 md:w-12 md:h-12 text-accent mt-1 flex-shrink-0" strokeWidth={1.5} />
-                      <span className="text-[8px] md:text-[10px] text-accent font-bold uppercase tracking-widest text-center mt-2 mb-2 md:mb-3">AI Agent</span>
+                    <div className="w-full flex flex-col rounded-xl border border-accent/40 bg-background/30 p-1.5 md:p-3 items-center relative z-10 h-[160px] md:h-[250px] flex-shrink-0">
+                      <Bot className="w-7 h-7 md:w-12 md:h-12 text-accent mt-1 flex-shrink-0" strokeWidth={1.5} />
+                      <span className="text-[7px] md:text-[10px] text-accent font-bold uppercase tracking-widest text-center mt-1 mb-1 md:mb-3">AI Agent</span>
 
-                      <div className="grid grid-cols-2 gap-1.5 md:gap-2 w-full mt-auto">
+                      <div className="grid grid-cols-2 gap-1 md:gap-2 w-full mt-auto">
                         {[
-                          { label: "Reason & Decide", icon: <BrainCircuit className="w-4 h-4 md:w-5 md:h-5 text-accent flex-shrink-0" /> },
-                          { label: "Use Tools", icon: <Settings2 className="w-4 h-4 md:w-5 md:h-5 text-accent flex-shrink-0" /> },
-                          { label: "Learn & Adapt", icon: <Activity className="w-4 h-4 md:w-5 md:h-5 text-accent flex-shrink-0" /> },
-                          { label: "Provide Output", icon: <FileText className="w-4 h-4 md:w-5 md:h-5 text-accent flex-shrink-0" /> }
+                          { label: "Reason", icon: <BrainCircuit className="w-3 h-3 md:w-5 md:h-5 text-accent flex-shrink-0" /> },
+                          { label: "Use Tools", icon: <Settings2 className="w-3 h-3 md:w-5 md:h-5 text-accent flex-shrink-0" /> },
+                          { label: "Learn", icon: <Activity className="w-3 h-3 md:w-5 md:h-5 text-accent flex-shrink-0" /> },
+                          { label: "Output", icon: <FileText className="w-3 h-3 md:w-5 md:h-5 text-accent flex-shrink-0" /> }
                         ].map((item) => (
                           <div key={item.label} className="flex flex-col items-center justify-center text-center gap-1 p-1 md:p-1.5 rounded border border-accent/10 bg-accent/[0.02]">
                             {item.icon}
@@ -1288,7 +1286,7 @@ export const ServiceGraphic: React.FC<ServiceGraphicProps> = ({ id }) => {
                   {/* EXECUTE & TOOLS COLUMN */}
                   <div className="flex-1 flex flex-col items-center min-w-0">
                     <div className="flex-1 w-full" />
-                    <div className="w-full flex flex-col rounded-xl border border-purple-500/40 bg-background/30 p-2 md:p-3 items-center relative z-10 h-[200px] md:h-[160px] flex-shrink-0">
+                    <div className="w-full flex flex-col rounded-xl border border-purple-500/40 bg-background/30 p-1.5 md:p-3 items-center relative z-10 h-[120px] md:h-[160px] flex-shrink-0">
                       <span className="text-[7px] md:text-[9px] text-purple-300 font-bold uppercase tracking-widest text-center mb-auto">Execute & Tools</span>
                       <LiaToolsSolid className="w-8 h-8 md:w-10 md:h-10 text-purple-400 opacity-90 my-auto flex-shrink-0" />
                       <span className="text-[6px] md:text-[8px] text-white/70 text-center mt-auto leading-tight">Use External Tools<br />& Integrations</span>
@@ -1307,7 +1305,7 @@ export const ServiceGraphic: React.FC<ServiceGraphicProps> = ({ id }) => {
                 </div>
 
                 {/* MEMORY & KNOWLEDGE */}
-                <div className="h-[20%] md:h-[24%] rounded-xl border border-accent/40 bg-background/30 p-1.5 md:p-2 flex flex-col relative z-10 flex-shrink-0 overflow-hidden">
+                <div className="h-[22%] md:h-[24%] rounded-xl border border-accent/40 bg-background/30 p-1 md:p-2 flex flex-col relative z-10 flex-shrink-0 overflow-hidden">
                   <span className="text-[6px] md:text-[9px] text-accent font-bold uppercase tracking-widest text-center mb-1 mt-0.5">Memory & Knowledge</span>
                   <div className="flex-1 flex justify-around items-center px-0 md:px-2">
 
@@ -1354,8 +1352,8 @@ export const ServiceGraphic: React.FC<ServiceGraphicProps> = ({ id }) => {
               </div>
 
               {/* 5. OUTPUTS */}
-              <div className="w-[15%] min-w-[70px] max-w-[100px] max-h-[400px] flex flex-col rounded-xl border border-purple-500/40 bg-background/30 p-2 md:p-3 relative flex-shrink-0">
-                <span className="text-[7px] md:text-[9px] text-purple-300 font-bold uppercase tracking-widest text-center mb-2 md:mb-3">Outputs</span>
+              <div className="w-[15%] min-w-[55px] max-w-[100px] max-h-[400px] flex flex-col rounded-xl border border-purple-500/40 bg-background/30 p-1.5 md:p-3 relative flex-shrink-0">
+                <span className="text-[6px] md:text-[9px] text-purple-300 font-bold uppercase tracking-widest text-center mb-1.5 md:mb-3">Outputs</span>
                 <div className="flex flex-col gap-1.5 md:gap-2 mt-auto mb-auto overflow-hidden">
                   {[
                     { label: "Response", icon: <MessageSquare className="w-4 h-4 md:w-5 md:h-5 text-purple-400 flex-shrink-0" /> },
@@ -1377,7 +1375,7 @@ export const ServiceGraphic: React.FC<ServiceGraphicProps> = ({ id }) => {
 
       case "07": // API & SaaS Integrations
         return (
-          <div className="relative w-full h-full flex flex-col px-2 md:px-4 py-8 md:py-4 overflow-hidden">
+          <div className="relative w-full h-full flex flex-col px-1 md:px-4 py-1 md:py-4 overflow-hidden">
             {bgGrid}
 
             <style>{`
@@ -1408,9 +1406,9 @@ export const ServiceGraphic: React.FC<ServiceGraphicProps> = ({ id }) => {
             <div className="flex-1 w-full max-w-[900px] max-h-[220px] md:max-h-[300px] mx-auto mb-auto z-10 grid grid-cols-[1fr_24px_1fr_24px_1fr] md:grid-cols-[1fr_40px_1fr_40px_1fr] grid-rows-[minmax(0,1fr)_24px_minmax(0,1fr)] md:grid-rows-[minmax(0,1fr)_40px_minmax(0,1fr)] relative min-h-0">
 
               {/* 1. APPLICATION (Row 1, Col 1) */}
-              <div className="col-start-1 row-start-1 w-full h-full min-h-0 rounded-xl border border-[#a855f7]/40 integration-block bg-background/30 flex flex-col items-center p-3 md:p-4 pt-1.5 md:pt-2 justify-between">
-                <span className="text-[10px] md:text-xs font-bold text-[#a855f7] tracking-wider uppercase text-center w-full">Application</span>
-                <div className="w-10 h-10 md:w-14 md:h-14 flex items-center justify-center relative my-auto">
+              <div className="col-start-1 row-start-1 w-full h-full min-h-0 rounded-xl border border-[#a855f7]/40 integration-block bg-background/30 flex flex-col items-center p-1.5 md:p-4 justify-between">
+                <span className="text-[8px] md:text-xs font-bold text-[#a855f7] tracking-wider uppercase text-center w-full">Application</span>
+                <div className="w-8 h-8 md:w-14 md:h-14 flex items-center justify-center relative my-auto">
                   <svg viewBox="0 0 24 24" className="w-full h-full text-[#a855f7]" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
                     <rect x="2" y="4" width="20" height="16" rx="2" />
                     <path d="M2 8h20" />
@@ -1422,9 +1420,7 @@ export const ServiceGraphic: React.FC<ServiceGraphicProps> = ({ id }) => {
                     <rect x="12" y="15" width="8" height="2" rx="0.5" />
                   </svg>
                 </div>
-                <div className="flex flex-col items-center gap-1 w-full mt-2">
-                  <span className="text-[8px] md:text-[10px] text-white/70 text-center w-full truncate">Web / Mobile App / SaaS Platform</span>
-                </div>
+                <span className="text-[7px] md:text-[10px] text-white/70 text-center w-full truncate">Web / Mobile / SaaS</span>
               </div>
 
               {/* Arrow 1 -> 2 (Row 1, Col 2) */}
@@ -1436,17 +1432,15 @@ export const ServiceGraphic: React.FC<ServiceGraphicProps> = ({ id }) => {
               </div>
 
               {/* 2. API LAYER (Row 1, Col 3) */}
-              <div className="col-start-3 row-start-1 w-full h-full min-h-0 rounded-xl border border-[#3b82f6]/40 integration-block bg-background/30 flex flex-col items-center p-3 md:p-4 pt-1.5 md:pt-2 justify-between">
-                <span className="text-[10px] md:text-xs font-bold text-[#3b82f6] tracking-wider uppercase text-center w-full">API Layer</span>
-                <div className="w-10 h-10 md:w-14 md:h-14 flex items-center justify-center relative my-auto">
+              <div className="col-start-3 row-start-1 w-full h-full min-h-0 rounded-xl border border-[#3b82f6]/40 integration-block bg-background/30 flex flex-col items-center p-1.5 md:p-4 justify-between">
+                <span className="text-[8px] md:text-xs font-bold text-[#3b82f6] tracking-wider uppercase text-center w-full">API Layer</span>
+                <div className="w-8 h-8 md:w-14 md:h-14 flex items-center justify-center relative my-auto">
                   <svg viewBox="0 0 24 24" className="w-full h-full text-[#3b82f6]" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M7.4 9A6 6 0 0 1 18 10.7 4.5 4.5 0 0 1 18.5 19H6.5A5.5 5.5 0 0 1 7.4 9z" />
                     <text x="12" y="16" textAnchor="middle" fill="currentColor" stroke="none" className="text-[6px] font-bold">API</text>
                   </svg>
                 </div>
-                <div className="flex flex-col items-center gap-1 w-full mt-2">
-                  <span className="text-[8px] md:text-[10px] text-white/70 text-center w-full truncate">REST / GraphQL API <br /> Authentication / Rate Limiting</span>
-                </div>
+                <span className="text-[7px] md:text-[10px] text-white/70 text-center w-full truncate">REST / GraphQL</span>
               </div>
 
               {/* Arrow 2 -> 3 (Row 1, Col 4) */}
@@ -1458,14 +1452,12 @@ export const ServiceGraphic: React.FC<ServiceGraphicProps> = ({ id }) => {
               </div>
 
               {/* 3. INTEGRATION LAYER (Row 1, Col 5) */}
-              <div className="col-start-5 row-start-1 w-full h-full min-h-0 rounded-xl border border-[#10b981]/40 integration-block bg-background/30 flex flex-col items-center p-3 md:p-4 pt-1.5 md:pt-2 justify-between">
-                <span className="text-[10px] md:text-xs font-bold text-[#10b981] tracking-wider uppercase text-center w-full">Integration Layer</span>
-                <div className="w-10 h-10 md:w-14 md:h-14 flex items-center justify-center relative my-auto">
+              <div className="col-start-5 row-start-1 w-full h-full min-h-0 rounded-xl border border-[#10b981]/40 integration-block bg-background/30 flex flex-col items-center p-1.5 md:p-4 justify-between">
+                <span className="text-[8px] md:text-xs font-bold text-[#10b981] tracking-wider uppercase text-center w-full">Integration</span>
+                <div className="w-8 h-8 md:w-14 md:h-14 flex items-center justify-center relative my-auto">
                   <MdOutlineIntegrationInstructions className="w-full h-full text-[#10b981]" />
                 </div>
-                <div className="flex flex-col items-center gap-1 w-full mt-2">
-                  <span className="text-[8px] md:text-[10px] text-white/70 text-center w-full truncate">Connectors / Mapping</span>
-                </div>
+                <span className="text-[7px] md:text-[10px] text-white/70 text-center w-full truncate">Connectors / Mapping</span>
               </div>
 
               {/* Arrow 3 -> 4 (Elbow Down-Left, Row 2 to Row 3, Col 5) */}
@@ -1480,14 +1472,12 @@ export const ServiceGraphic: React.FC<ServiceGraphicProps> = ({ id }) => {
               <div className="col-start-1 col-span-5 row-start-3 w-full h-full flex items-center justify-center gap-0">
 
                 {/* 5. DATA & RESPONSE (Left side of center) */}
-                <div className="w-[calc((100%-48px)/3)] md:w-[calc((100%-80px)/3)] h-full min-h-0 rounded-xl border border-[#a855f7]/40 integration-block bg-background/30 flex flex-col items-center p-3 md:p-4 pt-1.5 md:pt-2 justify-between shrink-0">
-                  <span className="text-[10px] md:text-xs font-bold text-[#a855f7] tracking-wider uppercase text-center w-full">Data & Response</span>
-                  <div className="w-10 h-10 md:w-14 md:h-14 flex items-center justify-center relative my-auto">
+                <div className="w-[calc((100%-48px)/3)] md:w-[calc((100%-80px)/3)] h-full min-h-0 rounded-xl border border-[#a855f7]/40 integration-block bg-background/30 flex flex-col items-center p-1.5 md:p-4 justify-between shrink-0">
+                  <span className="text-[8px] md:text-xs font-bold text-[#a855f7] tracking-wider uppercase text-center w-full">Data &amp; Response</span>
+                  <div className="w-8 h-8 md:w-14 md:h-14 flex items-center justify-center relative my-auto">
                     <FaSyncAlt className="w-[80%] h-[80%] text-[#a855f7]" />
                   </div>
-                  <div className="flex flex-col items-center gap-1 w-full mt-2">
-                    <span className="text-[8px] md:text-[10px] text-white/70 text-center w-full truncate">Sync / Process / Return</span>
-                  </div>
+                  <span className="text-[7px] md:text-[10px] text-white/70 text-center w-full truncate">Sync / Process / Return</span>
                 </div>
 
                 {/* Arrow 4 -> 5 (Horizontal Left) */}
@@ -1499,9 +1489,9 @@ export const ServiceGraphic: React.FC<ServiceGraphicProps> = ({ id }) => {
                 </div>
 
                 {/* 4. EXTERNAL SERVICES (Right side of center) */}
-                <div className="w-[calc((100%-48px)/3)] md:w-[calc((100%-80px)/3)] h-full min-h-0 rounded-xl border border-[#f59e0b]/40 integration-block bg-background/30 flex flex-col items-center p-3 md:p-4 pt-1.5 md:pt-2 justify-between shrink-0">
-                  <span className="text-[10px] md:text-xs font-bold text-[#f59e0b] tracking-wider uppercase text-center w-full">External Services</span>
-                  <div className="w-10 h-10 md:w-14 md:h-14 flex items-center justify-center relative my-auto">
+                <div className="w-[calc((100%-48px)/3)] md:w-[calc((100%-80px)/3)] h-full min-h-0 rounded-xl border border-[#f59e0b]/40 integration-block bg-background/30 flex flex-col items-center p-1.5 md:p-4 justify-between shrink-0">
+                  <span className="text-[8px] md:text-xs font-bold text-[#f59e0b] tracking-wider uppercase text-center w-full">External</span>
+                  <div className="w-8 h-8 md:w-14 md:h-14 flex items-center justify-center relative my-auto">
                     <svg viewBox="0 0 24 24" className="w-full h-full text-[#f59e0b]" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
                       <ellipse cx="12" cy="5" rx="9" ry="3" />
                       <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" />
@@ -1509,33 +1499,31 @@ export const ServiceGraphic: React.FC<ServiceGraphicProps> = ({ id }) => {
                       <path d="M21 8.5c0 1.66-4 3-9 3s-9-1.34-9-3" />
                     </svg>
                   </div>
-                  <div className="flex flex-col items-center gap-1 w-full mt-2">
-                    <span className="text-[8px] md:text-[10px] text-white/70 text-center w-full truncate">SaaS Apps / 3rd-party</span>
-                  </div>
+                  <span className="text-[7px] md:text-[10px] text-white/70 text-center w-full truncate">SaaS / 3rd-party</span>
                 </div>
 
               </div>
             </div>
 
             {/* Bottom Support Section: POPULAR INTEGRATIONS */}
-            <div className="absolute bottom-2 md:bottom-3 left-1/2 -translate-x-1/2  w-auto z-10 mx-auto max-w-[900px]">
-              <div className="w-full rounded-xl border border-white/10 integration-block bg-background/30 flex flex-col items-center justify-center py-2.5 md:py-2 gap-3">
-                <span className="text-[9px] md:text-[11px] text-white/50 tracking-[0.2em] font-semibold uppercase">Popular Integrations</span>
-                <div className="flex items-center justify-center gap-4 md:gap-8 px-4 w-full whitespace-nowrap">
+            <div className="absolute bottom-1 md:bottom-3 left-1/2 -translate-x-1/2 w-[95%] z-10 mx-auto max-w-[900px]">
+              <div className="w-full rounded-xl border border-white/10 integration-block bg-background/30 flex flex-col items-center justify-center py-1.5 md:py-2 gap-1.5 md:gap-3">
+                <span className="text-[7px] md:text-[11px] text-white/50 tracking-[0.2em] font-semibold uppercase">Popular Integrations</span>
+                <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1.5 md:flex-nowrap md:gap-8 px-2 md:px-4 w-full">
                   {[
-                    { name: "Slack", icon: <FaSlack className="w-5 h-5 md:w-6 md:h-6 text-[#E01E5A]" /> },
-                    { name: "Google Drive", icon: <FaGoogleDrive className="w-5 h-5 md:w-6 md:h-6 text-[#00A1F1]" /> },
-                    { name: "Stripe", icon: <SiStripe className="w-5 h-5 md:w-6 md:h-6 text-[#635BFF]" /> },
-                    { name: "Salesforce", icon: <SiSalesforce className="w-5 h-5 md:w-6 md:h-6 text-[#00A1E0]" /> },
-                    { name: "Notion", icon: <RiNotionFill className="w-5 h-5 md:w-6 md:h-6 text-white" /> },
-                    { name: "GitHub", icon: <FaGithub className="w-5 h-5 md:w-6 md:h-6 text-white" /> },
-                    { name: "REST API", icon: <Braces className="w-5 h-5 md:w-6 md:h-6 text-[#10b981]" /> }
+                    { name: "Slack", icon: <FaSlack className="w-4 h-4 md:w-6 md:h-6 text-[#E01E5A]" /> },
+                    { name: "Drive", icon: <FaGoogleDrive className="w-4 h-4 md:w-6 md:h-6 text-[#00A1F1]" /> },
+                    { name: "Stripe", icon: <SiStripe className="w-4 h-4 md:w-6 md:h-6 text-[#635BFF]" /> },
+                    { name: "Salesforce", icon: <SiSalesforce className="w-4 h-4 md:w-6 md:h-6 text-[#00A1E0]" /> },
+                    { name: "Notion", icon: <RiNotionFill className="w-4 h-4 md:w-6 md:h-6 text-white" /> },
+                    { name: "GitHub", icon: <FaGithub className="w-4 h-4 md:w-6 md:h-6 text-white" /> },
+                    { name: "REST API", icon: <Braces className="w-4 h-4 md:w-6 md:h-6 text-[#10b981]" /> }
                   ].map(item => (
-                    <div key={item.name} className="flex flex-col items-center justify-center gap-1.5 md:gap-2">
+                    <div key={item.name} className="flex flex-col items-center justify-center gap-0.5 md:gap-2">
                       <div className="flex items-center justify-center">
                         {item.icon}
                       </div>
-                      <span className="text-[9px] md:text-[11px] text-white/80 tracking-wide">{item.name}</span>
+                      <span className="text-[6px] md:text-[11px] text-white/80 tracking-wide whitespace-nowrap">{item.name}</span>
                     </div>
                   ))}
                 </div>

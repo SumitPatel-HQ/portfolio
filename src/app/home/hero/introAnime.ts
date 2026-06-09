@@ -250,9 +250,10 @@ export const useHeroAnimation = ({
     const menuBtnWrap = transitionContent?.querySelector<HTMLElement>(".hero-menu-btn-wrap");
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const isMobile = window.innerWidth < 768;
 
     if (reduceMotion) {
-      // For reduced motion: immediately show all elements and complete
+      // For reduced motion immediately show all elements and complete
       gsap.set([
         stripesRef.current,
         topChromeRef.current,
@@ -265,6 +266,25 @@ export const useHeroAnimation = ({
       gsap.set(introOverlayRef.current, { autoAlpha: 0, pointerEvents: "none" });
       setIsIntroComplete(true);
       setIntroComplete(true);
+      animationStatus.current = 'complete';
+      return;
+    }
+
+    if (isMobile) {
+      // On mobile, the MobileIntro component will handle the intro context state.
+      // We just set desktop elements to their final state in case of resize.
+      gsap.set([
+        stripesRef.current,
+        topChromeRef.current,
+        bottomChromeRef.current,
+        sumitRef.current,
+        patelRef.current,
+        nameDividerRef.current,
+      ], { clearProps: "all", opacity: 1, y: 0, clipPath: "inset(0% 0% 0% 0%)" });
+      if (menuBtnWrap) gsap.set(menuBtnWrap, { clearProps: "all", opacity: 1, y: 0 });
+      gsap.set(introOverlayRef.current, { autoAlpha: 0, pointerEvents: "none" });
+      // Note: We do NOT call setIntroComplete(true) here!
+      setIsIntroComplete(true); // Only for this hook's local state so it doesn't trigger blob cursor early, though it's hidden anyway
       animationStatus.current = 'complete';
       return;
     }

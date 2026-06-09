@@ -231,9 +231,9 @@ export function HomeScrollPinController({
         return setupScrollLogic(false);
       });
 
-      // Mobile (<768px) and Desktop (≥1280px): full pinSpacing on, original
-      // experience unchanged.
-      media.add("(max-width: 767px), (min-width: 1280px)", () => {
+      // Desktop (≥1280px): full pinSpacing on, original experience unchanged.
+      // Mobile (<768px) is handled entirely separately via MobileHomeLayout.
+      media.add("(min-width: 1280px)", () => {
         return setupScrollLogic(true);
       });
     // Scope to heroRef.current so ctx.revert() captures triggers/spacers

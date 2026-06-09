@@ -12,6 +12,7 @@ import GSAPProvider from "@/providers/GSAPProvider";
 import { TransitionProvider } from "@/components/transition/TransitionProvider";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { MobileBottomNav } from "@/components/mobile/MobileBottomNav";
 
 // Load Inter font with CSS variables
 const inter = Inter({
@@ -41,11 +42,18 @@ export default function RootLayout({
                 <ContactModalProvider>
                   <TransitionProvider>
                     <main className="relative flex-1 flex flex-col">
-                      <Menu />
+                      <div className="hidden md:block">
+                        <Menu />
+                      </div>
                       {children}
                     </main>
-                    <Footer />
+                    <div className="hidden md:block">
+                      <Footer />
+                    </div>
                   </TransitionProvider>
+                    <div className="md:hidden">
+                      <MobileBottomNav />
+                    </div>
                   <Analytics />
                   <SpeedInsights />
                 </ContactModalProvider>

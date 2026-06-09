@@ -12,9 +12,8 @@ import { AboutScrollPinController } from "./AboutScrollPinController";
 import { useLenis } from "@/providers/LenisProvider";
 import LogoLoop, { LogoItem } from "@/components/ui/LogoRail";
 import { SiReact, SiNextdotjs, SiTypescript, SiTailwindcss, SiDocker, SiPython, SiFastapi, SiVercel, SiGit, SiGithub, SiSupabase, SiGooglecloud, SiN8N } from 'react-icons/si';
-import { FileText, FolderKanban } from "lucide-react";
+import { FileText, FolderClosed } from "lucide-react";
 import { ResumeModal } from "@/components/ui/ResumeModal";
-import { getProfileImageUrl } from "@/lib/imagekit";
 import ScrollReveal from "@/components/ui/scroll-reveal";
 import { AboutMe } from "@/data/aboutmyself.data";
 
@@ -159,7 +158,7 @@ export default function AboutPage() {
               className="absolute inset-0 w-full h-full"
             >
               <Image
-                src={getProfileImageUrl("image.jpg")}
+                src={AboutMe.image}
                 alt="Sumit Patel Portrait"
                 fill
                 className="object-cover grayscale object-top brightness-75 scale-[1.2] transform-gpu"
@@ -268,7 +267,13 @@ export default function AboutPage() {
                 >
                   <button
                     type="button"
-                    onClick={() => setIsResumeOpen(true)}
+                    onClick={() => {
+                      if (window.innerWidth >= 768 && window.innerWidth < 1280) {
+                        window.open("/Sumit_Resume.pdf", "_blank");
+                      } else {
+                        setIsResumeOpen(true);
+                      }
+                    }}
                     className="inline-flex w-fit items-center gap-2 rounded-full border border-white/10 bg-background-secondary/55 px-4 py-2 md:px-6 md:py-3 lg:px-4 lg:py-2 text-sm md:text-lg lg:text-sm font-medium text-foreground/85 transition-colors duration-200 hover:border-accent/20 hover:text-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
                   >
                     <FileText className="w-4 h-4 md:w-5 md:h-5 lg:w-4 lg:h-4" aria-hidden />
@@ -279,7 +284,7 @@ export default function AboutPage() {
                     onClick={() => router.push('/projects')}
                     className="inline-flex w-fit items-center gap-2 rounded-full border border-white/10 bg-background-secondary/55 px-4 py-2 md:px-6 md:py-3 lg:px-4 lg:py-2 text-sm md:text-lg lg:text-sm font-medium text-foreground/85 transition-colors duration-200 hover:border-accent/20 hover:text-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
                   >
-                    <FolderKanban className="w-4 h-4 md:w-5 md:h-5 lg:w-4 lg:h-4" aria-hidden />
+                    <FolderClosed className="w-4 h-4 md:w-5 md:h-5 lg:w-4 lg:h-4" aria-hidden />
                     View Projects
                   </button>
                 </ScrollReveal>

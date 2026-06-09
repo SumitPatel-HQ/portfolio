@@ -1,56 +1,59 @@
-
-```
+```text
 +-----------------------------------------------------------+
 |                        End User                           |
-|                     Browser Input                         |
+|                 Desktop / Tablet / Mobile                 |
 +-----------------------------------------------------------+
                             |
                             v
 +-----------------------------------------------------------+
 |                    Next.js App Router                     |
-|            Routes: / /about /projects /experience         |
+| Routes: / /about /projects /experience /contact /services |
 +-----------------------------------------------------------+
                             |
                             v
 +-----------------------------------------------------------+
 |                     Root Layout                           |
-|              Global shell: Menu + Footer                 |
+|     Global shell handles responsive layout structures     |
+|     Desktop: Menu + Footer                                |
+|     Mobile: MobileRouteHeader + MobileBottomNav           |
 +-----------------------------------------------------------+
                             |
                             v
 +-----------------------------------------------------------+
 |                      Providers                            |
-|      Lenis -> GSAP -> ContactModalContext                |
+| TransitionProvider -> Lenis -> GSAP -> ContactModalContext|
 +-----------------------------------------------------------+
                             |
                             v
 +-----------------------------------------------------------+
 |                       Runtime                             |
-|      Lenis + GSAP ScrollTrigger + UI State Locks         |
+|        Lenis + GSAP ScrollTrigger + UI State Locks        |
 +-----------------------------------------------------------+
                             |
                             v
 +-----------------------------------------------------------+
 |                         Pages                             |
-|  Home | About | Projects | Experience                    |
-|  Home: Hero -> FeaturedWork -> ContactMiniSection        |
+| Desktop: Home | About | Projects | Experience | Services  |
+|          Home: Hero -> FeaturedWork -> ContactMiniSection |
+| Mobile:  MobileHomeLayout -> MobileHero -> MobileShowcase |
 +-----------------------------------------------------------+
                             |
                             v
 +-----------------------------------------------------------+
 |                    Components Layer                       |
-|      menu/* layout/* about/* projects/* ui/*             |
+| Desktop: layout/* menu/* projects/* about/* ui/*          |
+| Mobile:  mobile/* (home, projects, contact, services)     |
 +-----------------------------------------------------------+
                             |
                             v
 +-----------------------------------------------------------+
 |                      Data Layer                           |
-|   src/data/* + public/images/* + remote media URLs       |
+|     src/data/* + public/images/* + remote media URLs      |
 +-----------------------------------------------------------+
                             |
                             v
 +-----------------------------------------------------------+
 |                    Analytics Layer                        |
-|         Vercel Analytics + Speed Insights                |
+|           Vercel Analytics + Speed Insights               |
 +-----------------------------------------------------------+
 ```

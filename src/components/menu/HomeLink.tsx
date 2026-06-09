@@ -18,7 +18,7 @@ export const HomeLink: React.FC<HomeLinkProps> = ({ label, onNavigate, isContact
         opacity: isContactModalOpen ? 0 : 1,
         pointerEvents: isContactModalOpen ? 'none' : 'auto'
       }}
-      className="fixed xl:top-8 left-8 z-100 flex items-center justify-center overflow-hidden py-5 px-5 max-md:top-6 max-md:left-6 max-md:py-4 max-md:px-4 pointer-events-none md:top-12 xl:top-8"
+      className="fixed xl:top-8 left-8 z-100 flex items-center justify-center overflow-hidden py-5 px-5 max-md:top-6 max-md:left-6 max-md:py-4 max-md:px-4 pointer-events-none md:top-12 xl:top-8 hidden md:flex"
     >
       <div className="menu-home-link-target" style={{ pointerEvents: label ? 'auto' : 'none' }}>
         <AnimatePresence mode="wait" initial={false}>

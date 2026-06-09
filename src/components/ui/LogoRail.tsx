@@ -97,7 +97,10 @@ const useAnimationLoop = (
       }
 
       if (targetVelocity === 0 && hoverSpeed === undefined) {
-         track.style.transform = isVertical ? 'translate3d(0, 0, 0)' : 'translate3d(0, 0, 0)';
+         const transformValue = isVertical
+            ? `translate3d(0, ${-offsetRef.current}px, 0)`
+            : `translate3d(${-offsetRef.current}px, 0, 0)`;
+         track.style.transform = transformValue;
          return () => {
             lastTimestampRef.current = null;
          };
@@ -297,64 +300,31 @@ export const LogoLoop = React.memo<LogoLoopProps>(
       );
 
       const containerStyle = useMemo(
-         (): React.CSSProperties => ({
-            width: isVertical
-               ? toCssLength(width) === '100%'
-                  ? undefined
-                  : toCssLength(width)
-               : (toCssLength(width) ?? '100%'),
-            ...cssVariables,
-            ...style
-         }),
-         [width, cssVariables, style, isVertical]
+         (): React.CSSProperties => {
+            const baseStyle: React.CSSProperties = {
+               width: isVertical
+                  ? toCssLength(width) === '100%'
+                     ? undefined
+                     : toCssLength(width)
+                  : (toCssLength(width) ?? '100%'),
+               ...cssVariables,
+               ...style
+            };
+
+            if (fadeOut) {
+               const maskDir = isVertical ? 'to bottom' : 'to right';
+               const maskGradient = `linear-gradient(${maskDir}, transparent, black 15%, black 85%, transparent)`;
+               baseStyle.WebkitMaskImage = maskGradient;
+               baseStyle.maskImage = maskGradient;
+            }
+
+            return baseStyle;
+         },
+         [width, cssVariables, style, isVertical, fadeOut]
       );
 
       return (
          <div ref={containerRef} className={rootClasses} style={containerStyle} role="region" aria-label={ariaLabel}>
-            {fadeOut && (
-               <>
-                  {isVertical ? (
-                     <>
-                        <div
-                           aria-hidden
-                           className={cx(
-                              'pointer-events-none absolute inset-x-0 top-0 z-10',
-                              'h-[clamp(24px,8%,120px)]',
-                              'bg-[linear-gradient(to_bottom,var(--logoloop-fadeColor,var(--logoloop-fadeColorAuto))_0%,rgba(0,0,0,0)_100%)]'
-                           )}
-                        />
-                        <div
-                           aria-hidden
-                           className={cx(
-                              'pointer-events-none absolute inset-x-0 bottom-0 z-10',
-                              'h-[clamp(24px,8%,120px)]',
-                              'bg-[linear-gradient(to_top,var(--logoloop-fadeColor,var(--logoloop-fadeColorAuto))_0%,rgba(0,0,0,0)_100%)]'
-                           )}
-                        />
-                     </>
-                  ) : (
-                     <>
-                        <div
-                           aria-hidden
-                           className={cx(
-                              'pointer-events-none absolute inset-y-0 left-0 z-10',
-                              'w-[clamp(24px,8%,120px)]',
-                              'bg-[linear-gradient(to_right,var(--logoloop-fadeColor,var(--logoloop-fadeColorAuto))_0%,rgba(0,0,0,0)_100%)]'
-                           )}
-                        />
-                        <div
-                           aria-hidden
-                           className={cx(
-                              'pointer-events-none absolute inset-y-0 right-0 z-10',
-                              'w-[clamp(24px,8%,120px)]',
-                              'bg-[linear-gradient(to_left,var(--logoloop-fadeColor,var(--logoloop-fadeColorAuto))_0%,rgba(0,0,0,0)_100%)]'
-                           )}
-                        />
-                     </>
-                  )}
-               </>
-            )}
-
             <div
                className={cx(
                   'flex will-change-transform select-none relative z-0',

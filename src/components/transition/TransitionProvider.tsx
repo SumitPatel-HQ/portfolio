@@ -125,12 +125,13 @@ export function TransitionProvider({ children }: { children: React.ReactNode }) 
       return;
     }
 
-    // On the home route, skip the brand layer entry entirely.
+    // On mobile (<768px) or the home route, skip the brand layer entry entirely.
     // The HeroSection has its own cinematic intro animation that should
     // play unobstructed on initial load / refresh at "/".
     const isHomeRoute = pathname === "/";
+    const isMobile = window.innerWidth < 768;
 
-    if (isHomeRoute) {
+    if (isHomeRoute || isMobile) {
       // Immediately hide the brand layer and reveal content so the
       // hero intro animation can take full control of the entry sequence.
       gsap.set(brandEl, { y: "100vh", visibility: "hidden" });
@@ -374,6 +375,8 @@ export function TransitionProvider({ children }: { children: React.ReactNode }) 
   // ─── Popstate leave handler ───────────────────────────────────────────
   useEffect(() => {
     const handlePopState = () => {
+      if (window.innerWidth < 768) return;
+
       const targetPath = window.location.pathname;
 
       // Same page (e.g. hash change only) — ignore.
@@ -450,6 +453,15 @@ export function TransitionProvider({ children }: { children: React.ReactNode }) 
         next();
         return;
       }
+
+      if (window.innerWidth < 768) {
+        // DO NOT window.scrollTo(0, 0) here!
+        // It causes the outgoing page to jump to top visibly, and ruins Next.js's
+        // history scroll restoration by saving 0 as the scroll position before navigating.
+        next();
+        return;
+      }
+
       isTransitioningRef.current = true;
 
       const targetPath = to || window.location.pathname;
@@ -554,6 +566,14 @@ export function TransitionProvider({ children }: { children: React.ReactNode }) 
       skipBrandLayerRef.current = false;
 
       if (!brandEl || !contentEl) {
+        next();
+        isTransitioningRef.current = false;
+        return;
+      }
+
+      if (window.innerWidth < 768) {
+        if (contentEl) contentEl.style.visibility = "visible";
+        if (lenis) lenis.scrollTo(0, { immediate: true });
         next();
         isTransitioningRef.current = false;
         return;

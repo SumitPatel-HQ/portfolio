@@ -47,7 +47,7 @@ export function ContactCard({
           <h1 className="text-3xl font-bold md:text-4xl lg:text-5xl text-foreground">
             {title}
           </h1>
-          <p className="text-muted-custom max-w-xl text-sm font-thin md:text-base lg:text-lg">
+          <p className="text-muted-custom max-w-2xl text-sm font-thin md:text-base lg:text-lg">
             {description}
           </p>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -89,7 +89,7 @@ export function ContactCard({
       </div>
       <div
         className={cn(
-          "bg-background-dark/95 rounded-b-xl md:rounded-b-2xl lg:rounded-r-xl lg:rounded-b-none lg:rounded-br-xl flex h-full w-full items-center border-t border-white/5 md:border-t-2 md:p-8 lg:p-5 lg:col-span-1 lg:border-t-0 lg:border-l lg:border-border-custom",
+          "bg-background-dark/95 rounded-b-xl md:rounded-b-2xl lg:rounded-r-xl lg:rounded-b-none lg:rounded-br-xl flex flex-col h-full w-full border-t border-white/5 md:border-t-2 md:p-8 lg:p-6 lg:col-span-1 lg:border-t-0 lg:border-l lg:border-border-custom",
           formSectionClassName,
         )}
       >

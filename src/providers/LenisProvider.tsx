@@ -27,19 +27,24 @@ export default function LenisProvider({ children }: { children: ReactNode }) {
    useEffect(() => {
       const mobile = window.matchMedia("(max-width: 768px)").matches;
 
+      // Mobile pages use native scroll — no GSAP pin animations need Lenis.
+      // Skipping Lenis on mobile also prevents its document-level touch listeners
+      // from intercepting horizontal swipe gestures (carousels, etc.).
+      if (mobile) {
+         const readyHandle = requestAnimationFrame(() => setIsReady(true));
+         return () => cancelAnimationFrame(readyHandle);
+      }
+
       const lenis = new Lenis({
          autoRaf: false, // Prevent Lenis from running its own RAF since we sync it with GSAP's ticker
-         duration: mobile ? 1.2 : 1.5,
+         duration: 1.5,
          easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
          orientation: "vertical",
-         gestureOrientation: "both",
+         gestureOrientation: "vertical",
          smoothWheel: true,
          wheelMultiplier: 1.0,
-         // Mobile touch needs a higher multiplier so the page keeps up with your finger
-         touchMultiplier: mobile ? 1.5 : 1.0,
-         // Slightly slower lerp for a more "buttery" feel
-         lerp: mobile ? 0.08 : 0.1,
-         syncTouch: true,
+         lerp: 0.1,
+         syncTouch: false,
       });
 
       lenisRef.current = lenis;

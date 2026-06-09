@@ -16,15 +16,9 @@ export function Footer() {
   const pathname = usePathname();
   const { openModal } = useContactModal();
 
-  // Filter links based on pathname
-  const filteredLinks = pathname === '/' || pathname === '/about'
-    ? pageLinks.filter(link => link.label !== 'Contact Now')
-    : pageLinks;
-
   return (
-    <footer className={`relative z-10 rounded-2xl w-full px-8 py-8 text-sm text-white/50 md:py-6 md:px-24 md:border-t-[3px] md:border-white/10 lg:py-8 lg:border-t-2 lg:border-white/10 ${
-      pathname === '/projects' ? 'mt-10 md:-mt-5  bg-background' : 'mt-10 md:mt-0 lg:mt-10'
-    }`}>
+    <footer className={`relative z-10 rounded-2xl w-full px-8 py-8 text-sm text-white/50 md:py-6 md:px-24 md:border-t-[3px] md:border-white/10 lg:py-8 lg:border-t-2 lg:border-white/10 ${pathname === '/projects' ? 'mt-10 md:-mt-5  bg-background' : 'mt-10 md:mt-0 lg:mt-10'
+      }`}>
       <div className="grid grid-cols-1 items-center gap-6 text-center md:gap-8 lg:grid-cols-3 lg:gap-6">
         <div className="flex items-center justify-center gap-2 lg:justify-start">
           <span className="md:text-lg md:font-bold md:tracking-[0.15em] md:text-white lg:text-sm lg:font-normal lg:tracking-normal lg:text-white/50">AVAILABLE FOR WORK</span>
@@ -32,7 +26,7 @@ export function Footer() {
 
 
         <div className="flex flex-wrap items-center justify-center gap-4 md:gap-8 lg:gap-6">
-          {filteredLinks.map((item) =>
+          {pageLinks.map((item) =>
             item.label === 'Contact Now' ? (
               <button
                 key={item.label}
