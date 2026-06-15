@@ -48,9 +48,8 @@ next-env.d.ts
 
 # Files
 *.txt
+*.md
 changes.diff
-future _font_.md
-Readme.md
 
 favicon-package/.worktrees/
 /public/SVG

@@ -12,7 +12,7 @@ import { useIntro } from '@/context/IntroContext';
 
 const menuItemsLinks = [
   { label: 'Projects', href: '/projects' },
-  { label: 'Experience', href: '/experience' },
+  // { label: 'Experience', href: '/experience' },
   { label: 'About Me', href: '/about' },
   { label: 'Contact', href: '/contact' },
 ];

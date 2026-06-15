@@ -7,7 +7,7 @@ import { useContactModal } from '@/context/ContactModalContext';
 const pageLinks = [
   { label: 'Home', href: '/' },
   { label: 'Projects', href: '/projects' },
-  { label: 'Experience', href: '/experience' },
+  // { label: 'Experience', href: '/experience' },
   { label: 'About Me', href: '/about' },
   { label: 'Contact Now', href: '#' },
 ];

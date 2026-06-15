@@ -17,7 +17,7 @@ interface MenuContentProps {
 
 const menuItems: { label: string; href?: string }[] = [
   { label: "Projects", href: "/projects" },
-  { label: "Experience", href: "/experience" },
+  // { label: "Experience", href: "/experience" },
   { label: "About Me", href: "/about" },
   { label: "Contact", href: "#" },
 ];

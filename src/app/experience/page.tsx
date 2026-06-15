@@ -1,6 +1,7 @@
 "use client";
 
 import React from 'react';
+import { notFound } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { SkillBar } from '../../../trash/skills/SkillBar';
 import { SkillPill } from '../../../trash/skills/SkillPill';
@@ -53,6 +54,7 @@ const TOOLS = [
 ];
 
 export default function Experience() {
+  notFound();
   return (
     <div className="flex flex-col flex-1 px-8 lg:px-24 mb-32 max-w-7xl mx-auto w-full mt-28">
       {/* Page Title Area */}
