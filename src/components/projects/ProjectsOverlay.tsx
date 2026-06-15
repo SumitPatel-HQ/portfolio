@@ -9,7 +9,7 @@ type ProjectsOverlayProps = {
 
 export function ProjectsOverlay({ project }: ProjectsOverlayProps) {
   return (
-    <div className="relative z-20 flex max-w-245 flex-col gap-8 px-6">
+    <div className="relative z-20 flex max-w-245 flex-col gap-8 xl:px-6">
       <div className="flex flex-col gap-6">
         <ScrollReveal
           as={motion.h1}

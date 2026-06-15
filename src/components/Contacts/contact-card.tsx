@@ -37,7 +37,7 @@ export function ContactCard({
   return (
     <div
       className={cn(
-        "bg-background-secondary border-border-custom relative grid h-full w-full shadow-2xl md:grid-cols-2 lg:grid-cols-3 rounded-xl",
+        "bg-background-secondary border-border-custom relative grid h-full w-full shadow-2xl md:rounded-2xl lg:grid-cols-3 lg:rounded-xl",
         className,
       )}
       {...props}
@@ -47,7 +47,7 @@ export function ContactCard({
           <h1 className="text-3xl font-bold md:text-4xl lg:text-5xl text-foreground">
             {title}
           </h1>
-          <p className="text-muted-custom max-w-xl text-sm font-thin md:text-base lg:text-lg">
+          <p className="text-muted-custom max-w-2xl text-sm font-thin md:text-base lg:text-lg">
             {description}
           </p>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -89,7 +89,7 @@ export function ContactCard({
       </div>
       <div
         className={cn(
-          "bg-background-dark/80 rounded-r-xl flex h-full w-full items-center border-t border-border-custom p-5 md:col-span-1 md:border-t-0 md:border-l",
+          "bg-background-dark/95 rounded-b-xl md:rounded-b-2xl lg:rounded-r-xl lg:rounded-b-none lg:rounded-br-xl flex flex-col h-full w-full border-t border-white/5 md:border-t-2 md:p-8 lg:p-6 lg:col-span-1 lg:border-t-0 lg:border-l lg:border-border-custom",
           formSectionClassName,
         )}
       >
@@ -108,15 +108,18 @@ function ContactInfo({
 }: ContactInfoProps) {
   return (
     <div
-      className={cn("group flex items-center gap-3 py-3", className)}
+      className={cn(
+        "group flex items-center gap-3 py-3  lg:border-transparent lg:p-0 lg:py-3 lg:rounded-none",
+        className
+      )}
       {...props}
     >
-      <div className="flex h-12 w-12 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-white/50 transition-all duration-300 group-hover:bg-accent group-hover:text-background group-hover:border-accent">
+      <div className="flex shrink-0 h-12 w-12 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-white/50 transition-all duration-300 group-hover:bg-accent group-hover:text-background group-hover:border-accent">
         <Icon className="h-5 w-5" />
       </div>
-      <div>
+      <div className="min-w-0 flex-1">
         <p className="font-medium text-foreground">{label}</p>
-        <p className="text-muted-custom text-xs">{value}</p>
+        <p className="text-muted-custom text-xs truncate">{value}</p>
       </div>
     </div>
   );

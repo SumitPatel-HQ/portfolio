@@ -26,8 +26,6 @@ export function AboutScrollPinController({
 }: AboutScrollPinControllerProps) {
   const { isReady: isGSAPReady } = useGSAP();
   const { isReady: isLenisReady, lenis } = useLenis();
-
- 
   const [restoreCount, setRestoreCount] = useState(0);
 
   useEffect(() => {
@@ -39,8 +37,7 @@ export function AboutScrollPinController({
     window.addEventListener("pageshow", handlePageShow);
     return () => window.removeEventListener("pageshow", handlePageShow);
   }, []);
-  // ────────────────────────────────────────────────────────────────────────
-
+ 
   useEffect(() => {
     if (!isGSAPReady || !isLenisReady || !section1Ref.current || !section2Ref.current || !contactRef.current || !lenis) {
       return;
@@ -55,7 +52,6 @@ export function AboutScrollPinController({
     window.scrollTo(0, 0);
     lenis.scrollTo(0, { immediate: true });
 
- 
     const unwrapPinSpacer = (el: HTMLElement | null) => {
       if (!el) return;
       const parent = el.parentElement;
@@ -69,11 +65,9 @@ export function AboutScrollPinController({
     };
     unwrapPinSpacer(section1Ref.current);
     unwrapPinSpacer(section2Ref.current);
-    // ──────────────────────────────────────────────────────────────────────────
 
     const ctx = gsap.context(() => {
       const media = gsap.matchMedia();
-
 
       // Set a very low minimum width to ensure it is almost always active during testing
       media.add("(min-width: 320px)", () => {
@@ -90,18 +84,18 @@ export function AboutScrollPinController({
         const snapTo = (target: HTMLElement) => {
           if (isSnapping || isSnapCooldownActive() || !lenis) return;
           isSnapping = true;
-          
+
           lenis.stop();
-          
+
           lenis.scrollTo(target, {
             force: true,
             duration: 0.85,
             lock: false,
             easing: (t) => Math.min(1, 1 - Math.pow(1 - t, 4)),
             onComplete: () => {
-               lenis.start();
-               isSnapping = false;
-               snapCooldownUntil = performance.now() + SNAP_COOLDOWN_MS;
+              lenis.start();
+              isSnapping = false;
+              snapCooldownUntil = performance.now() + SNAP_COOLDOWN_MS;
             }
           });
         };
@@ -157,7 +151,7 @@ export function AboutScrollPinController({
             if (enteredSection2FromBottom && self.progress < 0.25) {
               enteredSection2FromBottom = false;
             }
-            
+
             const progressSnapLimit = enteredSection2FromBottom ? 0.1 : 0.85;
 
             if (self.direction === -1 && self.progress < progressSnapLimit && self.progress > 0.08) {
@@ -178,7 +172,7 @@ export function AboutScrollPinController({
 
             const isRecentWheelUp = performance.now() - lastWheelUpAt < RECENT_WHEEL_UP_INTENT_MS;
             const isUpwardIntent = lastScrollDirection === -1 || isRecentWheelUp;
-            
+
             const recoveryStart = 0.12;
             const recoveryEnd = enteredSection2FromBottom ? 0.15 : 0.88;
             const isInRecoveryZone = section2Trigger.progress > recoveryStart && section2Trigger.progress < recoveryEnd;
@@ -257,10 +251,10 @@ export function AboutScrollPinController({
         window.addEventListener("wheel", onWheel, { passive: true });
 
         const timer = setTimeout(() => {
-            ScrollTrigger.refresh();
-            if (lenis) {
-              lenis.resize();
-            }
+          ScrollTrigger.refresh();
+          if (lenis) {
+            lenis.resize();
+          }
         }, 100);
 
         return () => {
@@ -276,19 +270,18 @@ export function AboutScrollPinController({
           lenis.start();
         };
       });
-    // Scope to document.body so ctx.revert() also removes the pin-spacer <div>s
-    // that GSAP injects as siblings of the pinned element (outside parentElement).
-    }, document.body);
+    }, transitionContent);
 
     return () => {
       // Revert all GSAP artefacts (triggers, spacers, inline styles) created
       // by this controller, then force a fresh ScrollTrigger calculation so
       // the Home page initialises with a clean slate.
       ctx.revert();
-      ScrollTrigger.refresh();
+      setTimeout(() => {
+        ScrollTrigger.refresh();
+      }, 50);
     };
   }, [section2Ref, section1Ref, contactRef, isGSAPReady, isLenisReady, lenis, restoreCount]);
-
 
   return null;
 }

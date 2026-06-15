@@ -48,10 +48,10 @@ export const MenuContent: React.FC<MenuContentProps> = ({
   }, [isMenuOpen, setIsResumeOpen]);
 
   return (
-    <div className="flex h-full w-full flex-col px-6 pb-20 pt-24 font-sans sm:px-10 sm:pt-28 lg:px-16 lg:pb-24 lg:pt-32 xl:px-24">
-      <div className="grid h-full w-full grid-cols-1 gap-10 lg:mx-auto lg:mt-15 lg:w-fit lg:grid-cols-[max-content_max-content] lg:items-start lg:gap-x-150">
-        <div className="flex min-h-0 flex-col justify-center pl-2 sm:pl-4 lg:pl-8">
-          <nav aria-label="Main menu" className="flex flex-col gap-2 sm:gap-3">
+    <div className="flex h-full w-full flex-col px-6 pb-20 pt-24 font-sans sm:px-10 sm:pt-28 md:pt-40 xl:px-16 xl:pb-24 xl:pt-32 xl:px-24">
+      <div className="grid h-full w-full grid-cols-1 gap-10 md:gap-2 xl:mx-auto xl:mt-15 xl:w-fit xl:grid-cols-[max-content_max-content] xl:items-start xl:gap-x-150 xl:gap-y-0">
+        <div className="flex min-h-0 flex-col justify-center pl-2 sm:pl-4 md:pl-12 xl:pl-8">
+          <nav aria-label="Main menu" className="flex flex-col gap-2 sm:gap-3 md:gap-1.5 xl:gap-3">
             {menuItems.map((item) => (
               <div key={item.label} className="overflow-hidden py-1 -my-1">
                 {item.label === "Contact" ? (
@@ -61,7 +61,7 @@ export const MenuContent: React.FC<MenuContentProps> = ({
                     }}
                     onMouseEnter={() => setHoveredItem(item.label)}
                     onMouseLeave={() => setHoveredItem(null)}
-                    className="group/menu-item menu-content-pages inline-flex items-center gap-3 text-[44px] font-[350] leading-[1] tracking-[-0.015em] text-foreground bg-transparent border-none p-0 cursor-pointer sm:text-[56px] lg:text-[64px]"
+                    className="group/menu-item menu-content-pages inline-flex items-center gap-3 md:gap-1.5 xl:gap-3 text-[44px] font-[350] leading-[1] tracking-[-0.015em] text-foreground bg-transparent border-none p-0 cursor-pointer sm:text-[56px] md:text-[52px] xl:text-[64px]"
                     whileHover="hover"
                     initial="idle"
                   >
@@ -104,7 +104,7 @@ export const MenuContent: React.FC<MenuContentProps> = ({
                       href={item.href || "#"}
                       onClick={onNavigate}
                       data-transition-ignore
-                      className="group/menu-item menu-content-pages inline-flex items-center gap-3 text-[44px] font-[350] leading-[1] tracking-[-0.015em] text-foreground sm:text-[56px] lg:text-[64px]"
+                      className="group/menu-item menu-content-pages inline-flex items-center gap-3 md:gap-1.5 xl:gap-3 text-[44px] font-[350] leading-[1] tracking-[-0.015em] text-foreground sm:text-[56px] md:text-[52px] xl:text-[64px]"
                     >
                       <motion.span
                         className="inline-flex items-center"
@@ -141,13 +141,19 @@ export const MenuContent: React.FC<MenuContentProps> = ({
           </nav>
         </div>
 
-        <div className="menu-content-info grid grid-cols-1 gap-2 text-left text-[13px] font-medium uppercase tracking-[0.085em] leading-[1.33] text-foreground-secondary lg:grid-cols-2 lg:items-start lg:gap-x-0 lg:text-right">
-          <div className="space-y-1 lg:self-start">
+        <div className="menu-content-info grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-x-12 md:mt-2 md:pl-[90px] text-left text-[13px] font-medium uppercase tracking-[0.085em] leading-[1.33] text-foreground-secondary xl:mt-0 xl:grid-cols-2 xl:items-start xl:gap-x-0 xl:pl-0 xl:text-right">
+          <div className="space-y-1 xl:self-start">
             <p>Sumit</p>
             <p>401303 Virar</p>
             <p>Maharashtra</p>
             <p
-              onClick={() => setIsResumeOpen(true)}
+              onClick={() => {
+                if (window.innerWidth >= 768 && window.innerWidth < 1280) {
+                  window.open("/Sumit_Resume.pdf", "_blank");
+                } else {
+                  setIsResumeOpen(true);
+                }
+              }}
               className="cursor-pointer transition-all hover:opacity-70">
               View Resume
             </p>
@@ -159,7 +165,7 @@ export const MenuContent: React.FC<MenuContentProps> = ({
             <a href="mailto:job@akaru.fr" className="block transition-opacity hover:opacity-70">job@akaru.fr</a>
           </div> */}
 
-          <div className="space-y-1 lg:self-start">
+          <div className="space-y-1 xl:self-start">
             {socials
               .filter(
                 (social) =>
@@ -185,22 +191,22 @@ export const MenuContent: React.FC<MenuContentProps> = ({
         </div>
       </div>
 
-      {/* Desktop title layout (visible from lg and up) */}
+      {/* Desktop title layout (visible from md and up) */}
       <div
-        className="pointer-events-none relative mt-4 hidden w-full items-end justify-center overflow-visible pb-0 pt-2 lg:flex"
+        className="pointer-events-none relative mt-4 md:mt-auto xl:mt-4 hidden w-full items-end justify-center overflow-visible pb-0 md:pb-12 xl:pb-0 pt-2 md:-mb-12 xl:mb-0 md:flex"
         aria-hidden="true"
       >
         <div className="overflow-visible">
           <h1
             aria-label="SUMIT"
-            className="menu-content-title -translate-y-8 leading-[0.72] text-[clamp(14rem,36vw,33rem)] font-extrabold uppercase tracking-[-0.07em] text-foreground/10 [perspective:1000px] lg:-translate-y-18 scale-y-[1.2]"
+            className="menu-content-title -translate-y-8 md:translate-y-0 xl:-translate-y-18 leading-[0.72] md:text-[clamp(12rem,26vw,33rem)] xl:text-[clamp(14rem,36vw,33rem)] font-extrabold uppercase tracking-[-0.07em] text-foreground/10 [perspective:1000px] scale-y-[1.2]"
           >
             <span className="menu-content-title-letters flex gap-0 [transform-style:preserve-3d]">
               {titleLetters.map((letter, index) => (
                 <span
                   key={`${letter}-${index}`}
                   aria-hidden="true"
-                  className="menu-content-title-letter-clip block overflow-hidden leading-[1.05] pt-[0.3em] -mt-[0.3em] pb-[0.15em] -mb-[0.15em]"
+                  className="menu-content-title-letter-clip block overflow-hidden leading-[1.05] pt-[0.3em] -mt-[0.3em] pb-[0.15em] -mb-[0.15em] px-[0.15em] -mx-[0.15em]"
                 >
                   <span className="menu-content-title-letter block origin-bottom scale-y-[1.2] leading-tight [transform-style:preserve-3d]">
                     {letter}
@@ -212,14 +218,14 @@ export const MenuContent: React.FC<MenuContentProps> = ({
         </div>
       </div>
 
-      {/* Mobile title layout (hidden on lg and up) */}
+      {/* Mobile title layout (hidden on md and up) */}
       <div
-        className="pointer-events-none relative mt-auto flex items-end justify-center overflow-visible pb-20 pt-6 -mb-6 lg:hidden"
+        className="pointer-events-none relative mt-auto flex items-end justify-center overflow-visible pb-20 pt-6 -mb-6 md:hidden"
         aria-hidden="true"
       >
         <div className="overflow-visible">
           <div className="py-3 -my-3">
-            <h1 className="menu-content-title-mobile block origin-bottom pb-2 leading-[0.9] text-[88px] font-extrabold uppercase text-foreground/15 sm:text-[132px]">
+            <h1 className="menu-content-title-mobile block origin-bottom pb-2 leading-[0.9] text-[88px] font-extrabold uppercase text-foreground/15 sm:text-[132px] md:text-[240px]">
               <span className="block origin-bottom scale-y-[1.2]">SUMIT</span>
             </h1>
           </div>

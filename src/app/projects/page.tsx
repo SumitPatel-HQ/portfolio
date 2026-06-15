@@ -1,9 +1,10 @@
 import { PROJECTS } from "@/data/projects.data";
 import { fetchImagesForProject } from "@/lib/imagekit-server";
 import { ProjectsPageClient, ProjectWithImages } from "./ProjectsPageClient";
+import { MobileProjectsPage } from "@/components/mobile/projects/MobileProjectsPage";
 
 export const metadata = {
-  title: "Projects | Sumit Patel",
+  title: "Sumit Patel | Projects ",
   description: "A showcase of my recent work in engineering, design, and AI.",
 };
 
@@ -23,5 +24,14 @@ export default async function ProjectsPage() {
     })
   );
 
-  return <ProjectsPageClient projects={projectsWithImages} />;
+  return (
+    <>
+      <div className="hidden md:block">
+        <ProjectsPageClient projects={projectsWithImages} />
+      </div>
+      <div className="block md:hidden">
+        <MobileProjectsPage projects={projectsWithImages} />
+      </div>
+    </>
+  );
 }

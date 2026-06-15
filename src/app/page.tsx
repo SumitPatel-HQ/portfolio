@@ -6,6 +6,7 @@ import { HeroSection } from './home/hero/HeroSection';
 import { FeaturedWork } from './home/featured-work/FeaturedWork';
 import { ContactMiniSection } from './home/contactminipage/contactMiniSection';
 import { HomeScrollPinController } from './home/HomeScrollPinController';
+import { MobileHomeLayout } from './mobile-home/MobileHomeLayout';
 
 export default function Home() {
   const heroSectionRef = useRef<HTMLElement>(null);
@@ -33,30 +34,38 @@ export default function Home() {
   }, [lenis]);
 
   return (
-    <div className="flex flex-col flex-1 w-full overflow-x-clip">
-      <HomeScrollPinController
-        heroRef={heroSectionRef}
-        featuredRef={featuredSectionRef}
-        contactRef={contactSectionRef}
-      />
+    <>
+      {/* Desktop Experience (Unchanged) */}
+      <div className="hidden md:flex flex-col flex-1 w-full overflow-x-clip">
+        <HomeScrollPinController
+          heroRef={heroSectionRef}
+          featuredRef={featuredSectionRef}
+          contactRef={contactSectionRef}
+        />
 
-      <div className="w-full">
-        <section ref={heroSectionRef} className="min-h-screen w-full">
-          <HeroSection />
-        </section>
+        <div className="w-full">
+          <section ref={heroSectionRef} className="min-h-screen w-full">
+            <HeroSection />
+          </section>
+        </div>
+
+        <div className="w-full">
+          <section ref={featuredSectionRef} className="min-h-screen w-full md:min-h-fit">
+            <FeaturedWork />
+          </section>
+        </div>
+
+        <div className="w-full">
+          <section ref={contactSectionRef}>
+            <ContactMiniSection />
+          </section>
+        </div>
       </div>
 
-      <div className="w-full">
-        <section ref={featuredSectionRef} className="min-h-screen w-full">
-          <FeaturedWork />
-        </section>
+      {/* Mobile Experience */}
+      <div className="block md:hidden w-full">
+        <MobileHomeLayout />
       </div>
-
-      <div className="w-full">
-        <section ref={contactSectionRef}>
-          <ContactMiniSection />
-        </section>
-      </div>
-    </div>
+    </>
   );
 }

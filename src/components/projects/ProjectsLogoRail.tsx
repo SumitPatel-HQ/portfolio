@@ -70,9 +70,9 @@ export function ProjectsLogoRail({ projects, activeIndex, onSelect }: ProjectsLo
   if (!isMounted) return <div className="h-[112px] w-full" />;
 
   return (
-    <div ref={scrollRef} className="w-full overflow-x-auto scrollbar-hide" data-lenis-prevent>
+    <div ref={scrollRef} className="w-full overflow-x-auto scrollbar-hide" data-lenis-prevent data-prevent-project-click>
       <div 
-        className="show-default-cursor relative z-20 flex w-max items-center gap-2.5 rounded-[20px] bg-foreground/[0.03] p-2.5 backdrop-blur-md ring-1 ring-inset ring-foreground/[0.06] shadow-[0_8px_32px_-8px_rgba(0,0,0,0.12)] max-[900px]:gap-2 max-[900px]:p-2"
+        className="show-default-cursor relative z-20 flex w-max items-center gap-2.5 rounded-[20px] bg-foreground/[0.03] p-2.5 backdrop-blur-md ring-1 ring-inset ring-foreground/[0.06] shadow-[0_8px_32px_-8px_rgba(0,0,0,0.12)] max-md:gap-2 max-md:p-2"
         style={{
           willChange: "transform",
           transform: "translateZ(0)",
@@ -88,7 +88,7 @@ export function ProjectsLogoRail({ projects, activeIndex, onSelect }: ProjectsLo
             type="button"
             onClick={() => onSelect(index)}
             className={clsx(
-              "group relative flex h-[92px] w-[92px] items-center justify-center rounded-[16px] outline-none max-[900px]:h-[68px] max-[900px]:w-[68px] mouse-pointer",
+              "group relative flex h-[92px] w-[92px] items-center justify-center rounded-[16px] outline-none max-md:h-[68px] max-md:w-[68px] mouse-pointer",
               isActive
                 ? "text-foreground"
                 : "text-foreground/50 hover:text-foreground/80"
@@ -130,12 +130,12 @@ export function ProjectsLogoRail({ projects, activeIndex, onSelect }: ProjectsLo
               transition={contentTransition}
             >
               {isImagePath ? (
-                <div className="relative h-full w-full p-9 max-[900px]:h-[68px] max-[900px]:w-[68px] max-[900px]:p-2">
+                <div className="relative h-full w-full p-9 max-md:h-[68px] max-md:w-[68px] max-md:p-2">
                   <Image
                     src={project.logo}
                     alt={project.logoAlt}
                     fill
-                    sizes="(max-width: 900px) 68px, 92px"
+                    sizes="(max-width: 768px) 68px, 92px"
                     unoptimized={true}
                     priority={index === 0}
                     className={clsx(
@@ -147,7 +147,7 @@ export function ProjectsLogoRail({ projects, activeIndex, onSelect }: ProjectsLo
                   />
                 </div>
               ) : (
-                <span className="text-[15px] font-medium uppercase tracking-[0.02em] max-[900px]:text-[13px]">
+                <span className="text-[15px] font-medium uppercase tracking-[0.02em] max-md:text-[13px]">
                   {project.logo}
                 </span>
               )}

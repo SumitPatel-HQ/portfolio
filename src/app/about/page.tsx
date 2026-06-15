@@ -10,12 +10,14 @@ import Services from "./services";
 import { ContactMiniSection } from "@/app/home/contactminipage/contactMiniSection";
 import { AboutScrollPinController } from "./AboutScrollPinController";
 import { useLenis } from "@/providers/LenisProvider";
+import LogoLoop, { LogoItem } from "@/components/ui/LogoRail";
 import { SiReact, SiNextdotjs, SiTypescript, SiTailwindcss, SiDocker, SiPython, SiFastapi, SiVercel, SiGit, SiGithub, SiSupabase, SiGooglecloud, SiN8N } from 'react-icons/si';
-import { FileText, FolderKanban } from "lucide-react";
+import { FileText, FolderClosed } from "lucide-react";
 import { ResumeModal } from "@/components/ui/ResumeModal";
-import { getProfileImageUrl } from "@/lib/imagekit";
 import ScrollReveal from "@/components/ui/scroll-reveal";
 import { AboutMe } from "@/data/aboutmyself.data";
+
+
 const techLogos = [
   { node: <SiReact />, title: "React" },
   { node: <SiNextdotjs />, title: "Next.js" },
@@ -38,12 +40,12 @@ if (typeof window !== "undefined") {
 }
 
 const fadeUpVariants = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, y: 30 },
   visible: (custom: number) => ({
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.6,
+      duration: 0.8,
       ease: "easeOut" as const,
       delay: custom * 0.1,
     },
@@ -51,6 +53,57 @@ const fadeUpVariants = {
 };
 
 export default function AboutPage() {
+  const [activeLogo, setActiveLogo] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    const handleTap = (event: MouseEvent | TouchEvent) => {
+      const target = event.target as HTMLElement;
+      if (target && typeof target.closest === 'function' && !target.closest('a[data-logo-item="true"]')) {
+        setActiveLogo(null);
+      }
+    };
+    
+    if (activeLogo) {
+      document.addEventListener("mousedown", handleTap);
+      document.addEventListener("touchstart", handleTap);
+    }
+    
+    return () => {
+      document.removeEventListener("mousedown", handleTap);
+      document.removeEventListener("touchstart", handleTap);
+    };
+  }, [activeLogo]);
+
+  const renderMovingLogoItem = React.useCallback((tech: LogoItem, key: React.Key) => (
+    <motion.a
+      key={key}
+      data-logo-item="true"
+      onTap={() => {
+        setActiveLogo(prev => prev === tech.title ? null : (tech.title || null));
+      }}
+      target="_blank"
+      rel="noopener noreferrer"
+      initial={{ opacity: 0.7, scale: 1 }}
+      animate={{ 
+        opacity: activeLogo === tech.title ? 1 : 0.7, 
+        scale: activeLogo === tech.title ? 1.25 : 1 
+      }}
+      whileHover={{
+        scale: activeLogo === tech.title ? 1.25 : 1.15,
+        opacity: 1,
+        transition: {
+          duration: 0.2,
+          ease: "easeOut",
+        },
+      }}
+      className="group relative h-10 w-10 flex items-center justify-center text-white cursor-pointer"
+    >
+      <div className="relative z-10 text-4xl transition-all duration-300">
+        {'node' in tech ? tech.node : null}
+      </div>
+    </motion.a>
+  ), [activeLogo]);
+
   const section1Ref = useRef<HTMLElement>(null);
   const section2Ref = useRef<HTMLDivElement>(null);
   const contactRef = useRef<HTMLDivElement>(null);
@@ -95,9 +148,9 @@ export default function AboutPage() {
           contactRef={contactRef}
         />
         {/* SECTION 1: IDENTITY SPLIT PANEL */}
-        <section ref={section1Ref} className="relative min-h-screen overflow-hidden flex flex-col md:flex-row">
+        <section ref={section1Ref} className="relative min-h-screen overflow-hidden flex flex-col lg:flex-row">
           {/* LEFT PANEL */}
-          <div className="overflow-hidden relative h-[70vh] md:h-screen w-full md:w-1/2 shrink-0 z-10">
+          <div className="overflow-hidden relative h-[70vh] md:h-[50vh] lg:h-screen w-full lg:w-1/2 shrink-0 z-10">
             <motion.div
               initial={{ opacity: 0, y: 80 }}
               animate={transitionReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 80 }}
@@ -105,7 +158,7 @@ export default function AboutPage() {
               className="absolute inset-0 w-full h-full"
             >
               <Image
-                src={getProfileImageUrl("image.jpg")}
+                src={AboutMe.image}
                 alt="Sumit Patel Portrait"
                 fill
                 className="object-cover grayscale object-top brightness-75 scale-[1.2] transform-gpu"
@@ -133,7 +186,7 @@ export default function AboutPage() {
 
               <div
                 aria-hidden
-                className="pointer-events-none absolute -right-[12%] top-0 z-10 h-full w-[46%] blur-2xl md:block hidden"
+                className="pointer-events-none absolute -right-[12%] top-0 z-10 h-full w-[46%] blur-2xl lg:block hidden"
                 style={{ backgroundColor: "var(--background)", opacity: 0.52 }}
               />
             </motion.div>
@@ -145,12 +198,12 @@ export default function AboutPage() {
               animate={transitionReady ? "visible" : "hidden"}
               className="absolute bottom-12 left-8 md:left-12 z-20 flex flex-col gap-0"
             >
-              <motion.p variants={fadeUpVariants} className="text-role-tag ml-3 pb-3 font-sans text-[11px] font-medium uppercase tracking-[0.25em] text-accent">
+              <motion.p variants={fadeUpVariants} className="text-role-tag ml-3 pb-3 font-sans text-[12px] md:text-[13px] font-medium uppercase tracking-[0.25em] text-accent">
                 {AboutMe.tag}
               </motion.p>
               <ScrollReveal
                 as="h1"
-                textClassName="scale-y-[1.1] font-sans text-5xl md:text-6xl tracking-tight text-foreground lg:text-[84px] lg:leading-[0.85] font-extrabold"
+                textClassName="scale-y-[1.1] font-sans text-5xl md:text-[90px] lg:text-[90px] tracking-tight text-foreground lg:leading-[0.85] font-extrabold"
                 trigger={transitionReady}
                 staggerDelay={0.06}
                 delay={0}
@@ -165,19 +218,19 @@ export default function AboutPage() {
           </div>
 
           {/* RIGHT PANEL - CONTENT */}
-          <div className="flex-1 min-h-[50vh] md:h-screen overflow-y-auto px-8 py-16 md:p-12 lg:p-20 xl:pl-28 flex flex-col justify-center bg-background md:bg-transparent relative z-20">
-            <div className="max-w-[540px] flex flex-col gap-10">
+          <div className="flex-1 min-h-[50vh] lg:h-screen overflow-y-auto px-8 py-16 md:px-14 md:pt-12 md:pb-16 lg:p-20 xl:pl-28 flex flex-col justify-center md:justify-start lg:justify-center bg-background lg:bg-transparent relative z-20 md:-mt-10 md:rounded-t-[40px] lg:mt-0 lg:rounded-none">
+            <div className="max-w-[540px] md:max-w-full lg:max-w-[540px] flex flex-col gap-10 md:gap-10 lg:gap-10">
 
               {/* SECTION 1 & 2: HEADLINE & SUBTEXT */}
               <motion.div
                 custom={1}
                 initial="hidden"
                 animate={transitionReady ? "visible" : "hidden"}
-                className="flex flex-col gap-4"
+                className="flex flex-col gap-4 "
               >
                 <ScrollReveal
                   as="h2"
-                  textClassName="text-4xl md:text-5xl font-bold tracking-tight text-foreground leading-[1.15]"
+                  textClassName="text-4xl md:text-4xl lg:text-5xl font-bold tracking-tight text-foreground leading-[1.15]"
                   trigger={transitionReady}
                   staggerDelay={0.03}
                   delay={0.1}
@@ -190,7 +243,7 @@ export default function AboutPage() {
                 </ScrollReveal>
                 <ScrollReveal
                   as="p"
-                  textClassName="text-[#A0A0A0] text-lg leading-relaxed max-w-[480px]"
+                  textClassName="text-[#A0A0A0] text-lg md:text-2xl lg:text-lg leading-relaxed max-w-[480px] md:max-w-full lg:max-w-[480px]"
                   trigger={transitionReady}
                   staggerDelay={0.015}
                   delay={0.2}
@@ -214,31 +267,37 @@ export default function AboutPage() {
                 >
                   <button
                     type="button"
-                    onClick={() => setIsResumeOpen(true)}
-                    className="inline-flex w-fit items-center gap-2 rounded-full border border-white/10 bg-background-secondary/55 px-4 py-2 text-sm font-medium text-foreground/85 transition-colors duration-200 hover:border-accent/20 hover:text-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                    onClick={() => {
+                      if (window.innerWidth >= 768 && window.innerWidth < 1280) {
+                        window.open("/Sumit_Resume.pdf", "_blank");
+                      } else {
+                        setIsResumeOpen(true);
+                      }
+                    }}
+                    className="inline-flex w-fit items-center gap-2 rounded-full border border-white/10 bg-background-secondary/55 px-4 py-2 md:px-6 md:py-3 lg:px-4 lg:py-2 text-sm md:text-lg lg:text-sm font-medium text-foreground/85 transition-colors duration-200 hover:border-accent/20 hover:text-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
                   >
-                    <FileText size={16} aria-hidden />
+                    <FileText className="w-4 h-4 md:w-5 md:h-5 lg:w-4 lg:h-4" aria-hidden />
                     View Resume
                   </button>
                   <button
                     type="button"
                     onClick={() => router.push('/projects')}
-                    className="inline-flex w-fit items-center gap-2 rounded-full border border-white/10 bg-background-secondary/55 px-4 py-2 text-sm font-medium text-foreground/85 transition-colors duration-200 hover:border-accent/20 hover:text-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                    className="inline-flex w-fit items-center gap-2 rounded-full border border-white/10 bg-background-secondary/55 px-4 py-2 md:px-6 md:py-3 lg:px-4 lg:py-2 text-sm md:text-lg lg:text-sm font-medium text-foreground/85 transition-colors duration-200 hover:border-accent/20 hover:text-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
                   >
-                    <FolderKanban size={16} aria-hidden />
+                    <FolderClosed className="w-4 h-4 md:w-5 md:h-5 lg:w-4 lg:h-4" aria-hidden />
                     View Projects
                   </button>
                 </ScrollReveal>
               </motion.div>
 
               {/* SECTION 3 & 4: IMPACT & CURRENT STATUS */}
-              <div className="flex flex-col md:flex-row md:items-start gap-10 md:gap-16">
+              <div className="flex flex-col md:flex-row md:items-start gap-10 md:gap-16 lg:gap-16">
                 <div className="flex flex-col gap-1 shrink-0">
 
                   <div className="flex items-baseline gap-3">
                     <ScrollReveal
                       as="span"
-                      textClassName="text-5xl md:text-6xl font-extrabold tracking-tighter text-foreground"
+                      textClassName="text-5xl md:text-6xl lg:text-6xl md:scale-y-[1.1] font-extrabold tracking-tighter text-foreground"
                       trigger={transitionReady}
                       staggerDelay={0.06}
                       delay={0.25}
@@ -251,7 +310,7 @@ export default function AboutPage() {
                     </ScrollReveal>
                     <ScrollReveal
                       as="span"
-                      textClassName="text-sm text-[#A0A0A0] font-medium leading-tight"
+                      textClassName="text-sm md:text-base lg:text-sm text-[#A0A0A0] font-medium leading-tight"
                       trigger={transitionReady}
                       staggerDelay={0.02}
                       delay={0.3}
@@ -268,7 +327,7 @@ export default function AboutPage() {
                 <div className="flex flex-col gap-3">
                   <ScrollReveal
                     as="h3"
-                    textClassName="text-[11px] font-bold uppercase tracking-[0.2em] text-accent"
+                    textClassName="text-[11px] md:text-[16px] lg:text-[11px] font-bold uppercase tracking-[0.2em] text-accent "
                     trigger={transitionReady}
                     staggerDelay={0.02}
                     delay={0.3}
@@ -279,7 +338,7 @@ export default function AboutPage() {
                   >
                     Currently
                   </ScrollReveal>
-                  <div className="flex flex-col gap-2 text-[#A0A0A0] text-base">
+                  <div className="flex flex-col gap-2 text-[#A0A0A0] text-base md:text-xl lg:text-base">
                     <div className="flex items-start gap-1.5 leading-tight whitespace-nowrap">
                       <ScrollReveal
                         as="span"
@@ -344,7 +403,7 @@ export default function AboutPage() {
               <div className="flex flex-col gap-3">
                 <ScrollReveal
                   as="h3"
-                  textClassName="text-[11px] font-bold uppercase tracking-[0.2em] text-accent"
+                  textClassName="text-[11px] md:text-[16px] lg:text-[11px] font-bold uppercase tracking-[0.2em] text-accent"
                   trigger={transitionReady}
                   staggerDelay={0.02}
                   delay={0.45}
@@ -357,7 +416,7 @@ export default function AboutPage() {
                 </ScrollReveal>
                 <ScrollReveal
                   as="p"
-                  textClassName="text-base text-foreground font-medium"
+                  textClassName="text-base md:text-xl lg:text-base text-foreground font-medium"
                   trigger={transitionReady}
                   staggerDelay={0.015}
                   delay={0.5}
@@ -371,10 +430,10 @@ export default function AboutPage() {
               </div>
 
               {/* SECTION 7: CORE TECH STACK */}
-              <div className="flex flex-col gap-4 pt-4 border-t border-white/5">
+              <div className="flex flex-col gap-4 md:gap-6 lg:gap-4 pt-4 border-t border-white/5">
                 <ScrollReveal
                   as="h3"
-                  textClassName="text-[11px] font-bold uppercase tracking-[0.2em] text-accent"
+                  textClassName="text-[11px] md:text-[16px] lg:text-[11px] font-bold uppercase tracking-[0.2em] text-accent"
                   trigger={transitionReady}
                   staggerDelay={0.02}
                   delay={0.55}
@@ -388,7 +447,7 @@ export default function AboutPage() {
                 <ScrollReveal
                   as="div"
                   containerClassName="!my-0 w-full"
-                  textClassName="flex flex-wrap items-center justify-start gap-6"
+                  textClassName="w-full"
                   trigger={transitionReady}
                   staggerDelay={0.03}
                   delay={0.6}
@@ -396,30 +455,45 @@ export default function AboutPage() {
                   variant="none"
                   align="none"
                 >
-                  {techLogos.map((tech) => (
-                    <motion.a
-                      key={tech.title}
+                  {/* Desktop and Mobile: Static Wrapping */}
+                  <div className="flex md:hidden lg:flex flex-wrap items-center justify-start gap-6 lg:gap-6">
+                    {techLogos.map((tech) => (
+                      <motion.a
+                        key={tech.title}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        initial={{ opacity: 0.7, scale: 1 }}
+                        animate={{ opacity: 0.7, scale: 1 }}
+                        whileHover={{
+                          scale: 1.15,
+                          opacity: 1,
+                          transition: {
+                            duration: 0.2,
+                            ease: "easeOut",
+                          },
+                        }}
+                        className="group relative h-8 w-8 lg:h-8 lg:w-8 flex items-center justify-center text-white"
+                      >
+                        <div className="relative z-10 text-3xl lg:text-3xl transition-all duration-300 cursor-pointer">
+                          {tech.node}
+                        </div>
+                      </motion.a>
+                    ))}
+                  </div>
 
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      initial={{ opacity: 0.7, scale: 1 }}
-                      animate={{ opacity: 0.7, scale: 1 }}
-                      whileHover={{
-                        scale: 1.15,
-                        opacity: 1,
-                        transition: {
-                          duration: 0.2,
-                          ease: "easeOut",
-                        },
-                      }}
-                      className="group relative h-8 w-8 flex items-center justify-center text-white"
-                    >
-
-                      <div className="relative z-10 text-3xl transition-all duration-300 cursor-pointer">
-                        {tech.node}
-                      </div>
-                    </motion.a>
-                  ))}
+                  {/* Tablet: Moving LogoRail */}
+                  <div className="hidden md:block lg:hidden w-full max-w-4xl overflow-hidden">
+                    <LogoLoop
+                      logos={techLogos}
+                      speed={activeLogo ? 0 : 60}
+                      gap={40}
+                      logoHeight={48}
+                      fadeOut={true}
+                      fadeOutColor="var(--background)"
+                      renderItem={renderMovingLogoItem}
+                      pauseOnHover={true}
+                    />
+                  </div>
                 </ScrollReveal>
               </div>
             </div>

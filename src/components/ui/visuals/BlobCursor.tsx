@@ -1,6 +1,7 @@
 "use client";
 
-import React, { RefObject, useEffect, useRef, useState } from "react";
+import React, { RefObject, useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { createPortal } from "react-dom";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import { ArrowUpRight, LucideIcon } from "lucide-react";
 import { TextureOverlay } from "./TextureOverlay";
@@ -58,6 +59,12 @@ export function BlobCursor({
   iconColor = "text-white",
   restrictToTags
 }: BlobCursorProps) {
+  const isClient = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  );
+
   const [isVisible, setIsVisible] = useState(false);
   const onClickRef = useRef(onClick);
   const restrictToTagsRef = useRef(restrictToTags);
@@ -195,14 +202,16 @@ export function BlobCursor({
     };
   }, [targetRef, cursorX, cursorY, cursorXSpring, cursorYSpring]);
 
-  return (
+  if (!isClient) return null;
+
+  return createPortal(
     <motion.div
-      className="pointer-events-none fixed left-0 top-0 z-[9999] flex h-[76px] w-[76px] items-center justify-center"
+      className="pointer-events-none fixed left-0 top-0 z-[9999] hidden lg:flex h-[76px] w-[76px] items-center justify-center"
       style={{
         x: cursorXSpring,
         y: cursorYSpring,
-        translateX: "-50%",
-        translateY: "-50%",
+        marginLeft: "-38px",
+        marginTop: "-38px",
       }}
       initial={{ opacity: 0, scale: 0.5 }}
       animate={{
@@ -218,6 +227,7 @@ export function BlobCursor({
 
       {/* Sharp Icon */}
       <Icon className={`relative z-10 h-8 w-8 stroke-[1px] ${iconColor}`} />
-    </motion.div>
+    </motion.div>,
+    document.body
   );
 }

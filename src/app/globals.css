@@ -5,6 +5,8 @@
 
 @theme {
   /* --color-primary: #64FFDA; */
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1280px;
   --color-background-dark: #0A0A0A;
   --color-background-secondary: #1A1A1A;
   --color-background-light: #f5f8f8;
@@ -225,6 +227,7 @@
   &::-webkit-scrollbar {
     display: block;
     width: 5px;
+    height: 5px;
   }
 
   &::-webkit-scrollbar-button {
@@ -246,14 +249,13 @@
 
   &::-webkit-scrollbar-track {
     background: transparent;
+    border-radius: 9999px;
   }
 
   &::-webkit-scrollbar-thumb {
     background-color: rgba(255, 255, 255, 0.25);
-    border-radius: 20px;
+    border-radius: 9999px;
     transition: background-color 0.2s ease;
-    border: 1px solid transparent;
-    background-clip: padding-box;
   }
 
   &::-webkit-scrollbar-thumb:hover {

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, createContext, useContext, useCallback } from "react";
+import React, { useState, createContext, useContext, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CircleCheck, AlertCircle } from "lucide-react";
 
@@ -49,15 +49,24 @@ interface ToastContainerProps {
 }
 
 const ToastContainer: React.FC<ToastContainerProps> = ({ toasts }) => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkIsMobile = () => setIsMobile(window.innerWidth < 640);
+    checkIsMobile();
+    window.addEventListener("resize", checkIsMobile);
+    return () => window.removeEventListener("resize", checkIsMobile);
+  }, []);
+
   return (
-    <div className="pointer-events-none fixed inset-x-4 bottom-5 z-50 flex flex-col gap-3 sm:inset-x-auto sm:right-8 sm:bottom-8 sm:w-[min(420px,calc(100vw-4rem))]">
+    <div className="pointer-events-none fixed left-4 right-4 top-24 z-50 flex flex-col items-end gap-3 sm:top-auto sm:bottom-8 sm:left-auto sm:right-8 sm:items-stretch sm:w-[min(420px,calc(100vw-4rem))]">
       <AnimatePresence>
         {toasts.map((toast) => (
           <motion.div
             key={toast.id}
-            initial={{ opacity: 0, y: 48, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 32, scale: 0.98 }}
+            initial={isMobile ? { opacity: 0, x: 100, y: 0, scale: 0.98 } : { opacity: 0, x: 0, y: 48, scale: 0.98 }}
+            animate={{ opacity: 1, x: 0, y: 0, scale: 1 }}
+            exit={isMobile ? { opacity: 0, x: -100, y: 0, scale: 0.98 } : { opacity: 0, x: 0, y: 32, scale: 0.98 }}
             transition={{ duration: 0.36, ease: [0.16, 1, 0.3, 1] }}
             className="pointer-events-auto"
           >
