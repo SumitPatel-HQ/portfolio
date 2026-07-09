@@ -5,7 +5,7 @@ import gsap from "gsap";
 import { useGSAP } from "@/providers/GSAPProvider";
 
 import { socials } from "@/data/socialLinks";
-import { ContactOrb } from "@/components/ui/visuals/ContactOrb";
+import { DeferredContactOrb } from "@/components/ui/visuals/DeferredContactOrb";
 import { useContactModal } from "@/context/ContactModalContext";
 
 export const ContactMiniSection = () => {
@@ -169,7 +169,7 @@ export const ContactMiniSection = () => {
 
         {/* Big circle Bot */}
         <div className="contact-orb-wrapper order-2 md:order-1 lg:order-2 lg:col-span-3 flex items-center justify-center mt-10 md:mt-0 lg:mt-0 relative z-20">
-          <ContactOrb />
+          <DeferredContactOrb />
         </div>
       </div>
     </section>

@@ -7,7 +7,7 @@ import { ArrowUpRight } from "lucide-react";
 import { PROJECTS } from "@/data/projects.data";
 import { getProjectImageUrl } from "@/lib/imagekit";
 import { CARDS } from "@/data/what-I-build";
-import { ServiceGraphic } from "@/components/ui/ServiceGraphic";
+import { DeferredServiceGraphic } from "@/components/ui/DeferredServiceGraphic";
 import { MobileContactCard } from "@/components/mobile/contact/MobileContactCard";
 
 export function MobileShowcase() {
@@ -54,9 +54,10 @@ export function MobileShowcase() {
                 {/* ArrowUpRight action indicator */}
                 <Link
                   href={`/projects/${project.name.toLowerCase()}`}
+                  aria-label={`View ${project.name} details`}
                   className="w-10 h-10 rounded-full border border-white/10 bg-white/5 flex items-center justify-center flex-shrink-0 active:scale-95 transition-all hover:bg-white/10"
                 >
-                  <ArrowUpRight size={18} className="text-foreground transition-colors group-hover:text-accent" />
+                  <ArrowUpRight size={18} className="text-foreground transition-colors group-hover:text-accent" aria-hidden="true" />
                 </Link>
               </div>
             </motion.div>
@@ -96,7 +97,7 @@ export function MobileShowcase() {
                 transition={{ duration: 0.5, delay: idx * 0.1 }}
               >
                 <div className="mb-4 aspect-[16/10] overflow-hidden flex items-center justify-center rounded-xl border border-white/5 bg-white/[0.02] pointer-events-none slide-screenshot relative">
-                  <ServiceGraphic id={service.case} />
+                  <DeferredServiceGraphic id={service.case} />
                 </div>
 
                 {/* Service Content */}

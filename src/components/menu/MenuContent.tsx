@@ -3,10 +3,14 @@
 import Link from "next/link";
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import dynamic from "next/dynamic";
 import { useContactModal } from "@/context/ContactModalContext";
 import { socials } from "@/data/socialLinks";
-import { ResumeModal } from "@/components/ui/ResumeModal";
 import { AnimatedArrow } from "./AnimatedArrow";
+
+const DynamicResumeModal = dynamic(() =>
+  import("@/components/ui/ResumeModal").then((module) => module.ResumeModal),
+);
 
 interface MenuContentProps {
   onNavigate?: () => void;
@@ -39,6 +43,7 @@ export const MenuContent: React.FC<MenuContentProps> = ({
 }) => {
   const { openModal } = useContactModal();
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+  const [hasOpenedResume, setHasOpenedResume] = useState(false);
 
   // Reset resume modal when menu closes
   React.useEffect(() => {
@@ -151,6 +156,7 @@ export const MenuContent: React.FC<MenuContentProps> = ({
                 if (window.innerWidth >= 768 && window.innerWidth < 1280) {
                   window.open("/Sumit_Resume.pdf", "_blank");
                 } else {
+                  setHasOpenedResume(true);
                   setIsResumeOpen(true);
                 }
               }}
@@ -197,7 +203,7 @@ export const MenuContent: React.FC<MenuContentProps> = ({
         aria-hidden="true"
       >
         <div className="overflow-visible">
-          <h1
+          <h2
             aria-label="SUMIT"
             className="menu-content-title -translate-y-8 md:translate-y-0 xl:-translate-y-18 leading-[0.72] md:text-[clamp(12rem,26vw,33rem)] xl:text-[clamp(14rem,36vw,33rem)] font-extrabold uppercase tracking-[-0.07em] text-foreground/10 [perspective:1000px] scale-y-[1.2]"
           >
@@ -214,28 +220,16 @@ export const MenuContent: React.FC<MenuContentProps> = ({
                 </span>
               ))}
             </span>
-          </h1>
-        </div>
-      </div>
-
-      {/* Mobile title layout (hidden on md and up) */}
-      <div
-        className="pointer-events-none relative mt-auto flex items-end justify-center overflow-visible pb-20 pt-6 -mb-6 md:hidden"
-        aria-hidden="true"
-      >
-        <div className="overflow-visible">
-          <div className="py-3 -my-3">
-            <h1 className="menu-content-title-mobile block origin-bottom pb-2 leading-[0.9] text-[88px] font-extrabold uppercase text-foreground/15 sm:text-[132px] md:text-[240px]">
-              <span className="block origin-bottom scale-y-[1.2]">SUMIT</span>
-            </h1>
-          </div>
+          </h2>
         </div>
       </div>
       {/* RESUME PDF MODAL */}
-      <ResumeModal
-        isOpen={isResumeOpen}
-        onClose={() => setIsResumeOpen(false)}
-      />
+      {hasOpenedResume ? (
+        <DynamicResumeModal
+          isOpen={isResumeOpen}
+          onClose={() => setIsResumeOpen(false)}
+        />
+      ) : null}
     </div>
 
 

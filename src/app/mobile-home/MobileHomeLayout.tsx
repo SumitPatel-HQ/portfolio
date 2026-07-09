@@ -1,4 +1,3 @@
-"use client";
 
 import { MobileBackground } from "@/components/mobile/MobileBackground";
 import { MobileHero } from "@/components/mobile/home/MobileHero";

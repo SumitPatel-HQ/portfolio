@@ -6,13 +6,14 @@ import { AnimatePresence, motion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Github, ArrowUpRight } from "lucide-react";
+import Link from "next/link";
 
 import { ProjectItem, PROJECTS_TEXTURE_IMAGE } from "@/data/projects.data";
 import { ProjectsLogoRail } from "@/components/projects/ProjectsLogoRail";
 import { ProjectsOverlay } from "@/components/projects/ProjectsOverlay";
 import { ImageGallery } from "@/components/projects/ImageGallery";
 import { TextureOverlay } from "@/components/ui/visuals/TextureOverlay";
-import { BlobCursor } from "@/components/ui/visuals/BlobCursor";
+import { ResponsiveBlobCursor } from "@/components/ui/visuals/ResponsiveBlobCursor";
 import { useGSAP } from "@/providers/GSAPProvider";
 import { useLenis } from "@/providers/LenisProvider";
 
@@ -82,13 +83,13 @@ export function ProjectsPageClient({ projects }: ProjectsPageClientProps) {
 
   const onTouchMove = useCallback((e: React.TouchEvent) => {
     if (!touchStartRef.current) return;
-    
+
     const currentX = e.targetTouches[0].clientX;
     const currentY = e.targetTouches[0].clientY;
-    
+
     const dx = touchStartRef.current.x - currentX;
     const dy = touchStartRef.current.y - currentY;
-    
+
     // If the gesture is primarily horizontal, prevent native vertical scrolling
     if (Math.abs(dx) > Math.abs(dy)) {
       if (e.cancelable) {
@@ -117,7 +118,7 @@ export function ProjectsPageClient({ projects }: ProjectsPageClientProps) {
 
     const target = e.target as HTMLElement;
     if (
-      target?.closest?.("button") || 
+      target?.closest?.("button") ||
       target?.closest?.("a") ||
       target?.closest?.("[data-prevent-project-click]")
     ) {
@@ -170,7 +171,7 @@ export function ProjectsPageClient({ projects }: ProjectsPageClientProps) {
 
     const dx = touchStartRef.current.x - touchEndRef.current.x;
     const dy = touchStartRef.current.y - touchEndRef.current.y;
-    
+
     // Balanced sensitivity: min swipe distance 50px, and horizontal distance > vertical distance * 1.5
     if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
       if (dx > 0) {
@@ -244,7 +245,6 @@ export function ProjectsPageClient({ projects }: ProjectsPageClientProps) {
     window.addEventListener("pageshow", handlePageShow);
     return () => window.removeEventListener("pageshow", handlePageShow);
   }, [totalSteps]);
-  // ──────────────────────────────────────────────────────────────────────────
 
   useEffect(() => {
     if (!isGSAPReady || !mainRef.current) {
@@ -362,14 +362,14 @@ export function ProjectsPageClient({ projects }: ProjectsPageClientProps) {
 
   return (
     <div className="w-full">
-      <div 
-        ref={mainRef} 
+      <div
+        ref={mainRef}
         className="relative flex min-h-screen w-full flex-col xl:overflow-hidden bg-background text-foreground"
         onTouchStart={onTouchStart}
         onTouchMove={onTouchMove}
         onTouchEnd={onTouchEnd}
       >
-        <BlobCursor targetRef={mainRef} onClick={handleContainerClick} />
+        <ResponsiveBlobCursor targetRef={mainRef} onClick={handleContainerClick} />
 
         {/* Background Stage */}
         <div className="absolute inset-0 overflow-hidden bg-background pointer-events-none z-0">
@@ -395,7 +395,7 @@ export function ProjectsPageClient({ projects }: ProjectsPageClientProps) {
 
         {/* Vertical Flow Container */}
         <div className="relative z-10 flex-1 flex flex-col xl:block w-full min-h-screen pt-28 xl:pt-0">
-          
+
           <div className="relative xl:absolute xl:right-0 xl:top-[0%] xl:bottom-[0%] w-full xl:w-[57%] z-10 flex items-center justify-center p-6 md:p-12 xl:pr-24 xl:pl-0 min-h-[40vh] md:min-h-[50vh] xl:min-h-0 ">
             <ImageGallery
               images={activeProject.imageUrls}
@@ -433,10 +433,11 @@ export function ProjectsPageClient({ projects }: ProjectsPageClientProps) {
                 {/* github repo link  */}
                 {(activeProject.repoUrl || activeProject.href.includes("github.com")) && (
                   <div className="pointer-events-auto w-fit">
-                    <a
+                    <Link
                       href={activeProject.repoUrl || activeProject.href}
                       target="_blank"
                       rel="noopener noreferrer"
+                      aria-label={`${activeProject.name} GitHub Repository`}
                       className="group show-default-cursor cursor-pointer inline-flex items-center gap-3 text-foreground hover:opacity-70 transition-all duration-300 font-medium text-[1.05rem]"
                     >
                       <Github className="w-5 h-5 group-hover:opacity-100 transition-opacity" />
@@ -446,25 +447,26 @@ export function ProjectsPageClient({ projects }: ProjectsPageClientProps) {
                       <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/5 hover:opacity-70 transition-all duration-300">
                         <ArrowUpRight className="w-[18px] h-[18px]" strokeWidth={2} />
                       </div>
-                    </a>
+                    </Link>
                   </div>
                 )}
-                
-                {/* Mobile/Tablet Visit Site Button */}
+
+                {/* Tablet Visit Site Button */}
                 <div className="pointer-events-auto w-fit xl:hidden">
-                   <a
-                      href={activeProject.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group show-default-cursor cursor-pointer inline-flex items-center gap-3 text-foreground hover:opacity-70 transition-all duration-300 font-medium text-[1.05rem]"
-                   >
-                     <span className="uppercase tracking-wider">
-                       Visit Live Site
-                     </span>
-                     <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/5 hover:opacity-70 transition-all duration-300">
-                        <ArrowUpRight className="w-[18px] h-[18px]" strokeWidth={2} />
-                     </div>
-                   </a>
+                  <Link
+                    href={activeProject.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`Visit ${activeProject.name} Live Site`}
+                    className="group show-default-cursor cursor-pointer inline-flex items-center gap-3 text-foreground hover:opacity-70 transition-all duration-300 font-medium text-[1.05rem]"
+                  >
+                    <span className="uppercase tracking-wider">
+                      Visit Live Site
+                    </span>
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/5 hover:opacity-70 transition-all duration-300">
+                      <ArrowUpRight className="w-[18px] h-[18px]" strokeWidth={2} />
+                    </div>
+                  </Link>
                 </div>
               </div>
 

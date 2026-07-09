@@ -258,7 +258,7 @@ export const FeaturedWork = () => {
                     alt=""
                     className="object-cover w-[440px] lg:w-[480px] h-[248px] lg:h-[270px] rounded-lg shadow-2xl bg-white dark:bg-zinc-950"
                     sizes="480px"
-                    quality={100}
+                    quality={80}
                     priority
                   />
                 </motion.div>

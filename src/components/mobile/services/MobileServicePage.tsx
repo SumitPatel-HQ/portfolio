@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Check } from "lucide-react";
 import { CARDS } from "@/data/what-I-build";
 import { MobileRouteHeader } from "../MobileRouteHeader";
-import { ServiceGraphic } from "@/components/ui/ServiceGraphic";
+import { DeferredServiceGraphic } from "@/components/ui/DeferredServiceGraphic";
 
 import { MobileBackground } from "@/components/mobile/MobileBackground";
 
@@ -29,7 +29,7 @@ export function MobileServicePage({ hideHeader }: MobileServicePageProps = {}) {
           >
             <div className="px-4 mb-4  ">
               <div className="aspect-[16/10] overflow-hidden flex items-center justify-center pointer-events-none slide-screenshot">
-                <ServiceGraphic id={card.case} />
+                <DeferredServiceGraphic id={card.case} />
               </div>
             </div>
 

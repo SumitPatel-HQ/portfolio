@@ -2,17 +2,18 @@
 
 import React, { createContext, useCallback, useContext, useState, useEffect, useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
+import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
 import { useIntro } from "@/context/IntroContext";
-import { ContactCard } from "@/components/Contacts/contact-card";
 import { useLenis } from "@/providers/LenisProvider";
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-} from "@/components/Contacts/dialog";
 
-import { ContactForm } from "@/components/Contacts/ContactForm";
+const DynamicContactModalDialog = dynamic(
+  () =>
+    import("@/components/Contacts/ContactModalDialog").then(
+      (module) => module.ContactModalDialog,
+    ),
+  { ssr: false },
+);
 
 type ModalPhase = "closed" | "opening" | "open" | "closing";
 
@@ -242,39 +243,16 @@ export function ContactModalProvider({
     <ContactModalContext.Provider value={{ isOpen, openModal, closeModal }}>
       {children}
 
-      <Dialog
-        open={phase !== "closed"}
-        onOpenChange={(open) => {
-          if (!open) {
-            closeModal();
-          } else {
-            openModal();
-          }
-        }}
-      >
-        <DialogContent
-          wrapperRef={contentRef}
+      {phase !== "closed" ? (
+        <DynamicContactModalDialog
+          isOpen
+          shouldUseInitialHiddenState={shouldUseInitialHiddenState}
           overlayRef={overlayRef}
-          overlayStyle={shouldUseInitialHiddenState ? { opacity: 0, backdropFilter: "blur(0px)" } : undefined}
-          className="max-w-5xl p-0 border-none bg-transparent shadow-none outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-0 md:w-[95vw] md:h-auto md:max-h-[95vh] md:max-w-none md:rounded-2xl lg:w-full lg:h-auto lg:max-w-6xl lg:h-[70vh] lg:rounded-xl"
-          wrapperStyle={shouldUseInitialHiddenState ? { opacity: 0, "--contact-modal-y": "100px" } as React.CSSProperties : undefined}
-          onEscapeKeyDown={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            if (document.body.dataset.contactTextareaExpanded !== "true") {
-              closeModal();
-            }
-          }}
-          aria-describedby={undefined}
-        >
-          <DialogTitle className="sr-only">Contact Me</DialogTitle>
-          <div className="w-full min-h-0 md:max-h-[95vh] md:overflow-y-auto md:rounded-2xl lg:rounded-xl">
-            <ContactCard>
-              <ContactForm onBeforeSubmit={closeModal} />
-            </ContactCard>
-          </div>
-        </DialogContent>
-      </Dialog>
+          contentRef={contentRef}
+          onOpen={openModal}
+          onClose={closeModal}
+        />
+      ) : null}
     </ContactModalContext.Provider>
   );
 }

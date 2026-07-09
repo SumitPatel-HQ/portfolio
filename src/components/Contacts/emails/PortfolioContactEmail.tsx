@@ -9,7 +9,6 @@ import {
   Section,
   Text,
   Link,
-  Tailwind,
 } from "@react-email/components";
 import * as React from "react";
 
@@ -32,98 +31,200 @@ export const PortfolioContactEmail = ({
     <Html>
       <Head />
       <Preview>{previewText}</Preview>
-      <Tailwind
-        config={{
-          theme: {
-            extend: {
-              colors: {
-                brand: "#6366f1",
-                dark: "#0a0a0a",
-                card: "#111111",
-                muted: "#94a3b8",
-                accent: "#818cf8",
-              },
-            },
-          },
-        }}
-      >
-        <Body className="bg-[#050505] my-auto mx-auto font-sans px-2">
-          <Container className="border border-solid border-[#1a1a1a] rounded-[16px] my-[40px] mx-auto p-[20px] max-w-[465px] bg-[#0a0a0a] shadow-2xl">
-            <Section className="mt-[32px] text-center">
-              <Heading className="text-white text-[28px] font-bold text-center p-0 my-[10px] mx-0 tracking-tight leading-tight">
-                Portfolio Inquiry
-              </Heading>
-              <Text className="text-muted text-[15px] leading-[24px] px-4 m-0">
-                You&apos;ve received a new message through your portfolio contact form.
-              </Text>
-            </Section>
+      <Body style={styles.body}>
+        <Container style={styles.container}>
+          <Section style={styles.headerSection}>
+            <Heading style={styles.heading}>Portfolio Inquiry</Heading>
+            <Text style={styles.subheading}>
+              You&apos;ve received a new message through your portfolio contact
+              form.
+            </Text>
+          </Section>
 
-            <Section className="mt-[32px] px-[20px]">
-              <div className="bg-card border border-[#1a1a1a] rounded-[12px] p-6 space-y-4">
-                <div>
-                  <Text className="text-muted text-[11px] font-bold tracking-widest uppercase m-0 mb-2">
-                    Sender Details
-                  </Text>
-                  <Hr className="border-[#1a1a1a] m-0 w-full" />
-                </div>
-
-                <div className="space-y-4">
-                  <div>
-                    <Text className="text-muted text-[12px] m-0">Full Name</Text>
-                    <Text className="text-white text-[16px] font-semibold m-0 mt-1">
-                      {senderName}
-                    </Text>
-                  </div>
-
-                  <div>
-                    <Text className="text-muted text-[12px] m-0">Email Address</Text>
-                    <Link
-                      href={`mailto:${senderEmail}`}
-                      className="text-accent text-[16px] font-semibold m-0 mt-1 no-underline"
-                    >
-                      {senderEmail}
-                    </Link>
-                  </div>
-
-                  {phone && (
-                    <div>
-                      <Text className="text-muted text-[12px] m-0">Phone Number</Text>
-                      <Text className="text-white text-[16px] font-semibold m-0 mt-1">
-                        {phone}
-                      </Text>
-                    </div>
-                  )}
-                </div>
+          <Section style={styles.cardSection}>
+            <div style={styles.card}>
+              <div>
+                <Text style={styles.sectionLabel}>Sender Details</Text>
+                <Hr style={styles.divider} />
               </div>
-            </Section>
 
-            <Section className="mt-[24px] px-[20px]">
-              <div className="bg-card border border-[#1a1a1a] rounded-[12px] p-6">
-                <Text className="text-muted text-[11px] font-bold tracking-widest uppercase m-0 mb-4">
-                  Message Content
+              <div style={styles.fieldGroup}>
+                <div style={styles.field}>
+                  <Text style={styles.fieldLabel}>Full Name</Text>
+                  <Text style={styles.fieldValue}>{senderName}</Text>
+                </div>
+
+                <div style={styles.field}>
+                  <Text style={styles.fieldLabel}>Email Address</Text>
+                  <Link href={`mailto:${senderEmail}`} style={styles.emailLink}>
+                    {senderEmail}
+                  </Link>
+                </div>
+
+                {phone && (
+                  <div style={styles.field}>
+                    <Text style={styles.fieldLabel}>Phone Number</Text>
+                    <Text style={styles.fieldValue}>{phone}</Text>
+                  </div>
+                )}
+              </div>
+            </div>
+          </Section>
+
+          <Section style={styles.messageSection}>
+            <div style={styles.card}>
+              <Text style={styles.sectionLabel}>Message Content</Text>
+              <div style={styles.messageBox}>
+                <Text style={styles.messageText}>
+                  &quot;{message}&quot;
                 </Text>
-                <div className="bg-[#050505] border border-[#1a1a1a] rounded-[8px] p-4">
-                  <Text className="text-[#cbd5e1] text-[15px] leading-[1.6] m-0 italic">
-                    &quot;{message}&quot;
-                  </Text>
-                </div>
               </div>
-            </Section>
+            </div>
+          </Section>
 
-            <Section className="mt-[40px] mb-[32px] text-center px-[20px]">
-              <Hr className="border-[#1a1a1a] my-[20px] mx-0 w-full" />
-              <Text className="text-[#475569] text-[12px] leading-[18px] m-0">
-                This is an automated notification from your portfolio system.
-              </Text>
-              <Text className="text-[#334155] text-[10px] font-bold uppercase tracking-[0.1em] mt-[24px]">
-                &copy; {new Date().getFullYear()} PORTFOLIO &bull; SUMIT PATEL
-              </Text>
-            </Section>
-          </Container>
-        </Body>
-      </Tailwind>
+          <Section style={styles.footerSection}>
+            <Hr style={styles.footerDivider} />
+            <Text style={styles.footerText}>
+              This is an automated notification from your portfolio system.
+            </Text>
+            <Text style={styles.copyright}>
+              &copy; {new Date().getFullYear()} PORTFOLIO &bull; SUMIT PATEL
+            </Text>
+          </Section>
+        </Container>
+      </Body>
     </Html>
   );
+};
+
+const styles: Record<string, React.CSSProperties> = {
+  body: {
+    backgroundColor: "#050505",
+    margin: "auto",
+    fontFamily:
+      '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+    padding: "0 8px",
+  },
+  container: {
+    border: "1px solid #1a1a1a",
+    borderRadius: "16px",
+    margin: "40px auto",
+    padding: "20px",
+    maxWidth: "465px",
+    backgroundColor: "#0a0a0a",
+  },
+  headerSection: {
+    marginTop: "32px",
+    textAlign: "center",
+  },
+  heading: {
+    color: "#ffffff",
+    fontSize: "28px",
+    fontWeight: "700",
+    textAlign: "center",
+    padding: "0",
+    margin: "10px 0",
+    letterSpacing: "-0.5px",
+    lineHeight: "1.2",
+  },
+  subheading: {
+    color: "#94a3b8",
+    fontSize: "15px",
+    lineHeight: "24px",
+    padding: "0 16px",
+    margin: "0",
+  },
+  cardSection: {
+    marginTop: "32px",
+    padding: "0 20px",
+  },
+  card: {
+    backgroundColor: "#111111",
+    border: "1px solid #1a1a1a",
+    borderRadius: "12px",
+    padding: "24px",
+  },
+  sectionLabel: {
+    color: "#94a3b8",
+    fontSize: "11px",
+    fontWeight: "700",
+    letterSpacing: "0.1em",
+    textTransform: "uppercase",
+    margin: "0 0 8px 0",
+  },
+  divider: {
+    borderColor: "#1a1a1a",
+    margin: "0",
+    width: "100%",
+  },
+  fieldGroup: {
+    marginTop: "16px",
+  },
+  field: {
+    marginBottom: "16px",
+  },
+  fieldLabel: {
+    color: "#94a3b8",
+    fontSize: "12px",
+    margin: "0",
+  },
+  fieldValue: {
+    color: "#ffffff",
+    fontSize: "16px",
+    fontWeight: "600",
+    margin: "4px 0 0 0",
+  },
+  emailLink: {
+    color: "#818cf8",
+    fontSize: "16px",
+    fontWeight: "600",
+    margin: "4px 0 0 0",
+    textDecoration: "none",
+    display: "block",
+  },
+  messageSection: {
+    marginTop: "24px",
+    padding: "0 20px",
+  },
+  messageBox: {
+    backgroundColor: "#050505",
+    border: "1px solid #1a1a1a",
+    borderRadius: "8px",
+    padding: "16px",
+    marginTop: "16px",
+  },
+  messageText: {
+    color: "#cbd5e1",
+    fontSize: "15px",
+    lineHeight: "1.6",
+    margin: "0",
+    fontStyle: "italic",
+  },
+  footerSection: {
+    marginTop: "40px",
+    marginBottom: "32px",
+    textAlign: "center",
+    padding: "0 20px",
+  },
+  footerDivider: {
+    borderColor: "#1a1a1a",
+    margin: "20px 0",
+    width: "100%",
+  },
+  footerText: {
+    color: "#475569",
+    fontSize: "12px",
+    lineHeight: "18px",
+    margin: "0",
+  },
+  copyright: {
+    color: "#334155",
+    fontSize: "10px",
+    fontWeight: "700",
+    textTransform: "uppercase",
+    letterSpacing: "0.1em",
+    marginTop: "24px",
+  },
 };
 
 export default PortfolioContactEmail;

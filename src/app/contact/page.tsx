@@ -1,6 +1,12 @@
 import { MobileContactPage } from "@/components/mobile/contact/MobileContactPage";
 import { ContactCard } from "@/components/Contacts/contact-card";
 import { ContactForm } from "@/components/Contacts/ContactForm";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Sumit Patel | Contact",
+  description: "Connect with Sumit Patel for collaborations, product development, technical partnerships, and opportunities to build impactful software solutions."
+};
 
 export default function ContactPage() {
   return (

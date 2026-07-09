@@ -72,9 +72,9 @@ export function MobileProjectDetailLayout({ project }: MobileProjectDetailLayout
         <div className="flex justify-between items-start gap-6">
           <div className="flex-1">
             {/* Project Title */}
-            <h1 className="text-3xl scale-y-[1.1] font-bold text-foreground mb-4 leading-snug">
+            <h2 className="text-3xl scale-y-[1.1] font-bold text-foreground mb-4 leading-snug">
               {project.name}
-            </h1>
+            </h2>
 
             {/* Project Discription Section */}
             <div className="mb-4">
@@ -89,6 +89,7 @@ export function MobileProjectDetailLayout({ project }: MobileProjectDetailLayout
             href={project.href}
             target="_blank"
             rel="noopener noreferrer"
+            aria-label={`Visit ${project.name} Live Site`}
             className="w-12 h-12 rounded-full border border-white/10 bg-white/5 flex items-center justify-center flex-shrink-0 active:scale-95 transition-all mt-0.5 hover:bg-white/10"
           >
             <ArrowUpRight size={18} className="text-foreground transition-colors group-hover:text-accent" />
@@ -113,10 +114,11 @@ export function MobileProjectDetailLayout({ project }: MobileProjectDetailLayout
         <div className="flex flex-col gap-3 mb-10">
           {/* GitHub Repository Button */}
           {project.repoUrl && (
-            <a
+            <Link
               href={project.repoUrl}
               target="_blank"
               rel="noopener noreferrer"
+              aria-label={`${project.name} GitHub Repository`}
               className="group w-full flex items-center justify-between p-4 rounded-xl border border-white/10   bg-transparent shadow-[0_4px_12px_0_rgba(0,0,0,0.2)] backdrop-blur-[2px]"
             >
               <div className="flex items-center gap-3">
@@ -128,7 +130,7 @@ export function MobileProjectDetailLayout({ project }: MobileProjectDetailLayout
               <div className="w-8 h-8 rounded-full border border-white/10 bg-white/5 flex items-center justify-center hover:bg-white/10 group-active:scale-95 transition-transform">
                 <ArrowUpRight size={16} className="text-foreground-secondary group-active:text-foreground transition-colors" />
               </div>
-            </a>
+            </Link>
           )}
         </div>
 

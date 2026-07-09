@@ -57,7 +57,7 @@ async function fetchProjectImagesFromImageKit(
         const versionToken = item.updatedAt ?? item.fileId ?? item.name;
 
         return {
-          url: `${item.url}?tr=q-100&v=${encodeURIComponent(versionToken)}`,
+          url: `${item.url}?tr=q-100,f-auto&v=${encodeURIComponent(versionToken)}`,
         fileName: item.name,
         width: item.width,
         height: item.height,
@@ -82,11 +82,7 @@ export async function fetchProjectImages(projectFolder: string): Promise<Project
   )();
 }
 
-/**
- * Fetch images for a project by its ID.
- * The project ID is used directly as the ImageKit folder name under /projects/.
- * Projects without a matching folder return [] gracefully.
- */
+ // Fetch images for a project by its ID.
 export async function fetchImagesForProject(
   projectId: string
 ): Promise<ProjectImage[]> {

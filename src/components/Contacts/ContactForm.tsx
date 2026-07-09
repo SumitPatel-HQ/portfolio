@@ -9,10 +9,10 @@ import { Textarea } from "@/components/Contacts/textarea";
 import { Send } from "lucide-react";
 
 interface ContactFormProps {
-  onBeforeSubmit?: () => void;
+  onSuccess?: () => void;
 }
 
-export function ContactForm({ onBeforeSubmit }: ContactFormProps) {
+export function ContactForm({ onSuccess }: ContactFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { showToast } = useToast();
   
@@ -34,9 +34,6 @@ export function ContactForm({ onBeforeSubmit }: ContactFormProps) {
         const message = messageRef.current?.value ?? "";
 
         setIsSubmitting(true);
-        if (onBeforeSubmit) {
-          onBeforeSubmit();
-        }
 
         try {
           const res = await fetch("/api/contact", {
@@ -52,6 +49,10 @@ export function ContactForm({ onBeforeSubmit }: ContactFormProps) {
             if (emailRef.current) emailRef.current.value = "";
             if (phoneRef.current) phoneRef.current.value = "";
             if (messageRef.current) messageRef.current.value = "";
+
+            if (onSuccess) {
+              onSuccess();
+            }
           } else {
             const data = await res.json().catch(() => ({}));
             showToast(

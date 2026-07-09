@@ -59,7 +59,7 @@ const ToastContainer: React.FC<ToastContainerProps> = ({ toasts }) => {
   }, []);
 
   return (
-    <div className="pointer-events-none fixed left-4 right-4 top-24 z-50 flex flex-col items-end gap-3 sm:top-auto sm:bottom-8 sm:left-auto sm:right-8 sm:items-stretch sm:w-[min(420px,calc(100vw-4rem))]">
+    <div className="pointer-events-none fixed left-4 right-4 top-24 z-[100] flex flex-col items-end gap-3 sm:top-auto sm:bottom-8 sm:left-auto sm:right-8 sm:items-stretch sm:w-[min(420px,calc(100vw-4rem))]">
       <AnimatePresence>
         {toasts.map((toast) => (
           <motion.div

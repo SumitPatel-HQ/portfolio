@@ -1,7 +1,4 @@
 // BrandLayer — The atmospheric middle scene of the vertical transition stack.
-
-"use client";
-
 import React, { forwardRef } from "react";
 
 interface BrandLayerProps {

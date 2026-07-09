@@ -153,6 +153,7 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
               href="/Sumit_Resume.pdf"
               target="_blank"
               rel="noopener noreferrer"
+              aria-label="Open resume in new tab"
               className="p-2 rounded-xl text-muted-foreground hover:text-foreground hover:bg-foreground/10 transition-all duration-200 group"
               title="Open in new tab"
             >
@@ -164,6 +165,7 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
             <button
               onClick={handleDownload}
               type="button"
+              aria-label="Download Resume"
               className="p-2 rounded-xl text-muted-foreground hover:text-foreground hover:bg-foreground/10 transition-all duration-200 group"
               title="Download Resume"
             >
@@ -175,6 +177,7 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
             <button
               onClick={onClose}
               type="button"
+              aria-label="Close modal"
               className="p-2 rounded-xl text-muted-foreground hover:text-red-400 hover:bg-red-400/10 transition-all duration-200 group"
               title="Close"
             >
@@ -195,6 +198,7 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
           <iframe
             src="/Sumit_Resume.pdf#toolbar=0&navpanes=0&scrollbar=0&view=FitH"
             title="Resume"
+            aria-label="resume-iframe"
             onLoad={() => setIsLoading(false)}
             className={`relative z-10 block h-full w-full border-none transition-opacity duration-500 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
           />

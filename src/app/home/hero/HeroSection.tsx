@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useTransitionRouter } from 'next-transition-router';
 import StripesBackground from "@/components/ui/visuals/StripesBackground";
 import { useContactModal } from "@/context/ContactModalContext";
-import { BlobCursor } from "@/components/ui/visuals/BlobCursor";
+import { ResponsiveBlobCursor } from "@/components/ui/visuals/ResponsiveBlobCursor";
 import { useGSAP } from "@/providers/GSAPProvider";
 import { useIntro } from "@/context/IntroContext";
 import { useLenis } from "@/providers/LenisProvider";
@@ -130,7 +130,7 @@ export const HeroSection = () => {
             }}
           >
             {isIntroComplete ? (
-              <BlobCursor
+              <ResponsiveBlobCursor
                 targetRef={nameRef}
                 iconColor="text-black"
                 restrictToTags={['h1']}
@@ -138,15 +138,18 @@ export const HeroSection = () => {
             ) : null}
 
             {/* Premium Masked Typography System */}
-            <h1 ref={sumitRef} data-hero-title="sumit" className="hero-intro-title text-hero font-extrabold leading-[0.9] tracking-hero max-md:text-hero-mobile md:text-[13vw] lg:text-hero relative z-20 w-fit uppercase cursor-pointer md:pl-[0.4em] lg:pl-[0]">
-              <span className="hero-title-scale">Sumit</span>
-            </h1>
 
-            <div ref={nameDividerRef} className="hero-divider w-full border-b border-white/10 relative z-10 mt-4 md:mt-8 lg:mt-4" />
+  
+              <h1 ref={sumitRef} data-hero-title="sumit" className="hero-intro-title text-hero font-extrabold leading-[0.9] tracking-hero max-md:text-hero-mobile md:text-[13vw] lg:text-hero relative z-20 w-fit uppercase cursor-pointer md:pl-[0.4em] lg:pl-[0]">
+                <span className="hero-title-scale">Sumit</span>
+              </h1>
 
-            <h1 ref={patelRef} data-hero-title="patel" className="hero-intro-title text-hero font-extrabold leading-[0.9] tracking-hero text-right max-md:text-hero-mobile md:text-[13vw] lg:text-hero mt-4 md:mt-8 lg:mt-4 lg:pr-[0.05em] md:pr-[0.4em] relative z-20 ml-auto w-fit uppercase cursor-pointer">
-              <span className="hero-title-scale">Patel</span>
-            </h1>
+              <div ref={nameDividerRef} className="hero-divider w-full border-b border-white/10 relative z-10 mt-4 md:mt-8 lg:mt-4" />
+
+              <h1 ref={patelRef} data-hero-title="patel" className="hero-intro-title text-hero font-extrabold leading-[0.9] tracking-hero text-right max-md:text-hero-mobile md:text-[13vw] lg:text-hero mt-4 md:mt-8 lg:mt-4 lg:pr-[0.05em] md:pr-[0.4em] relative z-20 ml-auto w-fit uppercase cursor-pointer">
+                <span className="hero-title-scale">Patel</span>
+              </h1>
+         
           </div>
         </div>
 

@@ -33,9 +33,10 @@ export function MobileBottomNav({ className = "" }: { className?: string }) {
             <Link
               key={item.name}
               href={item.href}
+              aria-label={item.name}
               className={`flex items-center justify-center px-5 py-1 transition-colors ${isActive ? "text-white" : "!text-[#A0A0A0]"}`}
             >
-              <Icon size={24} strokeWidth={isActive ? 2 : 1.5} />
+              <Icon size={24} strokeWidth={isActive ? 2 : 1.5} aria-hidden="true" />
             </Link>
           );
         })}

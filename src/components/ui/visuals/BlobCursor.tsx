@@ -43,7 +43,7 @@ function releaseBlobCursorStyle(owner: symbol) {
   document.getElementById(BLOB_CURSOR_STYLE_ID)?.remove();
 }
 
-interface BlobCursorProps {
+export interface BlobCursorProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   targetRef: RefObject<any>;
   onClick?: (e: MouseEvent) => void;

@@ -6,7 +6,7 @@ import { ChevronLeft, ChevronRight, Check } from "lucide-react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { CARDS } from "@/data/what-I-build";
 import { SlideDotIndicators } from "@/components/ui/SlideDotIndicators";
-import { ServiceGraphic } from "@/components/ui/ServiceGraphic";
+import { DeferredServiceGraphic } from "@/components/ui/DeferredServiceGraphic";
 import { motion } from "framer-motion";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
@@ -338,7 +338,7 @@ const Services = () => {
                   transition={{ type: "spring", damping: 25, stiffness: 100, mass: 1, duration: 0.8, delay: 0.2 }}
                   className="w-full max-w-4xl slide-screenshot rounded-[12px] flex items-center justify-center aspect-[16/9] lg:aspect-[16/10]"
                 >
-                  <ServiceGraphic id={card.case} />
+                  <DeferredServiceGraphic id={card.case} />
                 </motion.div>
               </div>
             </div>

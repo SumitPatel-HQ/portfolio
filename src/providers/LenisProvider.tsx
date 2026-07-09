@@ -64,23 +64,10 @@ export default function LenisProvider({ children }: { children: ReactNode }) {
       // Connect Lenis scroll to ScrollTrigger
       lenis.on("scroll", ScrollTrigger.update);
 
-      // ─── Tab Duplication / BFCache Restore Handler (Fix 2 + Fix 3) ──────────
-      // Tab duplication and BFCache restore fire `pageshow` with `persisted: true`.
-      // On this event:
-      //   - GSAP's RAF ticker is suspended in the new tab context → wake it.
-      //   - Lenis's RAF loop is also dead → restart it.
-      //   - ScrollTrigger pin positions are stale → refresh after one frame.
-      //   - If the intro overlay is still visible, the intro was mid-play when
-      //     the tab was cloned → snap all hero elements to final visible state
-      //     so the page is not permanently blank/invisible.
       const handlePageShow = (event: PageTransitionEvent) => {
          if (!event.persisted) return;
 
-         // Restart the GSAP ticker (its RAF was suspended in the duplicated tab).
-         // gsap.ticker.wake() is the documented method; guard with optional chain
-         // for forwards compatibility.
-         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-         (gsap.ticker as any).wake?.();
+         (gsap.ticker as typeof gsap.ticker & { wake?: () => void }).wake?.();
 
          // Restart Lenis — it was stopped when the RAF loop died.
          lenis.start();
@@ -107,7 +94,6 @@ export default function LenisProvider({ children }: { children: ReactNode }) {
       };
 
       window.addEventListener("pageshow", handlePageShow);
-      // ─────────────────────────────────────────────────────────────────────────
 
       return () => {
          window.removeEventListener("pageshow", handlePageShow);

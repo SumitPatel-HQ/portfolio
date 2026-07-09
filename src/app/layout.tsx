@@ -22,8 +22,26 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Sumit Patel | Software Engineer",
-  description: "Portfolio of Sumit Patel, a Software Engineer.",
+  icons: {
+    // Apple Touch Icon — highest available resolution; iOS uses rel="apple-touch-icon"
+    apple: [
+      { url: "/favicons/apple-touch-icon-180x180.png", sizes: "180x180", type: "image/png" },
+      { url: "/favicons/apple-touch-icon-167x167.png", sizes: "167x167", type: "image/png" },
+    ],
+    // Other icons emitted as <link rel="icon"> — favicon.ico auto-served by Next.js from src/app/
+    other: [
+      // Web manifest link (also enables Android PWA install prompt)
+      { rel: "manifest", url: "/favicons/site.webmanifest" },
+      // Microsoft Tile (IE11 / legacy Edge)
+      { rel: "msapplication-TileImage", url: "/favicons/mstile-150x150.png" },
+      { rel: "msapplication-config", url: "/favicons/browserconfig.xml" },
+    ],
+  },
+  // Controls the browser UI chrome color on mobile (Android Chrome address bar, PWA)
+  other: {
+    "msapplication-TileColor": "#0a0a0a",
+    "theme-color": "#0a0a0a",
+  },
 };
 
 export default function RootLayout({

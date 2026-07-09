@@ -35,9 +35,9 @@ export function MobileContactPage() {
           transition={{ duration: 0.5, ease: "easeOut" }}
           className="space-y-4"
         >
-          <h1 className="text-4xl font-bold text-foreground tracking-tight">
+          <h2 className="text-4xl font-bold text-foreground tracking-tight">
             Get in touch
-          </h1>
+          </h2>
           <p className="text-[15px] font-light text-foreground-secondary/70 leading-relaxed">
             Got a question or want to collaborate? Drop me a message and I&apos;ll get back to you as soon as possible.
           </p>
@@ -122,9 +122,9 @@ export function MobileContactPage() {
           transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
           className="pt-2 space-y-4"
         >
-          <h1 className="text-3xl font-bold text-foreground/70 tracking-tight">
+          <h2 className="text-3xl font-bold text-foreground/70 tracking-tight">
             Got a project in mind?<br /> Let&apos;s talk.
-          </h1>
+          </h2>
           <p className="text-[15px] font-light text-foreground-secondary/70 leading-relaxed mb-6">
             Tell me about your project, idea, or collaboration.
           </p>

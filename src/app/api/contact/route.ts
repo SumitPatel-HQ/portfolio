@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { sendEmail } from "@/lib/gmail";
 
-// ---------------------------------------------------------------------------
-// Timeout utility for async operations
-// ---------------------------------------------------------------------------
 function withTimeout<T>(
   promise: Promise<T>, 
   ms: number, 
@@ -17,11 +14,8 @@ function withTimeout<T>(
   ]);
 }
 
-const EMAIL_TIMEOUT_MS = 30000; // 30 seconds
+const EMAIL_TIMEOUT_MS = 10000; // 10 seconds — keeps well within serverless function limits
 
-// ---------------------------------------------------------------------------
-// CORS configuration
-// ---------------------------------------------------------------------------
 const ALLOWED_ORIGINS = [
   process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
   "https://your-production-domain.com", // TODO: Update with actual domain
@@ -37,10 +31,8 @@ function setCorsHeaders(response: NextResponse, origin: string): NextResponse {
   return response;
 }
 
-// ---------------------------------------------------------------------------
-// Rate limiting — in-memory store (1 request per IP per 60 seconds)
-// ---------------------------------------------------------------------------
 const RATE_LIMIT_WINDOW_MS = 60_000; // 60 seconds
+const MAX_ATTEMPTS_PER_WINDOW = 3;    // Allow up to 3 submissions per window
 const CLEANUP_INTERVAL_MS = 5 * 60_000; // Cleanup every 5 minutes
 
 interface RateLimitEntry {
@@ -81,41 +73,30 @@ function isRateLimited(ip: string): boolean {
   const entry = rateLimitMap.get(ip);
 
   if (entry && now - entry.timestamp < RATE_LIMIT_WINDOW_MS) {
-    return true;
+    // Within window — increment attempt count and check limit
+    const updatedAttempts = entry.attempts + 1;
+    rateLimitMap.set(ip, { timestamp: entry.timestamp, attempts: updatedAttempts });
+    return updatedAttempts > MAX_ATTEMPTS_PER_WINDOW;
   }
 
-  rateLimitMap.set(ip, { 
-    timestamp: now, 
-    attempts: entry ? entry.attempts + 1 : 1 
-  });
+  // Window expired or first request — reset
+  rateLimitMap.set(ip, { timestamp: now, attempts: 1 });
   return false;
 }
 
-// ---------------------------------------------------------------------------
-// Input sanitization — strip all HTML tags from a string
-// ---------------------------------------------------------------------------
 function stripHtml(value: string): string {
   return value.replace(/<[^>]*>/g, "").trim();
 }
 
-// ---------------------------------------------------------------------------
-// Validation constants
-// ---------------------------------------------------------------------------
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MAX_MESSAGE_LENGTH = 2000;
 
-// ---------------------------------------------------------------------------
-// OPTIONS /api/contact (CORS preflight)
-// ---------------------------------------------------------------------------
 export async function OPTIONS(request: NextRequest) {
   const origin = request.headers.get("origin") || "";
   const response = new NextResponse(null, { status: 204 });
   return setCorsHeaders(response, origin);
 }
 
-// ---------------------------------------------------------------------------
-// POST /api/contact
-// ---------------------------------------------------------------------------
 export async function POST(request: NextRequest) {
   const origin = request.headers.get("origin") || "";
   
@@ -193,7 +174,7 @@ export async function POST(request: NextRequest) {
         message: sanitizedMessage,
       }),
       EMAIL_TIMEOUT_MS,
-      "Email sending timed out after 30 seconds"
+      "Email sending timed out after 10 seconds"
     );
 
     const successResponse = NextResponse.json({ success: true });

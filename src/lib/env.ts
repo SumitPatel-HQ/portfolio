@@ -1,8 +1,3 @@
-/**
- * Environment Variable Validation Module
- * Validates required environment variables at application startup
- */
-
 const serverRequiredEnvVars = [
   'GMAIL_CLIENT_ID',
   'GMAIL_CLIENT_SECRET',
@@ -22,11 +17,7 @@ const allRequiredEnvVars = [...serverRequiredEnvVars, ...publicEnvVars] as const
 
 type RequiredEnvVar = typeof allRequiredEnvVars[number];
 
-/**
- * Validates that all required environment variables are present and non-empty.
- * Throws descriptive error if any are missing.
- * Note: On the client, this will only validate NEXT_PUBLIC variables.
- */
+//Validates that all required environment variables are present and non-empty.
 export function validateEnvVars(): Record<RequiredEnvVar, string> {
   const isServer = typeof window === 'undefined';
   const missing: string[] = [];

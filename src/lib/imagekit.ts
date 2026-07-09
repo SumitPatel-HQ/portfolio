@@ -6,7 +6,6 @@ export const IMAGEKIT_CONFIG = {
   pathPrefix: env.NEXT_PUBLIC_IMAGEKIT_PATH_PREFIX,
 };
 
-
 export function getIKUrl(path: string, transformation?: string): string {
   if (path.startsWith("http")) return path;
   
@@ -28,14 +27,13 @@ export function getIKUrl(path: string, transformation?: string): string {
 
 // used for project preview in featured work
 export function getProjectImageUrl(name: string): string {
-  return getIKUrl(`projects/${name}`, "q-100");
+  return getIKUrl(`projects/${name}`, "q-100,f-auto");
 }
 
 export function getLogoUrl(name: string): string {
-  return getIKUrl(`Logo/${name}`, "q-100");
+  return getIKUrl(`Logo/${name}`, "q-50,f-auto");
 }
 
 export function getProfileImageUrl(name: string): string {
-  return getIKUrl(name, "q-100");
+  return getIKUrl(name, "q-100,f-auto");
 }
-

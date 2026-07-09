@@ -96,6 +96,7 @@ export function MobileProjectsPage({ projects }: MobileProjectsPageProps) {
               <Link
                 href={`/projects/${project.name.toLowerCase()}`}
                 scroll={false}
+                aria-label={`View ${project.name} details`}
                 onClick={() => {
                   if (typeof window !== "undefined" && window.innerWidth <= 768) {
                     sessionStorage.setItem("mobileProjectsScroll", window.scrollY.toString());
@@ -103,7 +104,7 @@ export function MobileProjectsPage({ projects }: MobileProjectsPageProps) {
                 }}
                 className="w-10 h-10 rounded-full border border-white/10 bg-white/5 flex items-center justify-center flex-shrink-0 active:scale-95 transition-all mt-0.5 hover:bg-white/10"
               >
-                <ArrowUpRight size={18} className="text-foreground transition-colors group-hover:text-accent" />
+                <ArrowUpRight size={18} className="text-foreground transition-colors group-hover:text-accent" aria-hidden="true" />
               </Link>
             </div>
           </motion.div>

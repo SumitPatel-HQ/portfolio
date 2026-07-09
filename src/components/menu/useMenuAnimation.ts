@@ -47,13 +47,6 @@ export const useMenuAnimation = ({ isOpen, onOpenStart, onOpenComplete, onCloseS
           autoAlpha: 0,
           transformOrigin: '50% 100%'
         });
-        gsap.set('.menu-content-title-mobile', {
-          yPercent: 100,
-          rotateY: 20,
-          scaleX: 0.2,
-          scaleY: 0.2,
-          autoAlpha: 0
-        });
 
         // Set initial state for overlay container
         gsap.set(containerRef.current, { pointerEvents: 'none', clipPath: 'inset(100% 0% 0% 0%)' });
@@ -70,13 +63,11 @@ export const useMenuAnimation = ({ isOpen, onOpenStart, onOpenComplete, onCloseS
           .to('.menu-content-pages', { yPercent: 0, autoAlpha: 1, duration: 1.85, ease: 'power2.out', stagger: 0.045 }, `${openStartLabel}+=0.28`)
           .to('.menu-content-info', { yPercent: 0, autoAlpha: 1, duration: 1.78, ease: 'power2.out', stagger: 0.045 }, `${openStartLabel}+=0.34`)
           .to('.menu-content-title-letter', { yPercent: 0, rotateY: 0, scale: 1, autoAlpha: 1, duration: 1.8, ease: 'power2.out', stagger: 0.038 }, `${openStartLabel}+=0.12`)
-          .to('.menu-content-title-mobile', { yPercent: 0, rotateY: 0, scaleX: 1, scaleY: 1, autoAlpha: 1, duration: 1.8, ease: 'power2.out' }, `${openStartLabel}+=0.12`)
           .addLabel(openEndLabel)
           .addLabel(closeStartLabel)
           .to('.menu-content-pages', { yPercent: -110, autoAlpha: 0, duration: 0.98, ease: 'power2.inOut', stagger: 0.035 }, closeStartLabel)
           .to('.menu-content-info', { yPercent: -110, autoAlpha: 0, duration: 0.94, ease: 'power2.inOut' }, `${closeStartLabel}+=0.08`)
           .to('.menu-content-title-letter', { yPercent: -120, rotateY: -12, scale: 0.85, autoAlpha: 0, duration: 1.02, ease: 'power2.inOut', stagger: 0.022 }, `${closeStartLabel}+=0.12`)
-          .to('.menu-content-title-mobile', { yPercent: -110, rotateY: -10, scaleX: 0.85, scaleY: 0.85, autoAlpha: 0, duration: 0.94, ease: 'power2.inOut' }, `${closeStartLabel}+=0.12`)
           .to(containerRef.current, {
             duration: 1.34,
             clipPath: 'inset(0% 0% 100% 0%)',

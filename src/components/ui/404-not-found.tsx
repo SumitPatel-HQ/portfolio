@@ -43,9 +43,10 @@ export function NotFoundPage() {
 					transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
 					className="flex flex-col sm:flex-row items-center gap-4"
 				>
-					<Button asChild variant="default" className="gap-4 px-8 py-6 rounded-full  border-t hover:border-white/50 border-transparent">
-						<Link href="/">
-							<HomeIcon className="w-4 h-4" />
+					<Button 
+					className="w-full text-white font-light text-base py-4 mt-auto border-transparent hover:border-t hover:border-accent/80 hover:text-accent transition-all duration-500 ease-in-out rounded-full">
+						<Link href="/" className="flex items-center justify-center gap-3 w-full h-full">
+							<HomeIcon className="w-5 h-5" />
 							Back to Home
 						</Link>
 					</Button>

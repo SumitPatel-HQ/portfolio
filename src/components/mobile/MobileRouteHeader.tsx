@@ -43,7 +43,7 @@ export function MobileRouteHeader({ title, showBackButton = false }: MobileRoute
               <ArrowLeft className="w-8 h-8" />
             </div>
           )}
-          <h1 className="text-3xl scale-y-[1.1] font-bold tracking-tight uppercase">{title}</h1>
+          <h2 className="text-3xl scale-y-[1.1] font-bold tracking-tight uppercase">{title}</h2>
         </div>
       </div>
 
@@ -73,7 +73,7 @@ export function MobileRouteHeader({ title, showBackButton = false }: MobileRoute
                 <ArrowLeft className="w-8 h-8" />
               </button>
             )}
-            <h1 className="text-3xl scale-y-[1.1] font-bold tracking-tight text-foreground uppercase">{title}</h1>
+            <h2 className="text-3xl scale-y-[1.1] font-bold tracking-tight text-foreground uppercase">{title}</h2>
           </motion.div>
         </div>
     </motion.div>

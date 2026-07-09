@@ -265,6 +265,14 @@ export function TransitionProvider({ children }: { children: React.ReactNode }) 
     const setupIncomingScene = () => {
       if (lenisRef.current) lenisRef.current.scrollTo(0, { immediate: true });
       window.scrollTo(0, 0);
+      // Pre-hide the menu button before content becomes visible so it doesn't
+      // flash during the hero intro startup gap (same race as in onEnter).
+      if (skipBrandLayer) {
+        const menuBtnWrap = contentEl.querySelector<HTMLElement>(".hero-menu-btn-wrap");
+        if (menuBtnWrap) {
+          gsap.set(menuBtnWrap, { autoAlpha: 0, y: 9, filter: "blur(5px)", force3D: true });
+        }
+      }
       contentEl.style.visibility = "visible";
       document.body.classList.add("transition-entering");
       if (skipBrandLayer) gsap.set(brandEl, { y: "100vh", visibility: "hidden" });
@@ -587,6 +595,19 @@ export function TransitionProvider({ children }: { children: React.ReactNode }) 
       }
 
       document.body.classList.add("transition-entering");
+
+      // When entering the home route, pre-hide the menu button wrapper before
+      // making content visible. This closes the one-frame gap where the browser
+      // paints the content (via direct DOM mutation) before useHeroAnimation's
+      // useLayoutEffect runs and applies its own autoAlpha:0 to the element.
+      // Without this, a stale isIntroComplete:true in IntroContext lets the
+      // menu button flash briefly at full opacity during the hero intro startup.
+      if (skipBrandLayer) {
+        const menuBtnWrap = contentEl.querySelector<HTMLElement>(".hero-menu-btn-wrap");
+        if (menuBtnWrap) {
+          gsap.set(menuBtnWrap, { autoAlpha: 0, y: 9, filter: "blur(5px)", force3D: true });
+        }
+      }
 
       // Ensure new page content is visible again
       contentEl.style.visibility = "visible";
