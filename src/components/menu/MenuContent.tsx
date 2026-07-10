@@ -7,6 +7,7 @@ import dynamic from "next/dynamic";
 import { useContactModal } from "@/context/ContactModalContext";
 import { socials } from "@/data/socialLinks";
 import { AnimatedArrow } from "./AnimatedArrow";
+import { SITE_ROUTES } from "@/data/navigation";
 
 const DynamicResumeModal = dynamic(() =>
   import("@/components/ui/ResumeModal").then((module) => module.ResumeModal),
@@ -18,13 +19,6 @@ interface MenuContentProps {
   isResumeOpen: boolean;
   setIsResumeOpen: (isOpen: boolean) => void;
 }
-
-const menuItems: { label: string; href?: string }[] = [
-  { label: "Projects", href: "/projects" },
-  // { label: "Experience", href: "/experience" },
-  { label: "About Me", href: "/about" },
-  { label: "Contact", href: "#" },
-];
 
 /**
  * Ultra-refined motion easing curve
@@ -57,7 +51,7 @@ export const MenuContent: React.FC<MenuContentProps> = ({
       <div className="grid h-full w-full grid-cols-1 gap-10 md:gap-2 xl:mx-auto xl:mt-15 xl:w-fit xl:grid-cols-[max-content_max-content] xl:items-start xl:gap-x-150 xl:gap-y-0">
         <div className="flex min-h-0 flex-col justify-center pl-2 sm:pl-4 md:pl-12 xl:pl-8">
           <nav aria-label="Main menu" className="flex flex-col gap-2 sm:gap-3 md:gap-1.5 xl:gap-3">
-            {menuItems.map((item) => (
+            {SITE_ROUTES.map((item) => (
               <div key={item.label} className="overflow-hidden py-1 -my-1">
                 {item.label === "Contact" ? (
                   <motion.button
@@ -165,12 +159,6 @@ export const MenuContent: React.FC<MenuContentProps> = ({
             </p>
           </div>
 
-          {/* can be scaled for conact section */}
-          {/* <div className="space-y-1">
-            <a href="mailto:contact@akaru.fr" className="block transition-opacity hover:opacity-70">contact@akaru.fr</a>
-            <a href="mailto:job@akaru.fr" className="block transition-opacity hover:opacity-70">job@akaru.fr</a>
-          </div> */}
-
           <div className="space-y-1 xl:self-start">
             {socials
               .filter(
@@ -189,11 +177,6 @@ export const MenuContent: React.FC<MenuContentProps> = ({
                 </a>
               ))}
           </div>
-
-          {/* contact number */}
-          {/* <div>
-            <a href="tel:0482338510" className="transition-opacity hover:opacity-70">04 82 33 85 10</a>
-          </div> */}
         </div>
       </div>
 
@@ -231,7 +214,5 @@ export const MenuContent: React.FC<MenuContentProps> = ({
         />
       ) : null}
     </div>
-
-
   );
 };

@@ -8,9 +8,10 @@ import { ArrowLeft } from "lucide-react";
 interface MobileRouteHeaderProps {
   title: string;
   showBackButton?: boolean;
+  backHref?: string;
 }
 
-export function MobileRouteHeader({ title, showBackButton = false }: MobileRouteHeaderProps) {
+export function MobileRouteHeader({ title, showBackButton = false, backHref }: MobileRouteHeaderProps) {
   const router = useRouter();
   const { scrollY } = useScroll();
   const [hidden, setHidden] = useState(false);
@@ -66,7 +67,7 @@ export function MobileRouteHeader({ title, showBackButton = false }: MobileRoute
           >
             {showBackButton && (
               <button
-                onClick={() => router.back()}
+                onClick={() => backHref ? router.push(backHref) : router.back()}
                 className="p-1 -ml-1 rounded-full text-foreground/80 active:text-foreground active:bg-white/10 transition-colors"
                 aria-label="Go back"
               >

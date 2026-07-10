@@ -2,15 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, FolderClosed, BriefcaseBusiness, MessageSquare } from "lucide-react";
 import { motion } from "framer-motion";
+import { MOBILE_NAV_ITEMS } from "@/data/navigation";
 
-const navItems = [
-  { name: "Home", href: "/", icon: Home },
-  { name: "Projects", href: "/projects", icon: FolderClosed },
-  { name: "Services", href: "/services", icon: BriefcaseBusiness },
-  { name: "Contact", href: "/contact", icon: MessageSquare },
-];
 
 export function MobileBottomNav({ className = "" }: { className?: string }) {
   const pathname = usePathname();
@@ -23,7 +17,7 @@ export function MobileBottomNav({ className = "" }: { className?: string }) {
         transition={{ duration: 0.5, ease: "easeOut" }}
         className="flex items-center justify-around w-full px-4 py-3 bg-background border-t border-white/20"
       >
-        {navItems.map((item) => {
+        {MOBILE_NAV_ITEMS.map((item) => {
           const isActive =
             pathname === item.href ||
             (item.href !== "/" && pathname.startsWith(`${item.href}/`));

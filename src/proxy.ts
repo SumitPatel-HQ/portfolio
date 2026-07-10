@@ -16,12 +16,6 @@ export function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL('/about', request.url), 302);
   }
 
-  // 3. Desktop/Tablet users on /projects/[name] -> redirect to /projects
-  // Matches paths like /projects/querycraft but not /projects itself
-  if (!isMobile && pathname.startsWith('/projects/') && pathname !== '/projects') {
-    return NextResponse.redirect(new URL('/projects', request.url), 302);
-  }
-
   return NextResponse.next();
 }
 

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback, useMemo, useEffect, useRef, useLayoutEffect } from 'react';
+import { useState, useCallback, useMemo, useEffect, useRef, useLayoutEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import { MenuButton } from './MenuButton';
 import { MenuContent } from './MenuContent';
@@ -9,13 +9,8 @@ import { useMenuAnimation } from './useMenuAnimation';
 import { useContactModal } from '@/context/ContactModalContext';
 import { useLenis } from '@/providers/LenisProvider';
 import { useIntro } from '@/context/IntroContext';
+import { SITE_ROUTES } from '@/data/navigation';
 
-const menuItemsLinks = [
-  { label: 'Projects', href: '/projects' },
-  // { label: 'Experience', href: '/experience' },
-  { label: 'About Me', href: '/about' },
-  { label: 'Contact', href: '/contact' },
-];
 
 export const Menu = () => {
   const pathname = usePathname();
@@ -28,7 +23,9 @@ export const Menu = () => {
 
   const targetClosedLabel = useMemo(() => {
     if (pathname === '/') return null;
-    const currentItem = menuItemsLinks.find(item => item.href === pathname);
+    const currentItem = SITE_ROUTES.find(item =>
+      item.href === pathname || pathname.startsWith(item.href + '/')
+    );
     return currentItem ? currentItem.label : null;
   }, [pathname]);
 
@@ -41,12 +38,6 @@ export const Menu = () => {
   const [prevIsOpen, setPrevIsOpen] = useState(isOpen);
   const [prevIsClosing, setPrevIsClosing] = useState(isClosing);
 
-  // Synchronize displayedLabel during render when dependencies change.
-  // This avoids the "double render" and satisfies linting for synchronous state updates.
-  // NOTE: We deliberately do NOT hide the label when the menu starts closing — that caused
-  // the HomeLink to vanish for the full close animation duration and only re-appear at the end
-  // (the "late arrival" bug). onCloseComplete is the sole authority for updating displayedLabel
-  // after the animation finishes.
   if (targetClosedLabel !== prevTargetClosedLabel || isOpen !== prevIsOpen || isClosing !== prevIsClosing) {
     setPrevTargetClosedLabel(targetClosedLabel);
     setPrevIsOpen(isOpen);
@@ -60,11 +51,7 @@ export const Menu = () => {
         setDisplayedLabel(null);
       }
     } else {
-      // If prevIsOpen was true, the menu is starting its close animation.
-      // If isClosing is true, the menu is actively animating out.
-      // In both cases, we must NOT update the label here; onCloseComplete will do it when the animation finishes.
-      // If BOTH are false, this is an instant change while the menu is already closed (e.g. browser back-button)
-      // so we update the label immediately.
+
       if (!prevIsOpen && !isClosing) {
         setDisplayedLabel(targetClosedLabel);
       }
@@ -193,7 +180,6 @@ export const Menu = () => {
         className="fixed inset-0 z-50 overflow-hidden overscroll-contain bg-background text-foreground flex flex-col"
         style={{ clipPath: 'inset(100% 0% 0% 0%)', pointerEvents: 'none' }}
       >
-        {/* Stop propagation so clicking inside content doesn't blindly close unless clicked directly on background */}
         <div className="w-full h-full" onClick={(e) => e.stopPropagation()}>
           <MenuContent 
             onNavigate={closeMenu} 

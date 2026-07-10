@@ -30,7 +30,7 @@ export function MobileProjectDetailLayout({ project }: MobileProjectDetailLayout
     <div className="min-h-screen bg-background flex flex-col pb-[calc(env(safe-area-inset-bottom)+50px)] relative z-10">
       <MobileBackground />
       {/* Route Header */}
-      <MobileRouteHeader title="PROJECTS" showBackButton={true} />
+      <MobileRouteHeader title="PROJECTS" showBackButton={true} backHref="/projects" />
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}

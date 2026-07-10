@@ -7,6 +7,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { BrandLayer } from "./BrandLayer";
 import { useLenis } from "@/providers/LenisProvider";
+import { SITE_ROUTES } from "@/data/navigation";
 import "./transition.css";
 
 
@@ -15,11 +16,14 @@ function getPageName(path: string): string {
 
   const cleanPath = path.split("?")[0].split("#")[0].replace(/\/$/, "");
 
-  if (cleanPath === "/about") return "ABOUT";
-  if (cleanPath === "/projects") return "PROJECTS";
-  if (cleanPath === "/experience") return "EXPERIENCE";
   if (cleanPath === "") return "SUMIT";
 
+  const matched = SITE_ROUTES.find(
+    (route) => cleanPath === route.href || cleanPath.startsWith(route.href + "/")
+  );
+  if (matched) return matched.brandLabel;
+
+  // Fallback for paths not in SITE_ROUTES (e.g. 404 or unknown dynamic routes)
   const segment = cleanPath.split("/").pop() || "";
   return segment ? decodeURIComponent(segment).replace(/[-_]/g, " ").toUpperCase() : "SUMIT";
 }
@@ -34,7 +38,10 @@ export function TransitionProvider({ children }: { children: React.ReactNode }) 
 
   // Popstate orchestration refs
   const isPopstateTransitionRef = useRef(false);
-  const prevPathnameRef = useRef(""); // Updated synchronously in useLayoutEffect
+  // Updated synchronously in handlePopState to prevent rapid navigation race conditions
+  const prevPathnameRef = useRef("");
+  // Updated in useLayoutEffect for same-route arrive guards
+  const layoutPathnameRef = useRef("");
   const leaveStartTimeRef = useRef(0);
   const expectedLeaveDurationRef = useRef(0);
   const enterTlRef = useRef<gsap.core.Timeline | null>(null);
@@ -110,11 +117,12 @@ export function TransitionProvider({ children }: { children: React.ReactNode }) 
     }
   }, []);
 
-  // ─── Initial entry animation (runs once on mount) ─────────────────────
+  // Initial entry animation (runs once on mount)
   useLayoutEffect(() => {
     if (hasPlayedInitialEntryRef.current) return;
     hasPlayedInitialEntryRef.current = true;
     prevPathnameRef.current = pathname;
+    layoutPathnameRef.current = pathname;
 
     const snapshotEl = snapshotRef.current;
     const brandEl = brandLayerRef.current;
@@ -228,17 +236,18 @@ export function TransitionProvider({ children }: { children: React.ReactNode }) 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // ─── Popstate arrive animation (runs when pathname changes after popstate leave) ──
+  // Popstate arrive animation (runs when pathname changes after popstate leave)
   useLayoutEffect(() => {
     // Skip the very first render — the initial-entry effect handles that.
-    if (prevPathnameRef.current === "" || pathname === prevPathnameRef.current) {
+    // Uses layoutPathnameRef for independent same-route guarding
+    if (layoutPathnameRef.current === "" || pathname === layoutPathnameRef.current) {
       // First mount or same-route update — just sync the ref and bail.
-      prevPathnameRef.current = pathname;
+      layoutPathnameRef.current = pathname;
       return;
     }
 
-    // Pathname actually changed. Sync the ref immediately.
-    prevPathnameRef.current = pathname;
+    // Pathname actually changed. Sync the layout ref immediately.
+    layoutPathnameRef.current = pathname;
 
     // Only run the arrive choreography if our popstate handler started a leave.
     if (!isPopstateTransitionRef.current) return;
@@ -380,15 +389,72 @@ export function TransitionProvider({ children }: { children: React.ReactNode }) 
     });
   }, []);
 
-  // ─── Popstate leave handler ───────────────────────────────────────────
+  // Keep the desktop project showcase mounted when a shared navigation link
+  // points from a project slug back to /projects. The route would otherwise
+  // remount the showcase at index 0 even though it is already the active
+  // project section. Capture this before TransitionRouter's delegated handler
+  // or Next.js's Link handler can start a navigation.
+  useEffect(() => {
+    const handleIntraProjectsClick = (event: MouseEvent) => {
+      if (
+        event.defaultPrevented ||
+        event.button !== 0 ||
+        event.metaKey ||
+        event.ctrlKey ||
+        event.shiftKey ||
+        event.altKey ||
+        window.innerWidth < 768 ||
+        !(event.target instanceof Element)
+      ) {
+        return;
+      }
+
+      const link = event.target.closest<HTMLAnchorElement>("a[href]");
+      const currentPath = window.location.pathname;
+
+      if (
+        !link ||
+        link.target === "_blank" ||
+        link.download ||
+        link.pathname !== "/projects" ||
+        !(
+          currentPath === "/projects" ||
+          currentPath.startsWith("/projects/")
+        )
+      ) {
+        return;
+      }
+
+      event.preventDefault();
+    };
+
+    document.addEventListener("click", handleIntraProjectsClick, true);
+    return () => document.removeEventListener("click", handleIntraProjectsClick, true);
+  }, []);
+
+  // Popstate leave handler
   useEffect(() => {
     const handlePopState = () => {
       if (window.innerWidth < 768) return;
 
       const targetPath = window.location.pathname;
+      const currentPath = prevPathnameRef.current;
+
+      // Synchronous update prevents stale-path comparisons during rapid Back/Forward
+      prevPathnameRef.current = targetPath;
+
+      // Intra-project navigation: both paths are within /projects (including
+      // /projects itself and /projects/[name]). ProjectsPageClient owns these
+      // popstate events — do not fire the cinematic transition.
+      if (
+        (targetPath === '/projects' || targetPath.startsWith('/projects/')) &&
+        (currentPath === '/projects' || currentPath.startsWith('/projects/'))
+      ) {
+        return;
+      }
 
       // Same page (e.g. hash change only) — ignore.
-      if (targetPath === prevPathnameRef.current) return;
+      if (targetPath === currentPath) return;
 
       const snapshotEl = snapshotRef.current;
       const brandEl = brandLayerRef.current;
@@ -451,6 +517,20 @@ export function TransitionProvider({ children }: { children: React.ReactNode }) 
    */
   const onLeave = useCallback(
     (next: () => void, from?: string, to?: string) => {
+      const targetPath = to || window.location.pathname;
+      const currentPath = window.location.pathname;
+
+      // Project showcase URLs share a mounted animated scene. Let
+      // ProjectsPageClient synchronize its internal state instead of creating
+      // a full-page cinematic transition between /projects routes.
+      if (
+        (targetPath === "/projects" || targetPath.startsWith("/projects/")) &&
+        (currentPath === "/projects" || currentPath.startsWith("/projects/"))
+      ) {
+        next();
+        return;
+      }
+
       // CRITICAL: If a transition is already running (e.g. a popstate animation
       // is mid-flight when the user clicks a link), we MUST still call next()
       // because the TransitionRouter library already set its internal
@@ -472,7 +552,6 @@ export function TransitionProvider({ children }: { children: React.ReactNode }) 
 
       isTransitioningRef.current = true;
 
-      const targetPath = to || window.location.pathname;
       skipBrandLayerRef.current = targetPath === "/";
       setTargetPageName(getPageName(targetPath));
 

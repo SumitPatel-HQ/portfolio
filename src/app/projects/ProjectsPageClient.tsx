@@ -21,6 +21,15 @@ export type ProjectWithImages = ProjectItem & { imageUrls: string[] };
 
 interface ProjectsPageClientProps {
   projects: ProjectWithImages[];
+  initialName?: string; // project.name.toLowerCase() from the URL, or undefined for /projects
+}
+
+function getInitialIndex(projects: ProjectWithImages[], initialName?: string): number {
+  if (!initialName) return 0;
+  const idx = projects.findIndex(
+    (p) => p.name.toLowerCase() === initialName.toLowerCase()
+  );
+  return idx === -1 ? 0 : idx;
 }
 
 const overlayVariants = {
@@ -47,8 +56,9 @@ const TIMING = {
   TRANSITION_LOCK: 1050,    // Slightly longer than LENIS_SCROLL for safety
 } as const;
 
-export function ProjectsPageClient({ projects }: ProjectsPageClientProps) {
-  const [activeIndex, setActiveIndex] = useState(0);
+export function ProjectsPageClient({ projects, initialName }: ProjectsPageClientProps) {
+  const initialIndex = getInitialIndex(projects, initialName);
+  const [activeIndex, setActiveIndex] = useState(initialIndex);
   const [direction, setDirection] = useState<1 | -1>(1);
 
   const activeProject = useMemo(() => projects[activeIndex], [activeIndex, projects]);
@@ -63,12 +73,18 @@ export function ProjectsPageClient({ projects }: ProjectsPageClientProps) {
 
   const mainRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<ScrollTrigger | null>(null);
-  const activeIndexRef = useRef(0);
+  // CRITICAL: activeIndexRef must be initialised to initialIndex, not 0.
+  // GSAP's onUpdate fires as soon as ScrollTrigger is created — before any
+  // useEffect runs — and reads this ref to decide whether to update state.
+  // If it reads 0 when the correct index is e.g. 2, it immediately overwrites
+  // the URL-derived selection with the wrong project.
+  const activeIndexRef = useRef(initialIndex);
   const isProgrammaticScrollRef = useRef(false);
+  const hasInitializedScrollRef = useRef(false);
   const scrollLockTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const { isReady: isGSAPReady } = useGSAP();
-  const { lenis } = useLenis();
+  const { lenis, isReady: isLenisReady } = useLenis();
 
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
   const touchEndRef = useRef<{ x: number; y: number } | null>(null);
@@ -154,7 +170,8 @@ export function ProjectsPageClient({ projects }: ProjectsPageClientProps) {
     setActiveIndex(nextIndex);
     lockScroll();
     scrollToIndex(nextIndex);
-  }, [scrollToIndex, projects.length, lockScroll]);
+    window.history.pushState(window.history.state, '', '/projects/' + projects[nextIndex].name.toLowerCase());
+  }, [scrollToIndex, projects, lockScroll]);
 
   const onNext = useCallback(() => {
     const current = activeIndexRef.current;
@@ -164,7 +181,8 @@ export function ProjectsPageClient({ projects }: ProjectsPageClientProps) {
     setActiveIndex(nextIndex);
     lockScroll();
     scrollToIndex(nextIndex);
-  }, [scrollToIndex, projects.length, lockScroll]);
+    window.history.pushState(window.history.state, '', '/projects/' + projects[nextIndex].name.toLowerCase());
+  }, [scrollToIndex, projects, lockScroll]);
 
   const onTouchEnd = useCallback(() => {
     if (!touchStartRef.current || !touchEndRef.current) return;
@@ -196,13 +214,44 @@ export function ProjectsPageClient({ projects }: ProjectsPageClientProps) {
     setActiveIndex(index);
     lockScroll();
     scrollToIndex(index);
-  }, [scrollToIndex, lockScroll]);
+    window.history.pushState(window.history.state, '', '/projects/' + projects[index].name.toLowerCase());
+  }, [scrollToIndex, lockScroll, projects]);
 
+
+  // Popstate — within-projects Back/Forward navigation
   useEffect(() => {
-    activeIndexRef.current = activeIndex;
-  }, [activeIndex]);
+    const handlePopState = () => {
+      const path = window.location.pathname;
 
-  // ── Tab Duplication / BFCache Restore — Projects Page ─────────────────────
+      if (!path.startsWith('/projects')) return;
+
+      if (path === '/projects') {
+        // Back to the landing: select default project but do NOT push a new entry.
+        activeIndexRef.current = 0;
+        setActiveIndex(0);
+        lockScroll();
+        scrollToIndex(0);
+        return;
+      }
+
+      const nameFromUrl = path.replace('/projects/', '').toLowerCase();
+      const idx = projects.findIndex(
+        (p) => p.name.toLowerCase() === nameFromUrl
+      );
+      if (idx === -1 || idx === activeIndexRef.current) return;
+
+      setDirection(idx > activeIndexRef.current ? 1 : -1);
+      activeIndexRef.current = idx;
+      setActiveIndex(idx);
+      lockScroll();
+      scrollToIndex(idx);
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [lockScroll, projects, scrollToIndex]);
+
+  // Tab Duplication / BFCache Restore — Projects Page
   // When the browser clones a tab it serializes:
   //   1. The GSAP <div data-pin-spacer> wrapper around mainRef.
   //   2. Framer Motion inline transforms on whichever slide overlay was active.
@@ -247,7 +296,7 @@ export function ProjectsPageClient({ projects }: ProjectsPageClientProps) {
   }, [totalSteps]);
 
   useEffect(() => {
-    if (!isGSAPReady || !mainRef.current) {
+    if (!isGSAPReady || !isLenisReady || !mainRef.current) {
       return;
     }
 
@@ -274,6 +323,15 @@ export function ProjectsPageClient({ projects }: ProjectsPageClientProps) {
       const mm = gsap.matchMedia();
 
       mm.add("(min-width: 1024px)", () => {
+        const shouldInitializeScroll = initialIndex > 0 && !hasInitializedScrollRef.current;
+
+        // ScrollTrigger synchronously invokes onUpdate while it is being
+        // created. Lock it first so the zero-valued native scroll position
+        // cannot overwrite the URL-derived project index.
+        if (shouldInitializeScroll) {
+          isProgrammaticScrollRef.current = true;
+        }
+
         const trigger = ScrollTrigger.create({
           trigger: mainRef.current,
           start: 0,
@@ -307,13 +365,66 @@ export function ProjectsPageClient({ projects }: ProjectsPageClientProps) {
             setDirection(nextIndex > activeIndexRef.current ? 1 : -1);
             activeIndexRef.current = nextIndex;
             setActiveIndex(nextIndex);
+            // Sync the URL with the scroll position so the address bar always
+            // matches the active project, even when the user scrolls manually.
+            window.history.replaceState(window.history.state, '', '/projects/' + projects[nextIndex].name.toLowerCase());
           },
         });
 
         triggerRef.current = trigger;
         ScrollTrigger.refresh();
 
+        // TransitionProvider performs its initial Lenis reset while the entry
+        // animation is running. Wait for its explicit completion signal so we
+        // calculate against the final pin geometry and scroll after that reset.
+        let transitionObserver: MutationObserver | null = null;
+        let unlockFrame: number | null = null;
+
+        if (shouldInitializeScroll) {
+          const initializeScroll = () => {
+            ScrollTrigger.refresh();
+            const target = trigger.start + (trigger.end - trigger.start) * (initialIndex / totalSteps);
+
+            if (lenis) {
+              lenis.scrollTo(target, { immediate: true, force: true });
+              trigger.scroll(target);
+            } else {
+              trigger.scroll(target);
+            }
+
+            hasInitializedScrollRef.current = true;
+            unlockFrame = window.requestAnimationFrame(() => {
+              isProgrammaticScrollRef.current = false;
+            });
+          };
+
+          if (document.documentElement.classList.contains("transition-ready")) {
+            initializeScroll();
+          } else {
+            transitionObserver = new MutationObserver(() => {
+              if (!document.documentElement.classList.contains("transition-ready")) {
+                return;
+              }
+
+              transitionObserver?.disconnect();
+              transitionObserver = null;
+              initializeScroll();
+            });
+            transitionObserver.observe(document.documentElement, {
+              attributes: true,
+              attributeFilter: ["class"],
+            });
+          }
+        }
+
         return () => {
+          transitionObserver?.disconnect();
+          if (unlockFrame !== null) {
+            window.cancelAnimationFrame(unlockFrame);
+          }
+          if (shouldInitializeScroll) {
+            isProgrammaticScrollRef.current = false;
+          }
           triggerRef.current = null;
         };
       });
@@ -323,7 +434,7 @@ export function ProjectsPageClient({ projects }: ProjectsPageClientProps) {
       triggerRef.current = null;
       ctx.revert();
     };
-  }, [isGSAPReady, perCardScrollDistance, totalSteps]);
+  }, [initialIndex, isGSAPReady, isLenisReady, lenis, perCardScrollDistance, projects, totalSteps]);
 
   // Preload adjacent project images
   useEffect(() => {
@@ -350,6 +461,14 @@ export function ProjectsPageClient({ projects }: ProjectsPageClientProps) {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [onNext, onPrev]);
+
+  // Sync browser tab title with the active project.
+  // This is desktop-only (the component is wrapped in hidden md:block in the layout).
+  // The server already sets the correct initial title via generateMetadata in [name]/page.tsx,
+  // so this only needs to keep it in sync as the user navigates the showcase.
+  useEffect(() => {
+    document.title = `Sumit Patel | ${activeProject.name}`;
+  }, [activeProject]);
 
   // Cleanup timeouts on unmount (CR-1: Memory leak fix)
   useEffect(() => {

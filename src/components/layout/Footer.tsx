@@ -3,21 +3,15 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useContactModal } from '@/context/ContactModalContext';
+import { FOOTER_PAGE_LINKS } from '@/data/navigation';
 
-const pageLinks = [
-  { label: 'Home', href: '/' },
-  { label: 'Projects', href: '/projects' },
-  // { label: 'Experience', href: '/experience' },
-  { label: 'About Me', href: '/about' },
-  { label: 'Contact Now', href: '#' },
-];
 
 export function Footer() {
   const pathname = usePathname();
   const { openModal } = useContactModal();
 
   return (
-    <footer className={`relative z-10 rounded-2xl w-full px-8 py-8 text-sm text-white/50 md:py-6 md:px-24 md:border-t-[3px] md:border-white/10 lg:py-8 lg:border-t-2 lg:border-white/10 ${pathname === '/projects' ? 'mt-10 md:-mt-5  bg-background' : 'mt-10 md:mt-0 lg:mt-10'
+    <footer className={`relative z-10 rounded-2xl w-full px-8 py-8 text-sm text-white/50 md:py-6 md:px-24 md:border-t-[3px] md:border-white/10 lg:py-8 lg:border-t-2 lg:border-white/10 ${pathname.startsWith('/projects') ? 'mt-10 md:-mt-5  bg-background' : 'mt-10 md:mt-0 lg:mt-10'
       }`}>
       <div className="grid grid-cols-1 items-center gap-6 text-center md:gap-8 lg:grid-cols-3 lg:gap-6">
         <div className="flex items-center justify-center gap-2 lg:justify-start">
@@ -26,7 +20,7 @@ export function Footer() {
 
 
         <div className="flex flex-wrap items-center justify-center gap-4 md:gap-8 lg:gap-6">
-          {pageLinks.map((item) =>
+          {FOOTER_PAGE_LINKS.map((item) =>
             item.label === 'Contact Now' ? (
               <button
                 key={item.label}
