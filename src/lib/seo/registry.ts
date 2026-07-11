@@ -24,21 +24,21 @@ export const ROUTE_REGISTRY: readonly RouteEntry[] = [
     priority: 1.0,
   },
   {
-    path: "/about",
+    path: "about",
     indexable: true,
     sitemapEligible: true,
     changeFrequency: "monthly",
     priority: 0.8,
   },
   {
-    path: "/contact",
+    path: "contact",
     indexable: true,
     sitemapEligible: true,
     changeFrequency: "monthly",
     priority: 0.7,
   },
   {
-    path: "/experience",
+    path: "experience",
     // Disabled — page not yet ready for public indexing.
     indexable: false,
     sitemapEligible: false,
@@ -46,14 +46,14 @@ export const ROUTE_REGISTRY: readonly RouteEntry[] = [
     priority: 0.5,
   },
   {
-    path: "/projects",
+    path: "projects",
     indexable: true,
     sitemapEligible: true,
     changeFrequency: "weekly",
     priority: 0.9,
   },
   {
-    path: "/services",
+    path: "services",
     // Cross-canonicalizes to /about; must not appear in the sitemap.
     indexable: false,
     sitemapEligible: false,
@@ -62,7 +62,7 @@ export const ROUTE_REGISTRY: readonly RouteEntry[] = [
     priority: 0.5,
   },
   {
-    path: "/SumitResume.pdf",
+    path: "SumitResume.pdf",
     indexable: true,
     sitemapEligible: true,
     changeFrequency: "monthly",
@@ -73,7 +73,7 @@ export const ROUTE_REGISTRY: readonly RouteEntry[] = [
 // Returns a RouteEntry for every project in the data source.
 export function getProjectRoutes(): RouteEntry[] {
   return PROJECTS.map((project) => ({
-    path: `/projects/${project.name.toLowerCase()}`,
+    path: `projects/${project.name.toLowerCase()}`,
     indexable: true,
     sitemapEligible: true,
     changeFrequency: "monthly" as ChangeFrequency,
