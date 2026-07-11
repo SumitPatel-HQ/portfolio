@@ -29,8 +29,8 @@ const PREMIUM_EASE = [0.45, 0, 0.15, 1] as const;
 
 const titleLetters = ["S", "U", "M", "I", "T"];
 
-export const MenuContent: React.FC<MenuContentProps> = ({ 
-  onNavigate, 
+export const MenuContent: React.FC<MenuContentProps> = ({
+  onNavigate,
   isMenuOpen,
   isResumeOpen,
   setIsResumeOpen
@@ -148,7 +148,7 @@ export const MenuContent: React.FC<MenuContentProps> = ({
             <p
               onClick={() => {
                 if (window.innerWidth >= 768 && window.innerWidth < 1280) {
-                  window.open("/Sumit_Resume.pdf", "_blank");
+                  window.open("/SumitResume.pdf", "_blank");
                 } else {
                   setHasOpenedResume(true);
                   setIsResumeOpen(true);

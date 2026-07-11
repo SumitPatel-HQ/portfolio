@@ -170,7 +170,7 @@ export function ProjectsPageClient({ projects, initialName }: ProjectsPageClient
     setActiveIndex(nextIndex);
     lockScroll();
     scrollToIndex(nextIndex);
-    window.history.pushState(window.history.state, '', '/projects/' + projects[nextIndex].name.toLowerCase());
+    window.history.pushState(window.history.state, "", `/projects/${projects[nextIndex].name.toLowerCase()}`);
   }, [scrollToIndex, projects, lockScroll]);
 
   const onNext = useCallback(() => {
@@ -181,7 +181,7 @@ export function ProjectsPageClient({ projects, initialName }: ProjectsPageClient
     setActiveIndex(nextIndex);
     lockScroll();
     scrollToIndex(nextIndex);
-    window.history.pushState(window.history.state, '', '/projects/' + projects[nextIndex].name.toLowerCase());
+    window.history.pushState(window.history.state, "", `/projects/${projects[nextIndex].name.toLowerCase()}`);
   }, [scrollToIndex, projects, lockScroll]);
 
   const onTouchEnd = useCallback(() => {
@@ -214,7 +214,7 @@ export function ProjectsPageClient({ projects, initialName }: ProjectsPageClient
     setActiveIndex(index);
     lockScroll();
     scrollToIndex(index);
-    window.history.pushState(window.history.state, '', '/projects/' + projects[index].name.toLowerCase());
+    window.history.pushState(window.history.state, "", `/projects/${projects[index].name.toLowerCase()}`);
   }, [scrollToIndex, lockScroll, projects]);
 
 
@@ -365,9 +365,6 @@ export function ProjectsPageClient({ projects, initialName }: ProjectsPageClient
             setDirection(nextIndex > activeIndexRef.current ? 1 : -1);
             activeIndexRef.current = nextIndex;
             setActiveIndex(nextIndex);
-            // Sync the URL with the scroll position so the address bar always
-            // matches the active project, even when the user scrolls manually.
-            window.history.replaceState(window.history.state, '', '/projects/' + projects[nextIndex].name.toLowerCase());
           },
         });
 

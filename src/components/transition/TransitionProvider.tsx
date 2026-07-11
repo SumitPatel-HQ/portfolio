@@ -236,6 +236,14 @@ export function TransitionProvider({ children }: { children: React.ReactNode }) 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Project selection uses the native History API, which updates Next's
+  // pathname without emitting popstate. Keep the popstate comparison source
+  // synchronized after every ordinary route change so the first browser Back
+  // between project URLs is not mistaken for a cross-page navigation.
+  useEffect(() => {
+    prevPathnameRef.current = pathname;
+  }, [pathname]);
+
   // Popstate arrive animation (runs when pathname changes after popstate leave)
   useLayoutEffect(() => {
     // Skip the very first render — the initial-entry effect handles that.

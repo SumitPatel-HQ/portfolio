@@ -61,6 +61,13 @@ export const ROUTE_REGISTRY: readonly RouteEntry[] = [
     changeFrequency: "monthly",
     priority: 0.5,
   },
+  {
+    path: "/SumitResume.pdf",
+    indexable: true,
+    sitemapEligible: true,
+    changeFrequency: "monthly",
+    priority: 0.8,
+  },
 ] as const;
 
 // Returns a RouteEntry for every project in the data source.

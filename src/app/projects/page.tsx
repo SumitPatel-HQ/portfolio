@@ -6,7 +6,7 @@ import { OG_IMAGES, buildOgMetadata, buildTwitterMetadata } from "@/lib/seo";
 
 const _PROJECTS_OG = {
   title: "Sumit Patel | Projects",
-  description: "Explore a collection of projects built by Sumit Patel, showcasing work across AI applications, full-stack development, and real-world engineering solutions.",
+  description: "Explore projects built by Sumit Patel, showcasing AI applications, full-stack development, and real-world engineering solutions.",
   path: "/projects",
   image: OG_IMAGES.default,
 } as const;
@@ -17,7 +17,7 @@ export const metadata = {
   alternates: {
     canonical: "/projects",
   },
-  openGraph: buildOgMetadata(_PROJECTS_OG),
+  openGraph: buildOgMetadata(_PROJECTS_OG ),
   twitter: buildTwitterMetadata(_PROJECTS_OG),
 };
 

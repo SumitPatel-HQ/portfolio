@@ -17,19 +17,19 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
 
   const handleDownload = async () => {
     try {
-      const response = await fetch("/Sumit_Resume.pdf");
+      const response = await fetch("/SumitResume.pdf");
       const blob = await response.blob();
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = "Sumit_Resume.pdf";
+      a.download = "SumitResume.pdf";
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
     } catch {
       // fallback: navigate directly
-      window.open("/Sumit_Resume.pdf", "_blank");
+      window.open("/SumitResume.pdf", "_blank");
     }
   };
 
@@ -143,14 +143,14 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
               <span className="text-foreground text-sm font-bold scale-y-[1.3] block lg:translate-y-[1px]">SP</span>
             </div>
             <div className="flex flex-col">
-              <h3 className="text-base sm:text-lg font-semibold text-foreground leading-tight tracking-wide">Resume.pdf</h3>
+              <h3 className="text-base sm:text-lg font-semibold text-foreground leading-tight tracking-wide">Sumit Resume</h3>
               <p className="text-xs sm:text-sm text-muted-foreground">Document</p>
             </div>
           </div>
 
           <div className="flex items-center gap-1 sm:gap-2">
             <a
-              href="/Sumit_Resume.pdf"
+              href="/SumitResume.pdf"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Open resume in new tab"
@@ -196,7 +196,7 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
           )}
 
           <iframe
-            src="/Sumit_Resume.pdf#toolbar=0&navpanes=0&scrollbar=0&view=FitH"
+            src="/SumitResume.pdf#toolbar=0&navpanes=0&scrollbar=0&view=FitH"
             title="Resume"
             aria-label="resume-iframe"
             onLoad={() => setIsLoading(false)}

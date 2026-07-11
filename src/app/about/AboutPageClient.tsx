@@ -273,7 +273,7 @@ export function AboutPageClient() {
                     type="button"
                     onClick={() => {
                       if (window.innerWidth >= 768 && window.innerWidth < 1280) {
-                        window.open("/Sumit_Resume.pdf", "_blank");
+                        window.open("/SumitResume.pdf", "_blank");
                       } else {
                         setHasOpenedResume(true);
                         setIsResumeOpen(true);
@@ -285,15 +285,15 @@ export function AboutPageClient() {
                     View Resume
                   </button>
                   <button
-                  type="button"
-                  className="inline-flex w-fit items-center gap-2 rounded-full border border-white/10 bg-background-secondary/55 px-4 py-2 md:px-6 md:py-3 lg:px-4 lg:py-2 text-sm md:text-lg lg:text-sm font-medium text-foreground/85 transition-colors duration-200 hover:border-accent/20 hover:text-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent">
-                  <Link
-                    href="/projects"
-                    className="flex items-center justify-center gap-3 w-full h-full"
-                  >
-                    <FolderClosed className="w-4 h-4 md:w-5 md:h-5 lg:w-4 lg:h-4" aria-hidden />
-                    View Projects
-                  </Link>
+                    type="button"
+                    className="inline-flex w-fit items-center gap-2 rounded-full border border-white/10 bg-background-secondary/55 px-4 py-2 md:px-6 md:py-3 lg:px-4 lg:py-2 text-sm md:text-lg lg:text-sm font-medium text-foreground/85 transition-colors duration-200 hover:border-accent/20 hover:text-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent">
+                    <Link
+                      href="/projects"
+                      className="flex items-center justify-center gap-3 w-full h-full"
+                    >
+                      <FolderClosed className="w-4 h-4 md:w-5 md:h-5 lg:w-4 lg:h-4" aria-hidden />
+                      View Projects
+                    </Link>
                   </button>
                 </ScrollReveal>
               </motion.div>
