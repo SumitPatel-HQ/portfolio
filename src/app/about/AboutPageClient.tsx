@@ -82,6 +82,7 @@ export function AboutPageClient() {
     <motion.a
       key={key}
       data-logo-item="true"
+      aria-label={tech.title ? `${tech.title} website` : undefined}
       onTap={() => {
         setActiveLogo(prev => prev === tech.title ? null : (tech.title || null));
       }}
@@ -102,7 +103,7 @@ export function AboutPageClient() {
       }}
       className="group relative h-10 w-10 flex items-center justify-center text-white cursor-pointer"
     >
-      <div className="relative z-10 text-4xl transition-all duration-300">
+      <div aria-hidden="true" className="relative z-10 text-4xl transition-all duration-300">
         {'node' in tech ? tech.node : null}
       </div>
     </motion.a>
@@ -468,6 +469,7 @@ export function AboutPageClient() {
                     {techLogos.map((tech) => (
                       <motion.a
                         key={tech.title}
+                        aria-label={`${tech.title} website`}
                         target="_blank"
                         rel="noopener noreferrer"
                         initial={{ opacity: 0.7, scale: 1 }}
@@ -482,7 +484,7 @@ export function AboutPageClient() {
                         }}
                         className="group relative h-8 w-8 lg:h-8 lg:w-8 flex items-center justify-center text-white"
                       >
-                        <div className="relative z-10 text-3xl lg:text-3xl transition-all duration-300 cursor-pointer">
+                        <div aria-hidden="true" className="relative z-10 text-3xl lg:text-3xl transition-all duration-300 cursor-pointer">
                           {tech.node}
                         </div>
                       </motion.a>

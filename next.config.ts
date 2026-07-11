@@ -35,7 +35,7 @@ const nextConfig: NextConfig = {
         headers: securityHeaders,
       },
       {
-        // Explicitly allow the PDF to be embedded
+        // Explicitly allow the PDF to be embedded and set canonical HTTP header
         source: "/SumitResume.pdf",
         headers: [
           {
@@ -45,6 +45,10 @@ const nextConfig: NextConfig = {
           {
             key: "Content-Security-Policy",
             value: "frame-ancestors 'self'",
+          },
+          {
+            key: "Link",
+            value: '<https://sumitvpatel.dev/SumitResume.pdf>; rel="canonical"',
           }
         ],
       },
