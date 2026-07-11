@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Footer } from "@/components/layout/Footer";
@@ -13,6 +13,7 @@ import { TransitionProvider } from "@/components/transition/TransitionProvider";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { MobileBottomNav } from "@/components/mobile/MobileBottomNav";
+import { SITE_URL } from "@/lib/seo";
 
 // Load Inter font with CSS variables
 const inter = Inter({
@@ -22,26 +23,33 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
+
+  openGraph: {
+    siteName: "Sumit Patel",
+    locale: "en_US",
+    type: "website",
+  },
   icons: {
-    // Apple Touch Icon — highest available resolution; iOS uses rel="apple-touch-icon"
     apple: [
       { url: "/favicons/apple-touch-icon-180x180.png", sizes: "180x180", type: "image/png" },
       { url: "/favicons/apple-touch-icon-167x167.png", sizes: "167x167", type: "image/png" },
     ],
-    // Other icons emitted as <link rel="icon"> — favicon.ico auto-served by Next.js from src/app/
     other: [
-      // Web manifest link (also enables Android PWA install prompt)
-      { rel: "manifest", url: "/favicons/site.webmanifest" },
       // Microsoft Tile (IE11 / legacy Edge)
       { rel: "msapplication-TileImage", url: "/favicons/mstile-150x150.png" },
       { rel: "msapplication-config", url: "/favicons/browserconfig.xml" },
     ],
   },
-  // Controls the browser UI chrome color on mobile (Android Chrome address bar, PWA)
+  // Controls the browser UI chrome color on mobile
   other: {
     "msapplication-TileColor": "#0a0a0a",
-    "theme-color": "#0a0a0a",
   },
+};
+
+// Viewport is separated from metadata per Next.js App Router API
+export const viewport: Viewport = {
+  themeColor: "#0a0a0a",
 };
 
 export default function RootLayout({

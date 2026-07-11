@@ -3,6 +3,11 @@ import { PROJECTS } from "@/data/projects.data";
 import { fetchImagesForProject } from "@/lib/imagekit-server";
 import { MobileProjectDetailLayout } from "@/components/mobile/projects/MobileProjectDetailLayout";
 import { ProjectsPageClient, ProjectWithImages } from "../ProjectsPageClient";
+import {
+  resolveProjectOgImage,
+  buildOgMetadata,
+  buildTwitterMetadata,
+} from "@/lib/seo";
 
 export const revalidate = 3600;
 
@@ -12,9 +17,22 @@ export async function generateMetadata({ params }: { params: Promise<{ name: str
   const project = PROJECTS.find((p) => p.name.toLowerCase() === decodedName.toLowerCase());
   if (!project) return { title: "Project Not Found" };
 
-  return {
+  const ogImage = resolveProjectOgImage(project.name);
+  const ogOptions = {
     title: `Sumit Patel | ${project.name}`,
     description: project.description,
+    path: `/projects/${project.name.toLowerCase()}`,
+    image: ogImage,
+  };
+
+  return {
+    title: ogOptions.title,
+    description: ogOptions.description,
+    alternates: {
+      canonical: `/projects/${project.name.toLowerCase()}`,
+    },
+    openGraph: buildOgMetadata(ogOptions),
+    twitter: buildTwitterMetadata(ogOptions),
   };
 }
 

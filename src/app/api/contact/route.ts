@@ -18,7 +18,6 @@ const EMAIL_TIMEOUT_MS = 10000; // 10 seconds — keeps well within serverless f
 
 const ALLOWED_ORIGINS = [
   process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
-  "https://your-production-domain.com", // TODO: Update with actual domain
 ];
 
 function setCorsHeaders(response: NextResponse, origin: string): NextResponse {

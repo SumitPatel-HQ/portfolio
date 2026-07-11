@@ -2,10 +2,23 @@ import { MobileContactPage } from "@/components/mobile/contact/MobileContactPage
 import { ContactCard } from "@/components/Contacts/contact-card";
 import { ContactForm } from "@/components/Contacts/ContactForm";
 import { Metadata } from "next";
+import { OG_IMAGES, buildOgMetadata, buildTwitterMetadata } from "@/lib/seo";
+
+const _CONTACT_OG = {
+  title: "Sumit Patel | Contact",
+  description: "Connect with Sumit Patel for collaborations, product development, technical partnerships, and opportunities to build impactful software solutions.",
+  path: "/contact",
+  image: OG_IMAGES.default,
+} as const;
 
 export const metadata: Metadata = {
-  title: "Sumit Patel | Contact",
-  description: "Connect with Sumit Patel for collaborations, product development, technical partnerships, and opportunities to build impactful software solutions."
+  title: _CONTACT_OG.title,
+  description: _CONTACT_OG.description,
+  alternates: {
+    canonical: "/contact",
+  },
+  openGraph: buildOgMetadata(_CONTACT_OG),
+  twitter: buildTwitterMetadata(_CONTACT_OG),
 };
 
 export default function ContactPage() {
