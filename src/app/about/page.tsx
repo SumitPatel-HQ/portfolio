@@ -4,7 +4,7 @@ import { OG_IMAGES, buildOgMetadata, buildTwitterMetadata } from '@/lib/seo';
 
 const _ABOUT_OG = {
   title: "Sumit Patel | About",
-  description: "Explore the journey, experience, and mindset behind Sumit Patel's work, from learning software development to building impactful digital solutions.",
+  description: "Discover the journey, experience, and mindset behind Sumit Patel's work, from learning software development to building impactful digital solutions.",
   path: "/about",
   image: OG_IMAGES.default,
 } as const;

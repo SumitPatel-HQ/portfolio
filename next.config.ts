@@ -8,8 +8,8 @@ const localIps = Object.values(os.networkInterfaces())
   .map((iface) => iface.address);
 
 const securityHeaders = [
-  // Prevent the page from being embedded in a frame (clickjacking protection)
-  { key: "X-Frame-Options", value: "DENY" },
+  // Prevent the page from being embedded in a frame across different origins, but allow on same origin for iframes (like PDF previews)
+  { key: "X-Frame-Options", value: "SAMEORIGIN" },
   // Prevent browsers from MIME-sniffing a response away from the declared content-type
   { key: "X-Content-Type-Options", value: "nosniff" },
   // Control how much referrer information is sent with requests
@@ -30,9 +30,23 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
-        // Apply to every route
+        // Apply to every route by default
         source: "/(.*)",
         headers: securityHeaders,
+      },
+      {
+        // Explicitly allow the PDF to be embedded
+        source: "/SumitResume.pdf",
+        headers: [
+          {
+            key: "X-Frame-Options",
+            value: "SAMEORIGIN",
+          },
+          {
+            key: "Content-Security-Policy",
+            value: "frame-ancestors 'self'",
+          }
+        ],
       },
     ];
   },

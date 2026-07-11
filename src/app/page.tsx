@@ -3,8 +3,8 @@ import { HomePageClient } from './home/HomePageClient';
 import { OG_IMAGES, buildOgMetadata, buildTwitterMetadata } from '@/lib/seo';
 
 const _HOME_OG = {
-  title: "Sumit Patel | Software Engineer",
-  description: "Explore the portfolio of Sumit Patel, a software engineer building AI-powered applications, full-stack web platforms, and scalable digital products.",
+  title: "Sumit Patel | AI Engineer & Full-Stack Developer",
+  description: "AI Engineer and Full-Stack Developer building intelligent applications, AI agents, scalable web platforms, and modern SaaS products.",
   path: "/",
   image: OG_IMAGES.default,
 } as const;
