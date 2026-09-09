@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { ROBO_URL } from "@/lib/seo";
+import { SITE_URL } from "@/lib/seo";
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -8,7 +8,7 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: "/api/",
     },
-    sitemap: `${ROBO_URL}/sitemap.xml`,
-   
+    sitemap: `${SITE_URL}/sitemap.xml`,
+    host: SITE_URL,
   };
 }

@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { ExperiencePageClient } from "./ExperiencePageClient";
+import { notFound } from "next/navigation";
 import { OG_IMAGES, buildOgMetadata, buildTwitterMetadata } from "@/lib/seo";
 
 const _EXPERIENCE_OG = {
@@ -15,10 +15,16 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/experience",
   },
+  robots: {
+    index: false,
+    follow: true,
+  },
   openGraph: buildOgMetadata(_EXPERIENCE_OG),
   twitter: buildTwitterMetadata(_EXPERIENCE_OG),
 };
 
 export default function ExperiencePage() {
-  return <ExperiencePageClient />;
+  // This unfinished route is intentionally excluded from navigation and the
+  // sitemap. Return a real 404 instead of a client-side soft 404.
+  notFound();
 }

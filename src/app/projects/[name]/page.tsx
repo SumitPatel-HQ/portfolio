@@ -11,6 +11,10 @@ import {
 
 export const revalidate = 3600;
 
+export function generateStaticParams() {
+  return PROJECTS.map((project) => ({ name: project.name.toLowerCase() }));
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ name: string }> }) {
   const { name } = await params;
   const decodedName = decodeURIComponent(name);
