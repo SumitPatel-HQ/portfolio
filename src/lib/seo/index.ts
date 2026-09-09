@@ -1,9 +1,10 @@
-export const SITE_URL = "https://sumitvpatel.dev/";
-export const ROBO_URL = "https://sumitvpatel.dev";
+// Keep the origin free of a trailing slash so absolute paths cannot produce
+// protocol-valid but non-canonical URLs containing a double slash.
+export const SITE_URL = "https://sumitvpatel.dev";
 
 export function canonicalUrl(pathname: string): string {
   const normalized = "/" + pathname.replace(/^\/+/, "").replace(/\/+$/, "");
-  return `${SITE_URL}${normalized === "/" ? "" : normalized}`;
+  return `${SITE_URL}${normalized === "/" ? "/" : normalized}`;
 }
 
 export {

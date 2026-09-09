@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { HomePageClient } from './home/HomePageClient';
-import { OG_IMAGES, buildOgMetadata, buildTwitterMetadata } from '@/lib/seo';
+import { OG_IMAGES, SITE_URL, buildOgMetadata, buildTwitterMetadata } from '@/lib/seo';
 
 const _HOME_OG = {
   title: "Sumit Patel | AI Engineer & Full-Stack Developer",
@@ -20,5 +20,49 @@ export const metadata: Metadata = {
 };
 
 export default function Home() {
-  return <HomePageClient />;
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": `${SITE_URL}/#website`,
+        url: `${SITE_URL}/`,
+        name: "Sumit Patel",
+        inLanguage: "en",
+      },
+      {
+        "@type": "ProfilePage",
+        "@id": `${SITE_URL}/#profile-page`,
+        url: `${SITE_URL}/`,
+        name: "Sumit Patel — AI Engineer & Full-Stack Developer",
+        isPartOf: { "@id": `${SITE_URL}/#website` },
+        mainEntity: { "@id": `${SITE_URL}/#person` },
+        inLanguage: "en",
+      },
+      {
+        "@type": "Person",
+        "@id": `${SITE_URL}/#person`,
+        name: "Sumit Patel",
+        url: `${SITE_URL}/`,
+        jobTitle: "AI Engineer and Full-Stack Developer",
+        sameAs: [
+          "https://github.com/SumitPatel-HQ",
+          "https://linkedin.com/in/sumitvpatel",
+          "https://x.com/ZSumit_",
+        ],
+      },
+    ],
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(structuredData).replace(/</g, "\\u003c"),
+        }}
+      />
+      <HomePageClient />
+    </>
+  );
 }
