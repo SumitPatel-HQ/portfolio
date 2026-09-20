@@ -26,8 +26,8 @@ export const AboutMe: AboutMe = {
    headLine2: "Full Stack Developer focused on performance, clean architecture, and real-world usability.",
    Buidling: "AI-powered DB assistant",
    Exploring: "System design / performance",
-   Education: "T.E  Artificial Intelligence and Data Science",
-   EducationShort: "T.E AI & DS",
+   Education: "B.E  Artificial Intelligence and Data Science",
+   EducationShort: "B.E AI & DS",
    ProjectNum: "5",
    Available: "Available for work",
    Skills: [
