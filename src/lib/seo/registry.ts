@@ -11,7 +11,6 @@ export interface RouteEntry {
   sitemapEligible: boolean;
   canonicalTarget?: string;
   changeFrequency: ChangeFrequency;
-  priority: number;
 }
 
 // Static Route Registry
@@ -21,21 +20,18 @@ export const ROUTE_REGISTRY: readonly RouteEntry[] = [
     indexable: true,
     sitemapEligible: true,
     changeFrequency: "weekly",
-    priority: 1.0,
   },
   {
     path: "about",
     indexable: true,
     sitemapEligible: true,
     changeFrequency: "monthly",
-    priority: 0.8,
   },
   {
     path: "contact",
     indexable: true,
     sitemapEligible: true,
     changeFrequency: "monthly",
-    priority: 0.7,
   },
   {
     path: "experience",
@@ -43,14 +39,12 @@ export const ROUTE_REGISTRY: readonly RouteEntry[] = [
     indexable: false,
     sitemapEligible: false,
     changeFrequency: "monthly",
-    priority: 0.5,
   },
   {
     path: "projects",
     indexable: true,
     sitemapEligible: true,
     changeFrequency: "weekly",
-    priority: 0.9,
   },
   {
     path: "services",
@@ -59,14 +53,12 @@ export const ROUTE_REGISTRY: readonly RouteEntry[] = [
     sitemapEligible: false,
     canonicalTarget: "/about",
     changeFrequency: "monthly",
-    priority: 0.5,
   },
   {
     path: "SumitResume.pdf",
     indexable: true,
     sitemapEligible: true,
     changeFrequency: "monthly",
-    priority: 0.8,
   },
 ] as const;
 
@@ -77,7 +69,6 @@ export function getProjectRoutes(): RouteEntry[] {
     indexable: true,
     sitemapEligible: true,
     changeFrequency: "monthly" as ChangeFrequency,
-    priority: 0.8,
   }));
 }
 
