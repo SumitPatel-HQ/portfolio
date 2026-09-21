@@ -24,16 +24,16 @@ export const HeroSection = () => {
   const stripesRef = useRef<HTMLDivElement>(null);
   const topChromeRef = useRef<HTMLDivElement>(null);
   const nameRef = useRef<HTMLDivElement>(null);
-  const sumitRef = useRef<HTMLHeadingElement>(null);
-  const patelRef = useRef<HTMLHeadingElement>(null);
-  const nameDividerRef = useRef<HTMLDivElement>(null);
+  const sumitRef = useRef<HTMLSpanElement>(null);
+  const patelRef = useRef<HTMLSpanElement>(null);
+  const nameDividerRef = useRef<HTMLSpanElement>(null);
   const bottomChromeRef = useRef<HTMLDivElement>(null);
   const [isIntroComplete, setIsIntroComplete] = useState(false);
   const router = useTransitionRouter();
 
   const handleNameClick = (e: React.MouseEvent | React.KeyboardEvent) => {
     const target = e.target as HTMLElement;
-    if (!target.closest('h1')) return;
+    if (!target.closest('[data-hero-title]')) return;
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (!isIntroComplete && !reduceMotion) return;
@@ -133,23 +133,24 @@ export const HeroSection = () => {
               <ResponsiveBlobCursor
                 targetRef={nameRef}
                 iconColor="text-black"
-                restrictToTags={['h1']}
+                restrictToTags={['[data-hero-title]']}
               />
             ) : null}
 
             {/* Premium Masked Typography System */}
 
-  
-              <h1 ref={sumitRef} data-hero-title="sumit" className="hero-intro-title text-hero font-extrabold leading-[0.9] tracking-hero max-md:text-hero-mobile md:text-[13vw] lg:text-hero relative z-20 w-fit uppercase cursor-pointer md:pl-[0.4em] lg:pl-[0]">
+            <h1 className="flex w-full flex-col">
+              <span ref={sumitRef} data-hero-title="sumit" className="hero-intro-title text-hero font-extrabold leading-[0.9] tracking-hero max-md:text-hero-mobile md:text-[13vw] lg:text-hero relative z-20 w-fit uppercase cursor-pointer md:pl-[0.4em] lg:pl-[0]">
                 <span className="hero-title-scale">Sumit</span>
-              </h1>
+              </span>
 
-              <div ref={nameDividerRef} className="hero-divider w-full border-b border-white/10 relative z-10 mt-4 md:mt-8 lg:mt-4" />
+              <span ref={nameDividerRef} aria-hidden="true" className="hero-divider block w-full border-b border-white/10 relative z-10 mt-4 md:mt-8 lg:mt-4" />
 
-              <h1 ref={patelRef} data-hero-title="patel" className="hero-intro-title text-hero font-extrabold leading-[0.9] tracking-hero text-right max-md:text-hero-mobile md:text-[13vw] lg:text-hero mt-4 md:mt-8 lg:mt-4 lg:pr-[0.05em] md:pr-[0.4em] relative z-20 ml-auto w-fit uppercase cursor-pointer">
-                <span className="hero-title-scale">Patel</span>
-              </h1>
-         
+              <span ref={patelRef} data-hero-title="patel" className="hero-intro-title text-hero font-extrabold leading-[0.9] tracking-hero text-right max-md:text-hero-mobile md:text-[13vw] lg:text-hero mt-4 md:mt-8 lg:mt-4 lg:pr-[0.05em] md:pr-[0.4em] relative z-20 ml-auto w-fit uppercase cursor-pointer">
+                {' '}<span className="hero-title-scale">Patel</span>
+              </span>
+            </h1>
+
           </div>
         </div>
 

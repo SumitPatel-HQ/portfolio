@@ -198,9 +198,9 @@ interface UseHeroAnimationProps {
   introBarsRef: React.RefObject<HTMLDivElement | null>;
   stripesRef: React.RefObject<HTMLDivElement | null>;
   topChromeRef: React.RefObject<HTMLDivElement | null>;
-  sumitRef: React.RefObject<HTMLHeadingElement | null>;
-  patelRef: React.RefObject<HTMLHeadingElement | null>;
-  nameDividerRef: React.RefObject<HTMLDivElement | null>;
+  sumitRef: React.RefObject<HTMLSpanElement | null>;
+  patelRef: React.RefObject<HTMLSpanElement | null>;
+  nameDividerRef: React.RefObject<HTMLSpanElement | null>;
   bottomChromeRef: React.RefObject<HTMLDivElement | null>;
   smoothScroll?: SmoothScrollController | null;
 }
