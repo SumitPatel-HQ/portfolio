@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
@@ -9,28 +10,34 @@ import { getProjectImageUrl } from "@/lib/imagekit";
 import { CARDS } from "@/data/what-I-build";
 import { DeferredServiceGraphic } from "@/components/ui/DeferredServiceGraphic";
 import { MobileContactCard } from "@/components/mobile/contact/MobileContactCard";
+import { useIntro } from "@/context/IntroContext";
 
 export function MobileShowcase() {
+  const { isIntroComplete } = useIntro();
+  const [isInitialMount] = useState(!isIntroComplete);
+  const baseDelay = isInitialMount ? 2.4 : 0.1;
+
   const featured = PROJECTS.slice(0, 2);
   const services = CARDS.slice(0, 3);
 
   return (
     <div className="flex-1 flex flex-col">
       {/* Featured Work Section */}
-      <section className="px-5 pt-6 pb-2">
+      <motion.section 
+        initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
+        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+        transition={{ duration: 0.8, delay: baseDelay + 0.6, ease: [0.25, 1, 0.5, 1] }}
+        className="px-5 pt-6 pb-2"
+      >
         <div className="flex items-center gap-4 mb-6">
           <h2 className="text-md font-bold tracking-[0.2em] uppercase text-accent">Featured Work</h2>
           <div className="flex-1 h-[2px] rounded-full bg-white/10"></div>
         </div>
 
         <div className="flex overflow-x-auto gap-4 -mx-5 px-5 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-          {featured.map((project, idx) => (
-            <motion.div
+          {featured.map((project) => (
+            <div
               key={project.id}
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.5, delay: idx * 0.1 }}
               className="flex-none w-[95vw] max-w-[440px] block relative pt-2 [-webkit-user-drag:none]"
             >
               <div className="mb-4">
@@ -60,7 +67,7 @@ export function MobileShowcase() {
                   <ArrowUpRight size={18} className="text-foreground transition-colors group-hover:text-accent" aria-hidden="true" />
                 </Link>
               </div>
-            </motion.div>
+            </div>
           ))}
 
           <div className="flex-none w-[40vw] max-w-[160px] flex items-center justify-center pt-2 pr-5">
@@ -75,27 +82,27 @@ export function MobileShowcase() {
             </Link>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* What I Do Section */}
-      <section className="px-5 pt-6 pb-2">
+      <motion.section 
+        initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
+        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+        transition={{ duration: 0.8, delay: baseDelay + 0.75, ease: [0.25, 1, 0.5, 1] }}
+        className="px-5 pt-6 pb-2"
+      >
         <div className="flex items-center gap-4 mb-6">
           <h2 className="text-md font-bold tracking-[0.2em] uppercase text-accent">What I Do</h2>
           <div className="flex-1 h-[2px] rounded-full bg-white/10"></div>
         </div>
 
         <div className="flex overflow-x-auto gap-4 -mx-5 px-5 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-          {services.map((service, idx) => (
+          {services.map((service) => (
             <div 
               key={service.id} 
               className="flex-none w-[95vw] max-w-[440px] block group relative pt-2"
             >
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.5, delay: idx * 0.1 }}
-              >
+              <div>
                 <div className="mb-4 aspect-[16/10] overflow-hidden flex items-center justify-center rounded-xl border border-white/5 bg-white/[0.02] pointer-events-none slide-screenshot relative">
                   <DeferredServiceGraphic id={service.case} />
                 </div>
@@ -108,7 +115,7 @@ export function MobileShowcase() {
                     </h2>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             </div>
           ))}
 
@@ -124,10 +131,16 @@ export function MobileShowcase() {
             </Link>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Final CTA Section */}
-      <MobileContactCard />
+      <motion.div
+        initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
+        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+        transition={{ duration: 0.8, delay: baseDelay + 0.9, ease: [0.25, 1, 0.5, 1] }}
+      >
+        <MobileContactCard />
+      </motion.div>
     </div>
   );
 }
