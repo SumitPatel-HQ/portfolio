@@ -1546,12 +1546,12 @@ export const ServiceGraphic: React.FC<ServiceGraphicProps> = ({ id }) => {
   };
 
   return (
-    <div ref={containerRef} className="w-full h-full rounded-[12px] bg-background-secondary/30 border border-white/[0.08] relative overflow-hidden group">
+    <div ref={containerRef} className="w-full h-full rounded-xl bg-background-secondary/30 border border-white/[0.04] relative overflow-hidden group">
       {/* Subtle hover gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-accent/0 via-transparent to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
 
       {/* Inner Content Wrapper */}
-      <div className="absolute inset-[1px] rounded-[11px] overflow-hidden bg-background/50 backdrop-blur-sm">
+      <div className="absolute inset-[0px] rounded-xl overflow-hidden bg-background/50 backdrop-blur-sm">
         {renderGraphic()}
       </div>
     </div>

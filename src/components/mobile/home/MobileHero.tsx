@@ -56,10 +56,10 @@ export function MobileHero() {
 
         <div className="mb-4">
           <p className="text-accent italic text-lg mb-1 font-serif">Hi, I&apos;m</p>
-          <h2 className="text-5xl font-bold scale-y-[1.1] tracking-tighter mb-4 text-foreground">
+          <h2 className="text-5xl font-bold scale-y-[1.1] tracking-tight mb-4 text-foreground">
             {AboutMe.Name}
           </h2>
-          <p className="text-foreground-secondary leading-relaxed text-base">
+          <p className="text-[#8E8E8E] leading-relaxed text-base">
             {AboutMe.headLine2}
           </p>
         </div>
@@ -77,7 +77,7 @@ export function MobileHero() {
                 aria-label={social.ariaLabel}
                 className="flex items-center justify-center w-13 h-13 rounded-full  border border-white/10 hover:bg-white/5 transition-colors"
               >
-                <Icon className="w-6 h-6 text-foreground-secondary/80" />
+                <Icon className="w-6 h-6 text-muted-custom" />
               </Link>
             );
           })}
@@ -89,7 +89,7 @@ export function MobileHero() {
             aria-label="View Resume"
             className="flex items-center justify-center w-13 h-13 rounded-full  border border-white/10  hover:bg-white/5 transition-colors"
           >
-            <FileText className="w-6 h-6 text-foreground-secondary/80" />
+            <FileText className="w-6 h-6 text-muted-custom" />
           </a>
         </div>
       </motion.div>

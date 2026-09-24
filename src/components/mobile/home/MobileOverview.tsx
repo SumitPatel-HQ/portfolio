@@ -31,7 +31,7 @@ const techLogos = [
 export function MobileOverview() {
   const { isIntroComplete } = useIntro();
   const [isInitialMount] = useState(!isIntroComplete);
-  const baseDelay = isInitialMount ? 2.4 : 0;
+  const baseDelay = isInitialMount ? 2.4 : 0.1;
 
   const [activeLogo, setActiveLogo] = useState<string | null>(null);
   const railRef = useRef<HTMLDivElement>(null);
@@ -70,98 +70,85 @@ export function MobileOverview() {
   ), [activeLogo]);
 
   return (
-    // currently
     <div className="flex flex-col">
-      <section className="px-5 pt-2 pb-6">
+      {/* Currently Section */}
+      <motion.section 
+        initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
+        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+        transition={{ duration: 0.8, delay: baseDelay + 0.3, ease: [0.25, 1, 0.5, 1] }}
+        className="px-5 pt-2 pb-6"
+      >
         <div className="flex items-center gap-4 mb-4">
           <h2 className="text-md font-bold tracking-[0.2em] uppercase text-accent">Currently</h2>
           <div className="flex-1 h-[2px] rounded-full bg-white/10"></div>
         </div>
         
         <div className="flex flex-col gap-6">
-          <motion.div 
-            initial={{ opacity: 0, x: -10 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: baseDelay }}
-            className="flex flex-row flex-wrap items-baseline gap-x-3 gap-y-1"
-          >
+          <div className="flex flex-row flex-wrap items-baseline gap-x-3 gap-y-1">
             <span className="text-sm font-bold tracking-[0.15em] uppercase text-muted">Building :-</span>
-            <span className="text-foreground-secondary/80 font-base text-base">{AboutMe.Buidling}</span>
-          </motion.div>
+            <span className="text-[#A0A0A0] font-base text-base">{AboutMe.Buidling}</span>
+          </div>
 
-          <motion.div 
-            initial={{ opacity: 0, x: -10 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: baseDelay + 0.1 }}
-            className="flex flex-row flex-wrap items-baseline gap-x-3 gap-y-1"
-          >
+          <div className="flex flex-row flex-wrap items-baseline gap-x-3 gap-y-1">
             <span className="text-sm font-bold tracking-[0.15em] uppercase text-muted">Exploring :-</span>
-            <span className="text-foreground-secondary/80 font-base text-base">{AboutMe.Exploring}</span>
-          </motion.div>
+            <span className="text-[#A0A0A0] font-base text-base">{AboutMe.Exploring}</span>
+          </div>
         </div>
-      </section>
+      </motion.section>
 
-      
-
-      <section className="px-5 py-6">
+      {/* Highlights Section */}
+      <motion.section 
+        initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
+        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+        transition={{ duration: 0.8, delay: baseDelay + 0.45, ease: [0.25, 1, 0.5, 1] }}
+        className="px-5 py-6"
+      >
         <div className="flex items-center gap-4 mb-6">
           <h2 className="text-md font-bold tracking-[0.2em] uppercase text-accent">Highlights</h2>
           <div className="flex-1 h-[2px] rounded-full bg-white/10"></div>
         </div>
 
-      <div className="flex flex-col gap-8">
-        <div className="grid grid-cols-2 gap-4">
-          {highlights.map((item, idx) => (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: baseDelay + idx * 0.1 }}
-              className="flex flex-col gap-1"
-            >
-              <span className="text-sm font-medium text-[#A0A0A0] leading-tight">{item.label}</span>
-              <span className="text-2xl font-bold tracking-light text-foreground">{item.value}</span>
-            </motion.div>
-          ))}
-        </div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.4, delay: baseDelay + 0.2 }}
-          className="flex flex-col gap-y-3 w-full"
-        >
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-medium leading-tighter text-[#A0A0A0]">Core Technologies</span>
-            {activeLogo && (
-              <motion.span
-                initial={{ opacity: 0, x: -5 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="text-xs font-bold text-accent"
+        <div className="flex flex-col gap-8">
+          <div className="grid grid-cols-2 gap-4">
+            {highlights.map((item, idx) => (
+              <div
+                key={idx}
+                className="flex flex-col gap-1"
               >
-                — {activeLogo}
-              </motion.span>
-            )}
+                <span className="text-sm font-medium text-[#A0A0A0] leading-tight">{item.label}</span>
+                <span className="text-2xl font-bold tracking-light text-foreground">{item.value}</span>
+              </div>
+            ))}
           </div>
-          <div ref={railRef} className="w-full overflow-hidden py-4">
-            <LogoLoop
-              logos={techLogos}
-              speed={activeLogo ? 0 : 40}
-              gap={30}
-              logoHeight={32}
-              fadeOut={true}
-              fadeOutColor="var(--background)"
-              renderItem={renderMovingLogoItem}
-              pauseOnHover={false}
-            />
+
+          <div className="flex flex-col gap-y-3 w-full">
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium leading-tighter text-[#A0A0A0]">Core Technologies</span>
+              {activeLogo && (
+                <motion.span
+                  initial={{ opacity: 0, x: -5 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  className="text-xs font-bold text-accent"
+                >
+                  — {activeLogo}
+                </motion.span>
+              )}
+            </div>
+            <div ref={railRef} className="w-full overflow-hidden py-4">
+              <LogoLoop
+                logos={techLogos}
+                speed={activeLogo ? 0 : 40}
+                gap={30}
+                logoHeight={32}
+                fadeOut={true}
+                fadeOutColor="var(--background)"
+                renderItem={renderMovingLogoItem}
+                pauseOnHover={false}
+              />
+            </div>
           </div>
-        </motion.div>
-      </div>
-    </section>
+        </div>
+      </motion.section>
     </div>
   );
 }

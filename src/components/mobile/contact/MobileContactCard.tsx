@@ -23,7 +23,7 @@ export function MobileContactCard() {
           <h3 className="text-4xl font-bold text-foreground leading-tight">
             Let&apos;s talk.
           </h3>
-          <p className="text-base text-foreground-secondary leading-relaxed">
+          <p className="text-base text-[#8E8E8E] leading-relaxed">
             Whether you&apos;re building an AI product, automation workflow, or web platform, I&apos;d love to hear about it.
           </p>
         </motion.div>
@@ -37,7 +37,7 @@ export function MobileContactCard() {
         >
           <Link
             href="/contact"
-            className="group flex items-center justify-center gap-2 w-full py-4 rounded-xl bg-accent/20 border border-white/20 text-background font-bold tracking-wide uppercase text-sm active:scale-[0.98] transition-transform"
+            className="group flex items-center justify-center gap-2 w-full py-4 rounded-xl bg-accent/20 border border-white/4 text-background font-bold tracking-wide uppercase text-sm active:scale-[0.98] transition-transform"
           >
             Contact Now
             <div className="w-8 h-8 rounded-full bg-transparent flex items-center justify-center group-active:scale-95 transition-transform">

@@ -23,7 +23,7 @@ export function ContactCard({
   title = "Get in touch",
   description = "Got a question or want to collaborate? Drop me a message and I'll get back to you as soon as possible.",
   contactInfo = socials
-    .filter((s) => ["Email", "Phone", "Location"].includes(s.label))
+    .filter((s) => ["Email", "Phone","LinkedIn", "Location"].includes(s.label))
     .map((s) => ({
       icon: s.icon,
       label: s.label,
@@ -64,7 +64,7 @@ export function ContactCard({
             <div className="flex flex-wrap items-center gap-3">
               {socials
                 .filter((s) =>
-                  ["GitHub", "LinkedIn", "Instagram", "Twitter"].includes(s.label)
+                  ["GitHub", "Instagram", "Twitter"].includes(s.label)
                 )
                 .map((social) => {
                   const Icon = social.icon;

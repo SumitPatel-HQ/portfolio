@@ -364,7 +364,7 @@ export function AboutPageClient() {
                       </ScrollReveal>
                       <ScrollReveal
                         as="span"
-                        textClassName="text-[#A0A0A0]"
+                        textClassName="text-[#A0A0A0] "
                         trigger={transitionReady}
                         staggerDelay={0.02}
                         delay={0.38}

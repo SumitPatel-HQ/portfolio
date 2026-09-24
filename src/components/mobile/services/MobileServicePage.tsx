@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { Check } from "lucide-react";
 import { CARDS } from "@/data/what-I-build";
-import { MobileRouteHeader } from "../MobileRouteHeader";
+import { MobileRouteHeaderSpace } from "../MobileRouteHeader";
 import { DeferredServiceGraphic } from "@/components/ui/DeferredServiceGraphic";
 
 import { MobileBackground } from "@/components/mobile/MobileBackground";
@@ -16,7 +16,7 @@ export function MobileServicePage({ hideHeader }: MobileServicePageProps = {}) {
   return (
     <div className="min-h-screen bg-background relative z-10">
       <MobileBackground />
-      {!hideHeader && <MobileRouteHeader title="SERVICES" />}
+      {!hideHeader && <MobileRouteHeaderSpace />}
 
       <div className="flex flex-col w-full pb-28 relative z-10">
         {CARDS.map((card, idx) => (
@@ -39,7 +39,7 @@ export function MobileServicePage({ hideHeader }: MobileServicePageProps = {}) {
 
               <ul className="space-y-3 mt-1 w-full">
                 {card.bullets.map((bullet, i) => (
-                  <li key={i} className="flex items-start gap-3 text-md font-light text-foreground-secondary/70 leading-relaxed">
+                  <li key={i} className="flex items-start gap-3 text-md font-light text-[#8E8E8E] leading-relaxed">
                     <Check className="w-4 h-4 text-accent mt-1 flex-shrink-0" />
                     <span>{bullet}</span>
                   </li>
@@ -52,7 +52,7 @@ export function MobileServicePage({ hideHeader }: MobileServicePageProps = {}) {
                   {card.tags.map((tag, idx) => (
                     <span
                       key={idx}
-                      className="inline-flex items-center rounded-full border border-white/10 transition-colors duration-300 bg-foreground-secondary/10 px-3 py-1.5 text-[clamp(0.75rem,1vw,0.85rem)] font-extralight text-foreground-secondary shadow-[0_4px_12px_0_rgba(0,0,0,0.2)] backdrop-blur-[2px] cursor-default"
+                      className="inline-flex items-center rounded-full border border-white/10 transition-colors duration-300 bg-foreground-secondary/10 px-3 py-1.5 text-[clamp(0.75rem,1vw,0.85rem)] font-extralight text-foreground/90 shadow-[0_4px_12px_0_rgba(0,0,0,0.2)] backdrop-blur-[2px] cursor-default"
                     >
                       {tag}
                     </span>

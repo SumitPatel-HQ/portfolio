@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { Maximize2, Minimize2 } from "lucide-react"
+import { Maximize2, X } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { AnimatePresence, motion } from "framer-motion"
 
@@ -91,12 +91,12 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         {/* Main Textarea Container Box */}
         <div
           className={cn(
-            "relative group flex flex-col w-full min-h-[100px]  rounded-lg border border-border-custom bg-background-dark transition-all duration-300 hover:border-white/20 focus-within:ring-1 focus-within:ring-white/20 overflow-hidden",
+            "relative group flex flex-col w-full min-h-[250px]  md:min-h-[100px]  rounded-lg border border-border-custom bg-background-dark transition-all duration-300 hover:border-white/20 focus-within:ring-1 focus-within:ring-white/20 overflow-hidden",
             className
           )}
         >
           <textarea
-            className="no-arrows flex-1 w-full bg-transparent pl-4 md:pl-5 lg:pl-4 pr-2 md:pr-4 lg:pr-2 pt-3 md:pt-3 text-base md:text-lg lg:text-sm leading-[1.6] text-foreground placeholder:text-muted-custom focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 scrollbar-custom overflow-y-auto resize-none"
+            className="no-arrows flex-1 w-full bg-transparent pl-4 md:pl-5 lg:pl-4 pr-2 md:pr-4 lg:pr-2 pt-3 md:pt-3 text-base md:text-lg lg:text-sm leading-[1.6] text-foreground/90 placeholder:text-muted-custom focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 scrollbar-custom overflow-y-auto resize-none"
             ref={internalRef}
             data-lenis-prevent
             value={value}
@@ -117,7 +117,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
                 setModalValue(internalRef.current?.value || "")
                 setIsExpanded(true)
               }}
-              className="rounded-lg border border-transparent hover:border-border-custom bg-transparent  p-2 md:p-3 lg:p-1 text-muted-custom transition-all duration-200 hover:text-foreground focus:opacity-100"
+              className=" bg-transparent  p-2 md:p-3 lg:p-1 text-muted-custom transition-all duration-200 hover:text-foreground focus:opacity-100"
               aria-label="Expand message view"
               title="Expand message view"
             >
@@ -143,35 +143,36 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
                 animate={{ scale: 1, opacity: 1, y: 0 }}
                 exit={{ scale: 0.96, opacity: 0, y: 16 }}
                 transition={{ type: "spring", damping: 25, stiffness: 300 }}
-                className="relative flex h-[min(80vh,720px)] md:h-[85vh] lg:h-[min(76vh,720px)] w-[95vw] md:w-[95vw] lg:w-full md:max-w-4xl lg:max-w-3xl flex-col overflow-hidden rounded-xl md:rounded-2xl lg:rounded-xl border border-white/10 shadow-2xl bg-background-dark"
+                className="relative flex h-[min(80vh,720px)] md:h-[85vh] lg:h-[min(76vh,720px)] w-[95vw] md:w-[95vw] lg:w-full md:max-w-4xl lg:max-w-3xl flex-col overflow-hidden rounded-xl md:rounded-2xl lg:rounded-xl border border-white/4 shadow-2xl bg-background-dark"
                 onClick={(e) => e.stopPropagation()}
               >
 
-                <div className="flex min-h-16 items-center justify-between border-b border-white/10 bg-background-secondary/45 px-4 py-3 md:px-6 md:py-5 lg:px-5 lg:py-3">
-                  {/* Modal Header & Character Count */}
-                  <div className="min-w-0">
-                    <p className="text-xs md:text-sm lg:text-xs font-medium uppercase tracking-[0.14em] text-muted-custom">
-                      Message
-                    </p>
-                    <p className="mt-1 text-sm md:text-base lg:text-sm text-foreground/80">
+                <div className="flex items-center justify-between border-b border-white/5 bg-background-secondary/25 px-4 py-2.5 md:px-6 md:py-3 lg:px-5 lg:py-2.5">
+                  {/* Modal Header: Label Left, Counter & Close Right */}
+                  <span className="text-xs md:text-xs lg:text-sm font-medium uppercase tracking-[0.14em] text-muted-custom/85">
+                    Message
+                  </span>
+
+                  <div className="flex items-center gap-3 md:gap-4">
+                    <span className="text-xs md:text-sm lg:text-xs text-muted-custom/80 select-none whitespace-nowrap">
                       {modalValue.length.toLocaleString()} / {props.maxLength || 1000} characters
-                    </p>
+                    </span>
+                    <button
+                      onClick={() => setIsExpanded(false)}
+                      type="button"
+                      aria-label="Close modal"
+                      className="p-2 rounded-full bg-transparent text-muted-custom hover:text-red-400 hover:bg-red-400/10 cursor-pointer"
+                      title="Close"
+                    >
+                      <X className="h-5 w-5  " />
+                    </button>
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => setIsExpanded(false)}
-                    className="group inline-flex size-10 md:size-14 lg:size-10 shrink-0 items-center justify-center rounded-full border border-white/20 bg-background-dark text-foreground transition-all duration-200 hover:border-white/30"
-                    aria-label="Collapse message view"
-                    title="Close and return"
-                  >
-                    <Minimize2 className="h-[18px] w-[18px] md:h-7 md:w-7 lg:h-[18px] lg:w-[18px]" />
-                  </button>
                 </div>
 
                 <div className="flex min-h-0 flex-1 p-4 md:p-5 lg:p-4">
                   {/* Expanded Textarea Container */}
                   <textarea
-                    className="scrollbar-custom h-full w-full resize-none rounded-xl border border-white/10 bg-background/60 px-4 py-4 text-base leading-[1.75] text-foreground outline-none transition-colors duration-200 placeholder:text-muted-custom focus:border-white/20 md:px-6 md:py-6 md:text-xl lg:px-4 lg:py-4 lg:text-base"
+                    className="scrollbar-custom h-full w-full resize-none bg-background/60 px-4 py-4 text-base leading-[1.75] text-foreground outline-none transition-colors duration-200 placeholder:text-muted-custom focus:border-white/20 md:px-6 md:py-6 md:text-xl lg:px-4 lg:py-4 lg:text-base"
                     data-lenis-prevent
                     value={modalValue}
                     onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
