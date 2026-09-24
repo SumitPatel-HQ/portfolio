@@ -8,6 +8,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { BrandLayer } from "./BrandLayer";
 import { useLenis } from "@/providers/LenisProvider";
 import { SITE_ROUTES } from "@/data/navigation";
+import { MobileRouteHeader } from "@/components/mobile/MobileRouteHeader";
 import "./transition.css";
 
 
@@ -787,6 +788,7 @@ export function TransitionProvider({ children }: { children: React.ReactNode }) 
       leave={onLeave}
       enter={onEnter}
     >
+      <MobileRouteHeader />
       {/* Snapshot overlay — temporarily holds outgoing page visual */}
       <div
         ref={snapshotRef}

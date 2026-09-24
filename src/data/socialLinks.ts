@@ -59,14 +59,14 @@ export const socials: SocialLink[] = [
     ariaLabel: "Follow me on X (Twitter)",
     icon: XIcon as LucideIcon,
   },
-  {
-    id: 6,
-    label: "Phone",
-    href: "tel:+918169937832",
-    username: "+91 8169937832",
-    ariaLabel: "Call me at +91 8169937832",
-    icon: PhoneIcon as LucideIcon,
-  },
+  // {
+  //   id: 6,
+  //   label: "Phone",
+  //   href: "tel:+918169937832",
+  //   username: "+91 8169937832",
+  //   ariaLabel: "Call me at +91 8169937832",
+  //   icon: PhoneIcon as LucideIcon,
+  // },
   {
     id: 7,
     label: "Location",

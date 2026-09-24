@@ -6,7 +6,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { ProjectWithImages } from "@/app/projects/ProjectsPageClient";
-import { MobileRouteHeader } from "../MobileRouteHeader";
+import { MobileRouteHeaderSpace } from "../MobileRouteHeader";
 import { ImageGallery } from "@/components/projects/ImageGallery";
 
 import { MobileBackground } from "@/components/mobile/MobileBackground";
@@ -18,13 +18,8 @@ interface MobileProjectsPageProps {
 function ExpandableDescription({ text }: { text: string }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const maxLength = 90;
-
-  if (text.length <= maxLength) {
-    return <p className="text-md font-light text-foreground-secondary/70 leading-relaxed">{text}</p>;
-  }
-
   return (
-    <p className="text-md font-light text-foreground-secondary/70 leading-relaxed">
+    <p className="text-md font-light text-[#C6C6C6] leading-relaxed">
       {isExpanded ? (
         <>
           {text}
@@ -34,7 +29,7 @@ function ExpandableDescription({ text }: { text: string }) {
           {text.substring(0, maxLength).trim()}{" "}
           <button
             onClick={(e) => { e.preventDefault(); e.stopPropagation(); setIsExpanded(true); }}
-            className="text-foreground-secondary/60 bg-transparent  font-base"
+            className="text-[#8E8E8E] bg-transparent  font-sm"
           >
             ...more
           </button>
@@ -63,7 +58,7 @@ export function MobileProjectsPage({ projects }: MobileProjectsPageProps) {
   return (
     <div className="min-h-screen bg-background relative z-10">
       <MobileBackground />
-      <MobileRouteHeader title="PROJECTS" />
+      <MobileRouteHeaderSpace />
 
       <div className="flex flex-col w-full pb-28 relative z-10">
         {projects.map((project, idx) => (
@@ -102,7 +97,7 @@ export function MobileProjectsPage({ projects }: MobileProjectsPageProps) {
                     sessionStorage.setItem("mobileProjectsScroll", window.scrollY.toString());
                   }
                 }}
-                className="w-10 h-10 rounded-full border border-white/10 bg-white/5 flex items-center justify-center flex-shrink-0 active:scale-95 transition-all mt-0.5 hover:bg-white/10"
+                className="w-12 h-12 rounded-full border border-white/10 bg-white/5 flex items-center justify-center flex-shrink-0 active:scale-95 transition-all mt-0.5 hover:bg-white/10"
               >
                 <ArrowUpRight size={18} className="text-foreground transition-colors group-hover:text-accent" aria-hidden="true" />
               </Link>

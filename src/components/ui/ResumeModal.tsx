@@ -138,23 +138,16 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
       >
         {/* Custom Header Bar */}
         <div className="relative z-30 flex items-center justify-between border-b border-border-custom bg-background-secondary/80 px-4 py-3 backdrop-blur-md">
-          <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-full bg-foreground/10 flex items-center justify-center border border-border-custom shadow-sm">
-              <span className="text-foreground text-sm font-bold scale-y-[1.3] block lg:translate-y-[1px]">SP</span>
+            <div className="flex ">
+              <h3 className="text-base sm:text-lg font-semibold text-foreground leading-wide  tracking-wide">Profile</h3>
             </div>
-            <div className="flex flex-col">
-              <h3 className="text-base sm:text-lg font-semibold text-foreground leading-tight tracking-wide">Sumit Resume</h3>
-              <p className="text-xs sm:text-sm text-muted-foreground">Document</p>
-            </div>
-          </div>
-
           <div className="flex items-center gap-1 sm:gap-2">
             <a
               href="/SumitResume.pdf"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Open resume in new tab"
-              className="p-2 rounded-xl text-muted-foreground hover:text-foreground hover:bg-foreground/10 transition-all duration-200 group"
+              className="p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-foreground/10 transition-all duration-200 group"
               title="Open in new tab"
             >
               <ExternalLink className="h-4 w-4 sm:h-5 sm:w-5 transition-transform" />
@@ -166,7 +159,7 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
               onClick={handleDownload}
               type="button"
               aria-label="Download Resume"
-              className="p-2 rounded-xl text-muted-foreground hover:text-foreground hover:bg-foreground/10 transition-all duration-200 group"
+              className="p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-foreground/10 transition-all duration-200 group"
               title="Download Resume"
             >
               <Download className="h-4 w-4 sm:h-5 sm:w-5 transition-transform" />
@@ -178,7 +171,7 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
               onClick={onClose}
               type="button"
               aria-label="Close modal"
-              className="p-2 rounded-xl text-muted-foreground hover:text-red-400 hover:bg-red-400/10 transition-all duration-200 group"
+              className="p-2 rounded-full text-muted-foreground hover:text-red-400 hover:bg-red-400/10 transition-all duration-200 group"
               title="Close"
             >
               <X className="h-5 w-5 group-hover:scale-110 transition-transform" />

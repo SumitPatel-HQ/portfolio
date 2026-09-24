@@ -26,7 +26,7 @@ export const ROUTE_REGISTRY: readonly RouteEntry[] = [
   {
     path: "about",
     indexable: true,
-    sitemapEligible: true,
+    sitemapEligible: false,
     changeFrequency: "monthly",
     priority: 0.8,
   },

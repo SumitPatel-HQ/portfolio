@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { MobileRouteHeader } from "../MobileRouteHeader";
+import { MobileRouteHeaderSpace } from "../MobileRouteHeader";
 import { socials } from "@/data/socialLinks";
 import { ContactForm } from "@/components/Contacts/ContactForm";
 import { ArrowUpRight } from "lucide-react";
@@ -24,7 +24,7 @@ export function MobileContactPage() {
   return (
     <div className="min-h-screen bg-background flex flex-col relative z-10">
       <MobileBackground />
-      <MobileRouteHeader title="CONTACT" />
+      <MobileRouteHeaderSpace />
 
       <main className="flex-1 w-full pb-28 flex flex-col px-5 pt-8 space-y-8 relative z-10">
 
@@ -38,7 +38,7 @@ export function MobileContactPage() {
           <h2 className="text-4xl font-bold text-foreground tracking-tight">
             Get in touch
           </h2>
-          <p className="text-[15px] font-light text-foreground-secondary/70 leading-relaxed">
+          <p className="text-[15px] font-light text-[#8E8E8E] leading-relaxed">
             Got a question or want to collaborate? Drop me a message and I&apos;ll get back to you as soon as possible.
           </p>
         </motion.section>
@@ -61,7 +61,7 @@ export function MobileContactPage() {
             >
               <div className="flex items-center gap-4">
                 <contact.icon size={22} className="text-muted-custom transition-colors group-hover:text-foreground" />
-                <span className="text-lg font-medium text-foreground tracking-wide uppercase">
+                <span className="text-lg font-medium text-foreground/90 tracking-wide uppercase">
                   {contact.label}
                 </span>
               </div>
@@ -83,7 +83,7 @@ export function MobileContactPage() {
                 <span className="text-[11px] font-medium text-muted-custom uppercase tracking-wider mb-1">
                   {contact.label}
                 </span>
-                <span className="text-[15px] font-light text-foreground-secondary break-words">
+                <span className="text-[15px] font-light text-foreground/80 break-words">
                   {contact.username}
                 </span>
               </div>
@@ -103,7 +103,7 @@ export function MobileContactPage() {
                   className="group flex items-center gap-2.5 text-muted-custom hover:text-foreground transition-colors active:scale-95"
                 >
                   <Icon size={20} className="text-muted-custom group-hover:text-foreground transition-colors" />
-                  <span className="text-[14px] font-light text-foreground-secondary/80">
+                  <span className="text-[14px] font-light text-foreground/80">
                     {social.username}
                   </span>
                 </a>
@@ -125,7 +125,7 @@ export function MobileContactPage() {
           <h2 className="text-3xl font-bold text-foreground/70 tracking-tight">
             Got a project in mind?<br /> Let&apos;s talk.
           </h2>
-          <p className="text-[15px] font-light text-foreground-secondary/70 leading-relaxed mb-6">
+          <p className="text-[15px] font-light text-[#8E8E8E] leading-relaxed mb-6">
             Tell me about your project, idea, or collaboration.
           </p>
           <ContactForm />

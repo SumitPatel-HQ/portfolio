@@ -15,7 +15,7 @@ export function MobileBottomNav({ className = "" }: { className?: string }) {
         initial={{ y: 50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
-        className="flex items-center justify-around w-full px-4 py-3 bg-background border-t border-white/20"
+        className="flex items-center justify-around w-full px-4 py-3 bg-background border-t border-accent/5"
       >
         {MOBILE_NAV_ITEMS.map((item) => {
           const isActive =
@@ -28,7 +28,7 @@ export function MobileBottomNav({ className = "" }: { className?: string }) {
               key={item.name}
               href={item.href}
               aria-label={item.name}
-              className={`flex items-center justify-center px-5 py-1 transition-colors ${isActive ? "text-white" : "!text-[#A0A0A0]"}`}
+              className={`flex items-center justify-center px-5 py-1 transition-colors ${isActive ? "!text-white/80" : "!text-[#A0A0A0]"}`}
             >
               <Icon size={24} strokeWidth={isActive ? 2 : 1.5} aria-hidden="true" />
             </Link>

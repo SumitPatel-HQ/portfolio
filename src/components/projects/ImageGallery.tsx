@@ -62,11 +62,11 @@ function CarouselNavigation() {
   return (
     <div className="show-default-cursor pointer-events-auto hidden md:block">
       {selectedIndex > 0 && (
-        <SliderPrevButton className="pointer-events-auto show-default-cursor absolute left-4 top-1/2 -translate-y-1/2 z-40 w-11 h-11 rounded-full bg-black/30 hover:bg-black/50 backdrop-blur-xs border border-white/10 text-white hover:text-white transition-all duration-300 flex items-center justify-center shadow-xl disabled:opacity-20 focus:outline-none focus-visible:ring-0">
+        <SliderPrevButton className="pointer-events-auto show-default-cursor absolute left-4 top-1/2 -translate-y-1/2 z-40 w-11 h-11 rounded-full bg-black/30 hover:bg-black/50 backdrop-blur-xs text-white hover:text-white opacity-70 hover:opacity-90 transition-all duration-300 flex items-center justify-center shadow-xl disabled:opacity-20 focus:outline-none">
           <ChevronLeft size={22} />
         </SliderPrevButton>
       )}
-      <SliderNextButton className="pointer-events-auto show-default-cursor absolute right-4 top-1/2 -translate-y-1/2 z-40 w-11 h-11 rounded-full bg-black/30 hover:bg-black/50 backdrop-blur-xs border border-white/10 text-white hover:text-white transition-all duration-300 flex items-center justify-center shadow-xl disabled:opacity-20 focus:outline-none focus-visible:ring-0">
+      <SliderNextButton className="pointer-events-auto show-default-cursor absolute right-4 top-1/2 -translate-y-1/2 z-40 w-11 h-11 rounded-full bg-black/30 hover:bg-black/50 backdrop-blur-xs text-white hover:text-white opacity-70 hover:opacity-90 transition-all duration-300 flex items-center justify-center shadow-xl disabled:opacity-20 focus:outline-none">
         <ChevronRight size={22} />
       </SliderNextButton>
     </div>
@@ -145,7 +145,7 @@ export function ImageGallery({ images, imageAlt, projectId, className }: ImageGa
   }
 
   return (
-    <div className={cn("relative aspect-[14/9] w-full shadow-[0_40px_80px_-15px_rgba(0,0,0,0.7)] rounded-xl overflow-hidden border border-white/10 group bg-gray-900/20", className)}>
+    <div className={cn("relative aspect-[14/9] w-full shadow-[0_40px_80px_-15px_rgba(0,0,0,0.7)] rounded-[20px] overflow-hidden  group bg-gray-900/20", className)}>
       <Carousel options={OPTIONS} className="w-full h-full">
         <CarouselReset
           resetKey={projectId !== undefined ? String(projectId) : images.join(',')}
@@ -217,7 +217,7 @@ export function ImageGallery({ images, imageAlt, projectId, className }: ImageGa
         <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-black/50" />
       </div>
 
-      <div className="absolute inset-0 ring-1 ring-inset ring-white/10 pointer-events-none z-30 [border-radius:inherit]" />
+      <div className="absolute inset-0  pointer-events-none z-30 " />
     </div>
   );
 }

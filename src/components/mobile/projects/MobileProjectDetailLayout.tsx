@@ -6,7 +6,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { ArrowUpRight, Github } from "lucide-react";
 import { FaCaretRight } from "react-icons/fa";
-import { MobileRouteHeader } from "../MobileRouteHeader";
+import { MobileRouteHeaderSpace } from "../MobileRouteHeader";
 import { ProjectWithImages } from "@/app/projects/ProjectsPageClient";
 import { ImageGallery } from "@/components/projects/ImageGallery";
 import { MobileContactCard } from "@/components/mobile/contact/MobileContactCard";
@@ -30,7 +30,7 @@ export function MobileProjectDetailLayout({ project }: MobileProjectDetailLayout
     <div className="min-h-screen bg-background flex flex-col pb-[calc(env(safe-area-inset-bottom)+50px)] relative z-10">
       <MobileBackground />
       {/* Route Header */}
-      <MobileRouteHeader title="PROJECTS" showBackButton={true} backHref="/projects" />
+      <MobileRouteHeaderSpace />
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -44,11 +44,11 @@ export function MobileProjectDetailLayout({ project }: MobileProjectDetailLayout
             images={project.imageUrls || []}
             imageAlt={project.imageAlt || project.name}
             projectId={project.id}
-            className="aspect-[16/10] rounded-md border-white/5"
+            className="aspect-[16/10] rounded-xl border-white/5"
           />
 
           {project.logo && project.logo.trim().length > 0 && (
-            <div className="absolute -bottom-9 left-4 z-30 w-16 h-16 rounded-md  border border-white/10 bg-background backdrop-blur-md  flex items-center justify-center p-3 shadow-xl">
+            <div className="absolute -bottom-9 left-4 z-30 w-16 h-16 rounded-xl  border border-white/5 bg-background backdrop-blur-sm  flex items-center justify-center p-3 shadow-xl">
               {project.logo.startsWith('http') || project.logo.startsWith('/') || project.logo.includes('.') ? (
                 <div className="relative w-full h-full">
                   <Image 
@@ -60,7 +60,7 @@ export function MobileProjectDetailLayout({ project }: MobileProjectDetailLayout
                   />
                 </div>
               ) : (
-                <span className="text-[10px] font-bold text-foreground text-center uppercase tracking-wider line-clamp-2 leading-tight">
+                <span className="text-[10px] font-bold text-foreground text-center uppercase tracking-wider scale-y-[1.1] leading-tight">
                   {project.logo}
                 </span>
               )}
@@ -78,7 +78,7 @@ export function MobileProjectDetailLayout({ project }: MobileProjectDetailLayout
 
             {/* Project Discription Section */}
             <div className="mb-4">
-              <p className="text-md font-light text-foreground-secondary/80 leading-relaxed">
+              <p className="text-md font-light text-[#8E8E8E] leading-relaxed">
                 {project.description}
               </p>
             </div>
@@ -102,7 +102,7 @@ export function MobileProjectDetailLayout({ project }: MobileProjectDetailLayout
             {project.tags.map((tag, idx) => (
               <span
                 key={idx}
-                className="inline-flex items-center rounded-full border border-white/10 transition-colors duration-300 bg-foreground-secondary/10 px-3 py-1.5 text-[clamp(0.75rem,1vw,0.85rem)] font-extralight text-foreground-secondary shadow-[0_4px_12px_0_rgba(0,0,0,0.2)] backdrop-blur-[2px] cursor-default"
+                className="inline-flex items-center rounded-full border border-white/10 transition-colors duration-300 bg-foreground-secondary/10 px-3 py-1.5 text-[clamp(0.75rem,1vw,0.85rem)] font-extralight text-foreground/90 shadow-[0_4px_12px_0_rgba(0,0,0,0.2)] backdrop-blur-[2px] cursor-default"
               >
                 {tag}
               </span>
@@ -122,13 +122,13 @@ export function MobileProjectDetailLayout({ project }: MobileProjectDetailLayout
               className="group w-full flex items-center justify-between p-4 rounded-xl border border-white/10   bg-transparent shadow-[0_4px_12px_0_rgba(0,0,0,0.2)] backdrop-blur-[2px]"
             >
               <div className="flex items-center gap-3">
-                <Github size={18} className="text-foreground-secondary group-active:text-foreground transition-colors" />
-                <span className="text-sm font-medium tracking-wide uppercase text-foreground-secondary group-active:text-foreground transition-colors">
+                <Github size={18} className="text-muted-custom group-active:text-foreground transition-colors" />
+                <span className="text-sm font-medium tracking-wide uppercase text-foreground/90 group-active:text-foreground transition-colors">
                   GITHUB REPOSITORY
                 </span>
               </div>
-              <div className="w-8 h-8 rounded-full border border-white/10 bg-white/5 flex items-center justify-center hover:bg-white/10 group-active:scale-95 transition-transform">
-                <ArrowUpRight size={16} className="text-foreground-secondary group-active:text-foreground transition-colors" />
+              <div className="w-8 h-8 rounded-full  flex items-center justify-center hover:bg-white/10 group-active:scale-95 transition-transform">
+                <ArrowUpRight size={18} className="text-foreground-secondary group-active:text-foreground transition-colors" />
               </div>
             </Link>
           )}
@@ -142,7 +142,7 @@ export function MobileProjectDetailLayout({ project }: MobileProjectDetailLayout
                 <h3 className="text-base font-semibold tracking-wide text-foreground mb-3">
                   The Problem
                 </h3>
-                <ul className="text-md font-light text-foreground-secondary/80 leading-relaxed space-y-3 list-disc pl-5">
+                <ul className="text-md font-light text-[#8E8E8E] leading-relaxed space-y-3 list-disc pl-5">
                   {project.problem.map((point, idx) => (
                     <li key={idx} className="pl-1">{point}</li>
                   ))}
@@ -155,7 +155,7 @@ export function MobileProjectDetailLayout({ project }: MobileProjectDetailLayout
                 <h3 className="text-base font-semibold tracking-wide text-foreground mb-3">
                   {String(project.id) === "4" ? "Overview" : "The Solution"}
                 </h3>
-                <ul className="text-md font-light text-foreground-secondary/80 leading-relaxed space-y-3 list-disc pl-5">
+                <ul className="text-md font-light text-[#8E8E8E] leading-relaxed space-y-3 list-disc pl-5">
                   {project.solution.map((point, idx) => (
                     <li key={idx} className="pl-1">{point}</li>
                   ))}
@@ -186,7 +186,7 @@ export function MobileProjectDetailLayout({ project }: MobileProjectDetailLayout
                     >
                       <FaCaretRight />
                     </motion.span>
-                    <span className="text-sm font-medium tracking-wide uppercase text-foreground-secondary">
+                    <span className="text-sm font-medium tracking-wide uppercase text-foreground/90">
                       {category}
                     </span>
                   </button>
@@ -200,7 +200,7 @@ export function MobileProjectDetailLayout({ project }: MobileProjectDetailLayout
                       {technologies.map((tech, idx) => (
                         <span
                           key={idx}
-                          className="inline-flex items-center rounded-full border border-white/10 transition-colors duration-300 bg-foreground-secondary/10 px-3 py-1.5 text-[clamp(0.75rem,1vw,0.85rem)] font-extralight text-foreground-secondary shadow-[0_4px_12px_0_rgba(0,0,0,0.2)] backdrop-blur-[2px] cursor-default"
+                          className="inline-flex items-center rounded-full border border-white/10 transition-colors duration-300 bg-foreground-secondary/10 px-3 py-1.5 text-[clamp(0.75rem,1vw,0.85rem)] font-extralight text-foreground/90 shadow-[0_4px_12px_0_rgba(0,0,0,0.2)] backdrop-blur-[2px] cursor-default"
                         >
                           {tech}
                         </span>

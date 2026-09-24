@@ -34,6 +34,17 @@ html:not(.transition-ready) .transition-content {
   visibility: hidden;
 }
 
+html:not(.transition-ready) [data-mobile-route-header],
+html:not(.transition-ready) .mobile-route-header,
+.transition-active [data-mobile-route-header],
+.transition-active .mobile-route-header,
+.transition-entering [data-mobile-route-header],
+.transition-entering .mobile-route-header {
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
 /* Brand layer inner content — centered branding */
 .transition-brand-inner {
   display: flex;
