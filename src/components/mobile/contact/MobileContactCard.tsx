@@ -24,7 +24,7 @@ export function MobileContactCard() {
             Let&apos;s talk.
           </h3>
           <p className="text-base text-[#8E8E8E] leading-relaxed">
-            Whether you&apos;re building an AI product, automation workflow, or web platform, I&apos;d love to hear about it.
+            I design and build clean, high-impact digital experiences for modern products. If you have an idea worth shipping, I'd love to hear it.
           </p>
         </motion.div>
 
